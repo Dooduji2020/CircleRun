@@ -1,0 +1,27 @@
+# Created by https://www.gitimnore.io./api/unity
+
+### Unity ###
+.vs/
+.svn/
+*.csproj
+*.sln
+*.suo
+*.userprefs
+*.pidb
+Assets/UnityVS/
+Assets/UnityVS.meta
+debugkey.txt
+keyhash.txt
+sha1&256.txt
+.Library/
+Library/
+.metadata/
+Temp/
+Build/
+obj/
+Logs/
+*.db
+
+
+
+ExportedObi/
