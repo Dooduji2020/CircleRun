@@ -58,9 +58,11 @@ public class MainMenuManager : MonoBehaviour
         shopUI.SetActive(false);
     }
     public void RankingOpen()
-    { 
-        
+    {
+        rankingUI.gameObject.SetActive(true);
     }
     public void RankingClose()
-    { }
+    {
+        rankingUI.gameObject.SetActive(true);
+    }
 }
