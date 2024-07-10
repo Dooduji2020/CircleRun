@@ -3,47 +3,128 @@ using System.Collections.Generic;
 using UnityEngine;
 using BackEnd;
 using System;
+using BackEnd.Game.Rank;
+using UnityEditor.MPE;
 
 public class BackEndManager : MonoBehaviour
 {
+    public static BackEndManager Instance;
     private UserItem userItem = new UserItem();
     public delegate void ExceptionEvent(Exception e);
-    private void Start()
+
+    private void Awake()
     {
-        var bro = Backend.Initialize(true, true);
-        if(bro.IsSuccess())
+        if (Instance == null)
         {
-            //ÃÊ±âÈ­ ¼º°ø
+            Instance = this;
+            DontDestroyOnLoad(Instance);
         }
         else
-        { 
-            //ÃÊ±âÈ­ ½ÇÆĞ
-        }
+            Destroy(this.gameObject);
     }
-    public void GetRanking()
+    public bool Init()
     {
-        //ÇØ´ç ·©Å· Å×ÀÌºíÀÇ 15À§±îÁöÀÇ ¼øÀ§¸¦ °¡Á®¿Â´Ù
-        Backend.URank.User.GetRankList("tableUUID", 50);
+        bool isResult = true;
+        var bro = Backend.Initialize(true, true);
+        if (bro.IsSuccess())
+        {
+            isResult = VersionCheck();
+        }
+        else
+        {
+        }
+        return isResult;
     }
-    public T GetItemData<T>(string tableName) where T : BackEndBase, new()
+    private bool VersionCheck()
+    {
+        bool isResult = true;
+#if !UNITY_EDITOR
+
+        var bro = Backend.Utils.GetLatestVersion();
+        if (bro.IsSuccess())
+        {
+            string serverVersion = bro.GetReturnValuetoJSON()["version"].ToString();
+
+            if (serverVersion == Application.version)
+            { }  //ë²„ì „ ì¼ì¹˜ ë‹¤ìŒ ì§„í–‰ 
+            string forceUpdate = bro.GetReturnValuetoJSON()["type"].ToString();
+            if (forceUpdate == "1")  // ì„ íƒì  ì—…ë°ì´íŠ¸
+            { }
+            else if (forceUpdate == "2")  // ê°•ì œ ì—…ë°ì´íŠ¸ 
+            { }
+        }
+        else
+        {
+            //ë„¤íŠ¸ì›Œí¬ ì²´í¬ ë° ë‹¤ì‹œ ì‹œë„ë²„íŠ¼ì„ ë„ì›ë‹¤. 
+            isResult = false;
+            Debug.LogError("ë²„ì „ ì •ë³´ ì¡°íšŒ ì‹¤íŒ¨");
+        }
+#endif
+        return isResult;
+    }
+    public void GetRanking(Ranking ranking)
+    {
+        string table = GetRankingTable(ranking);
+        var bro = Backend.URank.User.GetRankList(table, 50);
+        if (bro.IsSuccess())
+        {
+            string json = bro.GetFlattenJSON().ToJson();
+            UserRank userRank = new UserRank();
+        }
+        else
+        { }
+    }
+    public void SetNickName(string nickName)
+    {
+        var bro = Backend.BMember.UpdateNickname(nickName);
+        if (bro.IsSuccess())
+        { }
+        else
+        { }
+    }
+    public void RankingUpdate(Ranking ranking, int score)
+    {
+        string table = GetRankingTable(ranking);
+        Param param = new Param();
+        param.Add("score", score);
+        var bro = Backend.URank.User.UpdateUserScore(table, "", "", param);
+    }
+    private string GetRankingTable(Ranking ranking)
+    {
+        string table = Define.Ranking_Daily;
+        switch (ranking)
+        {
+            case Ranking.Week:
+                table = Define.Ranking_Week;
+                break;
+            case Ranking.Mon:
+                table = Define.Ranking_Mon;
+                break;
+            case Ranking.Total:
+                table = Define.Ranking_Total;
+                break;
+        }
+        return table;
+    }
+    public T GetGameData<T>(string tableName) where T : BackEndBase, new()
     {
         var bro = Backend.GameData.GetMyData(tableName, Backend.UserInDate);
         T data = new T();
-        if(bro.IsSuccess())
+        if (bro.IsSuccess())
         {
             string json = bro.GetFlattenJSON().ToJson();
             data = JsonUtility.FromJson<T>(json);
         }
         else
-        { 
-            //ÃÊ±âÈ­ ¹× ÀÎ¼­Æ®
+        {
+            //ï¿½Ê±ï¿½È­ ï¿½ï¿½ ï¿½Î¼ï¿½Æ®
         }
         return data;
     }
     public void GameDataInsert(string tableName)
     {
         var bro = Backend.GameData.Insert(tableName);
-        if(bro.IsSuccess())
+        if (bro.IsSuccess())
         { }
         else
         { }
@@ -53,9 +134,17 @@ public class BackEndManager : MonoBehaviour
         Param param = new Param();
         foreach (var i in dic)
             param.Add(i.Key, i.Value);
-        Backend.GameData.UpdateV2(tableName, userItem.inDate, Backend.UserInDate, param,(callback)=> { 
+        Backend.GameData.UpdateV2(tableName, userItem.inDate, Backend.UserInDate, param, (callback) =>
+        {
         });
     }
+}
+public enum Ranking
+{
+    Daily,
+    Week,
+    Mon,
+    Total
 }
 public class BackEndBase
 {

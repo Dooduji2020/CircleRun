@@ -21,7 +21,7 @@ public class MainMenuManager : MonoBehaviour
            PlayerPrefs.GetInt(Constants.DATA.SETTINGS_SOUND) : 1) == 1;
         _soundImage.sprite = sound ? _activeSoundSprite : _inactiveSoundSprite;
 
-        AudioManager.Instance.AddButtonSound();
+        //AudioManager.Instance.AddButtonSound();
         BgmManager.Instance.AddButtonSound();
     }
 
@@ -45,7 +45,7 @@ public class MainMenuManager : MonoBehaviour
         sound = !sound;
         PlayerPrefs.SetInt(Constants.DATA.SETTINGS_SOUND, sound ? 1 : 0);
         _soundImage.sprite = sound ? _activeSoundSprite : _inactiveSoundSprite;
-        AudioManager.Instance.ToggleSound();
+        //AudioManager.Instance.ToggleSound();
         BgmManager.Instance.ToggleSound();
     }
 
@@ -63,6 +63,6 @@ public class MainMenuManager : MonoBehaviour
     }
     public void RankingClose()
     {
-        rankingUI.gameObject.SetActive(true);
+        rankingUI.gameObject.SetActive(false);
     }
 }
