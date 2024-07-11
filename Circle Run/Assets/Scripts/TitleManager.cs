@@ -4,8 +4,15 @@ using UnityEngine;
 
 public class TitleManager : MonoBehaviour
 {
+    public static TitleManager Instance;
     public GameObject titleLogo;
-
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(this.gameObject);
+    }
     private void Start()
     {
         VersionCheckResult(BackEndManager.Instance.Init());
@@ -24,6 +31,9 @@ public class TitleManager : MonoBehaviour
             Application.OpenURL("");
 #endif
         }
+    }
+    public void UserDataInit()
+    {
     }
     IEnumerator LogoDelay()
     {

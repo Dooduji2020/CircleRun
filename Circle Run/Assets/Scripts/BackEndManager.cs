@@ -1,27 +1,82 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using BackEnd;
-using System;
 using BackEnd.Game.Rank;
-using UnityEditor.MPE;
+
+#if UNITY_ANDROID
+using GooglePlayGames;
+using GooglePlayGames.BasicApi;
+#elif UNITY_IOS
+#endif
 
 public class BackEndManager : MonoBehaviour
 {
     public static BackEndManager Instance;
-    private UserItem userItem = new UserItem();
-    public delegate void ExceptionEvent(Exception e);
-
     private void Awake()
     {
         if (Instance == null)
-        {
             Instance = this;
-            DontDestroyOnLoad(Instance);
-        }
         else
             Destroy(this.gameObject);
     }
+    private void Start()
+    {
+        PlayGamesPlatform.Instance.Authenticate(ProcessAuthentication);
+    }
+    private void DataInit()
+    {
+        SendQueue.Enqueue(Backend.GameData.GetMyData, "UserItem", Backend.UserInDate,callback =>
+        {
+            // 이후 처리
+        });
+    }
+#region Google
+    void ProcessAuthentication(SignInStatus status)
+    {
+        if (status == SignInStatus.Success)
+        {
+            GetAccessCode();
+            // Continue with Play Games Services
+        }
+        else
+        {
+            // Disable your integration with Play Games Services or show a login button
+            // to ask users to sign-in. Clicking it should call
+            // PlayGamesPlatform.Instance.ManuallyAuthenticate(ProcessAuthentication).
+        }
+    }
+    public void GetAccessCode()
+    {
+        PlayGamesPlatform.Instance.RequestServerSideAccess(
+          /* forceRefreshToken= */ false,
+          code => {
+              Debug.Log("구글 인증 코드 : " + code);
+
+              Backend.BMember.GetGPGS2AccessToken(code, googleCallback =>
+              {
+                  Debug.Log("GetGPGS2AccessToken 함수 호출 결과 " + googleCallback);
+
+                  string accessToken = "";
+
+                  if (googleCallback.IsSuccess())
+                  {
+                      accessToken = googleCallback.GetReturnValuetoJSON()["access_token"].ToString();
+                      Backend.BMember.AuthorizeFederation(accessToken, FederationType.GPGS2, callback =>
+                      {
+                          Debug.Log("뒤끝 로그인 성공했습니다. " + callback);
+                          DontDestroyOnLoad(gameObject);
+                          TitleManager.Instance.UserDataInit();
+                      });
+                  }
+              });
+          });
+    }
+#endregion
+#region Apple
+#endregion
+#region Version&Init
     public bool Init()
     {
         bool isResult = true;
@@ -62,6 +117,39 @@ public class BackEndManager : MonoBehaviour
 #endif
         return isResult;
     }
+#endregion
+#region User
+    public void SetNickName(string nickName)
+    {
+        var bro = Backend.BMember.UpdateNickname(nickName);
+        if (bro.IsSuccess())
+        { }
+        else
+        { }
+    }
+
+    public bool AutoLogin()
+    {
+        bool isResult = false;
+        var bro = Backend.BMember.LoginWithTheBackendToken();
+        if (bro.IsSuccess())
+        {
+            Debug.Log("Auto Login");
+            isResult = true;
+        }
+        return isResult;
+    }
+    public void Logout()
+    {
+        Backend.BMember.Logout((callback) => { 
+            if(callback.IsSuccess())
+            { }
+            else
+            { }
+        });
+    }
+#endregion
+#region Ranking
     public void GetRanking(Ranking ranking)
     {
         string table = GetRankingTable(ranking);
@@ -69,16 +157,8 @@ public class BackEndManager : MonoBehaviour
         if (bro.IsSuccess())
         {
             string json = bro.GetFlattenJSON().ToJson();
-            UserRank userRank = new UserRank();
+            UserRank[] userRank = JsonUtility.FromJson<UserRank[]>(json);
         }
-        else
-        { }
-    }
-    public void SetNickName(string nickName)
-    {
-        var bro = Backend.BMember.UpdateNickname(nickName);
-        if (bro.IsSuccess())
-        { }
         else
         { }
     }
@@ -106,7 +186,9 @@ public class BackEndManager : MonoBehaviour
         }
         return table;
     }
-    public T GetGameData<T>(string tableName) where T : BackEndBase, new()
+#endregion
+#region GameData
+    public T GetGameData<T>(string tableName) where T : DataManager.BackEndBase, new()
     {
         var bro = Backend.GameData.GetMyData(tableName, Backend.UserInDate);
         T data = new T();
@@ -134,42 +216,9 @@ public class BackEndManager : MonoBehaviour
         Param param = new Param();
         foreach (var i in dic)
             param.Add(i.Key, i.Value);
-        Backend.GameData.UpdateV2(tableName, userItem.inDate, Backend.UserInDate, param, (callback) =>
+        Backend.GameData.UpdateV2(tableName, DataManager.userItem.inDate, Backend.UserInDate, param, (callback) =>
         {
         });
     }
-}
-public enum Ranking
-{
-    Daily,
-    Week,
-    Mon,
-    Total
-}
-public class BackEndBase
-{
-    public string inDate;
-    public string owner_inDate;
-}
-public class UserScore : BackEndBase
-{
-    public string nickName;
-    public int DailyScore;
-    public int weekScore;
-    public int monScore;
-    public int totalScore;
-}
-public class UserItem : BackEndBase
-{
-    public int continueCoupon = 2;
-    public int shield = 2;
-    public bool adsRemove;
-}
-public class RankingData
-{
-    public string gamerInDate;
-    public string nickname;
-    public int score;
-    public int index;
-    public int rank;
+#endregion
 }
