@@ -23,60 +23,70 @@ public class BackEndManager : MonoBehaviour
     }
     private void Start()
     {
-        PlayGamesPlatform.Instance.Authenticate(ProcessAuthentication);
+        PlayGamesClientConfiguration config = new PlayGamesClientConfiguration
+       .Builder()
+       .RequestServerAuthCode(false)
+       .RequestEmail() // 이메일 권한을 얻고 싶지 않다면 해당 줄(RequestEmail)을 지워주세요.
+       .RequestIdToken()
+       .Build();
+        //커스텀 된 정보로 GPGS 초기화
+        PlayGamesPlatform.InitializeInstance(config);
+        PlayGamesPlatform.DebugLogEnabled = true; // 디버그 로그를 보고 싶지 않다면 false로 바꿔주세요.
+                                                  //GPGS 시작.
+        PlayGamesPlatform.Activate();
     }
     private void DataInit()
     {
-        SendQueue.Enqueue(Backend.GameData.GetMyData, "UserItem", Backend.UserInDate,callback =>
+        SendQueue.Enqueue(Backend.GameData.GetMyData, "UserItem", Backend.UserInDate, callback =>
         {
             // 이후 처리
         });
     }
-#region Google
-    void ProcessAuthentication(SignInStatus status)
+    #region Google
+    public void GPGSLogin()
     {
-        if (status == SignInStatus.Success)
+        // 이미 로그인 된 경우
+        if (Social.localUser.authenticated == true)
         {
-            GetAccessCode();
-            // Continue with Play Games Services
+            BackendReturnObject BRO = Backend.BMember.AuthorizeFederation(GetTokens(), FederationType.Google, "gpgs");
         }
         else
         {
-            // Disable your integration with Play Games Services or show a login button
-            // to ask users to sign-in. Clicking it should call
-            // PlayGamesPlatform.Instance.ManuallyAuthenticate(ProcessAuthentication).
+            Social.localUser.Authenticate((bool success) =>
+            {
+                if (success)
+                {
+                    // 로그인 성공 -> 뒤끝 서버에 획득한 구글 토큰으로 가입 요청
+                    BackendReturnObject BRO = Backend.BMember.AuthorizeFederation(GetTokens(), FederationType.Google, "gpgs");
+                }
+                else
+                {
+                    // 로그인 실패
+                    Debug.Log("Login failed for some reason");
+                }
+            });
         }
     }
-    public void GetAccessCode()
+    public string GetTokens()
     {
-        PlayGamesPlatform.Instance.RequestServerSideAccess(
-          /* forceRefreshToken= */ false,
-          code => {
-              Debug.Log("구글 인증 코드 : " + code);
-
-              Backend.BMember.GetGPGS2AccessToken(code, googleCallback =>
-              {
-                  Debug.Log("GetGPGS2AccessToken 함수 호출 결과 " + googleCallback);
-
-                  string accessToken = "";
-
-                  if (googleCallback.IsSuccess())
-                  {
-                      accessToken = googleCallback.GetReturnValuetoJSON()["access_token"].ToString();
-                      Backend.BMember.AuthorizeFederation(accessToken, FederationType.GPGS2, callback =>
-                      {
-                          Debug.Log("뒤끝 로그인 성공했습니다. " + callback);
-                          DontDestroyOnLoad(gameObject);
-                          TitleManager.Instance.UserDataInit();
-                      });
-                  }
-              });
-          });
+        if (PlayGamesPlatform.Instance.localUser.authenticated)
+        {
+            // 유저 토큰 받기 첫 번째 방법
+            string _IDtoken = PlayGamesPlatform.Instance.GetIdToken();
+            // 두 번째 방법
+            // string _IDtoken = ((PlayGamesLocalUser)Social.localUser).GetIdToken();
+            return _IDtoken;
+        }
+        else
+        {
+            Debug.Log("접속되어 있지 않습니다. PlayGamesPlatform.Instance.localUser.authenticated :  fail");
+            return null;
+        }
     }
-#endregion
-#region Apple
-#endregion
-#region Version&Init
+    #endregion
+    #region Apple
+    #endregion
+    #region Version&Init
     public bool Init()
     {
         bool isResult = true;
@@ -117,8 +127,8 @@ public class BackEndManager : MonoBehaviour
 #endif
         return isResult;
     }
-#endregion
-#region User
+    #endregion
+    #region User
     public void SetNickName(string nickName)
     {
         var bro = Backend.BMember.UpdateNickname(nickName);
@@ -141,15 +151,16 @@ public class BackEndManager : MonoBehaviour
     }
     public void Logout()
     {
-        Backend.BMember.Logout((callback) => { 
-            if(callback.IsSuccess())
+        Backend.BMember.Logout((callback) =>
+        {
+            if (callback.IsSuccess())
             { }
             else
             { }
         });
     }
-#endregion
-#region Ranking
+    #endregion
+    #region Ranking
     public void GetRanking(Ranking ranking)
     {
         string table = GetRankingTable(ranking);
@@ -186,8 +197,8 @@ public class BackEndManager : MonoBehaviour
         }
         return table;
     }
-#endregion
-#region GameData
+    #endregion
+    #region GameData
     public T GetGameData<T>(string tableName) where T : DataManager.BackEndBase, new()
     {
         var bro = Backend.GameData.GetMyData(tableName, Backend.UserInDate);
@@ -220,5 +231,5 @@ public class BackEndManager : MonoBehaviour
         {
         });
     }
-#endregion
+    #endregion
 }

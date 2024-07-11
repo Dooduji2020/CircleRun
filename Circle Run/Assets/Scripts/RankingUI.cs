@@ -35,12 +35,12 @@ public class RankingUI : MonoBehaviour
             });
         }
     }
-    private void RankingSlotInit(List<RankingData> data)
+    private void RankingSlotInit(List<DataManager.RankingData> data)
     {
     }
     private void Init(Ranking ranking = Ranking.Daily)
     {
-        List<RankingData> data = new List<RankingData>();
+        List<DataManager.RankingData> data = new List<DataManager.RankingData>();
         switch(ranking)
         {
             case Ranking.Daily:

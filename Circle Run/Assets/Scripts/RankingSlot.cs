@@ -6,8 +6,8 @@ public class RankingSlot : MonoBehaviour
     public TextMeshProUGUI nickNameTxt;
     public TextMeshProUGUI scoreTxt;
 
-    private RankingData data;
-    public void Init(RankingData _data)
+    private DataManager.RankingData data;
+    public void Init(DataManager.RankingData _data)
     {
         if (_data == null)
         {
