@@ -7,10 +7,10 @@ public partial class DataManager : MonoBehaviour
     public static DataManager Instance { get; private set; }
     public static UserScore userScore;
     public static UserItem userItem;
-    public static List<RankingData> dailyRanking = new List<RankingData>();
-    public static List<RankingData> weekRanking = new List<RankingData>();
-    public static List<RankingData> monRanking = new List<RankingData>();
-    public static List<RankingData> totalRanking = new List<RankingData>();
+    public static RankList dailyRanking = new RankList();
+    public static RankList weekRanking = new RankList();
+    public static RankList monRanking = new RankList();
+    public static RankList totalRanking = new RankList();
 
     private void Awake()
     {

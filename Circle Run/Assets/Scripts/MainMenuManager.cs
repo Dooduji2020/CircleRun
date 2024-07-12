@@ -14,6 +14,7 @@ public class MainMenuManager : MonoBehaviour
 
     public GameObject shopUI;
     public RankingUI rankingUI;
+    public NickNameUI nickNameUI;
 
     private void Start()
     {
@@ -21,8 +22,8 @@ public class MainMenuManager : MonoBehaviour
            PlayerPrefs.GetInt(Constants.DATA.SETTINGS_SOUND) : 1) == 1;
         _soundImage.sprite = sound ? _activeSoundSprite : _inactiveSoundSprite;
 
-        //AudioManager.Instance.AddButtonSound();
-        BgmManager.Instance.AddButtonSound();
+        AudioManager.Instance.AddButtonSound();
+        //AuManager.Instance.AddButtonSound();
     }
 
     public void ClickedPlay()

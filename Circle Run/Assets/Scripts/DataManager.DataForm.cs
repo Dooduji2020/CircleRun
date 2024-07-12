@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public partial class DataManager : MonoBehaviour
@@ -25,10 +26,14 @@ public partial class DataManager : MonoBehaviour
     public class RankingData
     {
         public string gamerInDate;
-        public string nickname;
+        public string nickName;
         public int score;
         public int index;
         public int rank;
+    }
+    public class RankList
+    {
+        public List<RankingData> rows = new List<RankingData>();
     }
     #endregion
 }

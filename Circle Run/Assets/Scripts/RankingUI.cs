@@ -7,8 +7,8 @@ public class RankingUI : MonoBehaviour
 {
     public Transform slotsTr;
     public Toggle[] toggles;
-    public GameObject[] rainkingPanelObject;
-    private RankingSlot[] rankingSlots;
+    public RankingToggle[] _toggles;
+    public RankingSlot[] rankingSlots;
     [ContextMenu("Setting")]
     private void Setting()
     {
@@ -24,23 +24,30 @@ public class RankingUI : MonoBehaviour
     {
         for (int i = 0; i <= (int)Ranking.Total; i++)
         {
-            toggles[i].onValueChanged.AddListener((isOn) => {
+            int index = i;
+            toggles[index].onValueChanged.AddListener((isOn) => {
                 if (isOn)
-                {
-                    rainkingPanelObject[i].SetActive(true);
-                    Init((Ranking)i);
-                }
-                else
-                    rainkingPanelObject[i].SetActive(false);
+                    Init((Ranking)index);
+                _toggles[index].OnToggle(isOn);
+                Debug.Log(index);
             });
         }
+        toggles[0].isOn = true;
     }
-    private void RankingSlotInit(List<DataManager.RankingData> data)
+    private void RankingSlotInit(DataManager.RankList data)
     {
+        int count = rankingSlots.Length - (rankingSlots.Length - data.rows.Count);
+        for(int i = 0;i<rankingSlots.Length;i++)
+        {
+            if (count <= i)
+                rankingSlots[i].Init(null);
+            else
+                rankingSlots[i].Init(data.rows[i]);
+        }
     }
     private void Init(Ranking ranking = Ranking.Daily)
     {
-        List<DataManager.RankingData> data = new List<DataManager.RankingData>();
+        DataManager.RankList data = new DataManager.RankList();
         switch(ranking)
         {
             case Ranking.Daily:
