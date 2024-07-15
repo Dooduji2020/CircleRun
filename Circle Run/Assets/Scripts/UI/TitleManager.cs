@@ -6,12 +6,14 @@ using TMPro;
 public class TitleManager : MonoBehaviour
 {
     public static TitleManager Instance;
-
     public TextMeshProUGUI nickNameTxt;
     public TextMeshProUGUI shieldTxt;
     public TextMeshProUGUI couponTxt;
-
     public NickNameUI nickNameUI;
+
+    [Header("Move UI")]
+    public MoveUI[] moveUI;
+
     private void Awake()
     {
         if (Instance == null)
@@ -78,6 +80,13 @@ public class TitleManager : MonoBehaviour
                 nickNameUI.gameObject.SetActive(true);
         }
         LoadingManager.Instance.LoadingStop();
+
+        yield return new WaitForSeconds(1f);
+        
+        foreach (var i in moveUI)
+            i.Move();
+        yield return null;
+
         yield break;
     }
 }

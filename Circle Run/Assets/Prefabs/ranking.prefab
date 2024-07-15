@@ -111,8 +111,8 @@ MonoBehaviour:
   _toggles:
   - {fileID: 5372032840677571771}
   - {fileID: 6042967131469537699}
-  weekObj: {fileID: 0}
-  dailyObj: {fileID: 0}
+  weekObj: {fileID: 6734982696133672262}
+  dailyObj: {fileID: 6959886923794426256}
 --- !u!1 &1002169369312966944
 GameObject:
   m_ObjectHideFlags: 0
