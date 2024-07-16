@@ -1475,6 +1475,7 @@ MonoBehaviour:
   moveUI:
   - {fileID: 1358691703}
   - {fileID: 1734542774}
+  - {fileID: 1574897477}
 --- !u!4 &559730948
 Transform:
   m_ObjectHideFlags: 0
@@ -3647,7 +3648,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1013298944}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: edd8ccb7fb29f7d4a978147f76d4d77b, type: 3}
   m_Name: 
@@ -9708,9 +9709,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e218c7219f3033a4c927ebec18381165, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveTime: 2.65
-  _rotateRadius: 1.5
-  _center: {x: 0, y: 0, z: 0}
+  angle: 0
+  isOrigin: 1
+  speed: 1.5
 --- !u!1 &1608666011
 GameObject:
   m_ObjectHideFlags: 0

@@ -5,3 +5,8 @@ public enum MoveAngle
     Left,
     Right
 }
+public enum UISprite
+{
+    Shield,
+    Coupon
+}

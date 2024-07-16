@@ -336,7 +336,7 @@ public class BackEndManager : MonoBehaviour
         }
         else
         {
-            //�ʱ�ȭ �� �μ�Ʈ
+            //게임데이터 불러오기 에러, 팝업 이나 문구 띄우고, 네트워크 상태 체크
         }
         return data;
     }
@@ -346,15 +346,24 @@ public class BackEndManager : MonoBehaviour
         if (bro.IsSuccess())
         { }
         else
-        { }
+        {
+            //게임데이터 추가 에러, 팝업 이나 문구 띄우고, 네트워크 상태 체크
+        }
     }
-    public void GameDataUpdate(string tableName, Dictionary<string, string> dic)
+    public void GameDataUpdate(string tableName, string inDate,Dictionary<string, string> dic, Action<bool> callback)
     {
         Param param = new Param();
         foreach (var i in dic)
             param.Add(i.Key, i.Value);
-        Backend.GameData.UpdateV2(tableName, DataManager.userItem.inDate, Backend.UserInDate, param, (callback) =>
+        Backend.GameData.UpdateV2(tableName, inDate, Backend.UserInDate, param, (result) =>
         {
+            bool isResult = result.IsSuccess();
+            if (isResult)
+                callback?.Invoke(isResult);
+            else
+            {
+            }
+            LoadingManager.Instance.LoadingStop();
         });
     }
     #endregion

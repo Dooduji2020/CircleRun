@@ -14,4 +14,13 @@ public class NetworkConnect : MonoBehaviour
 
         return isConnect;
     }
+    private void Update()
+    {
+        if(CheckConnectInternet())
+        { }
+        else
+        {
+            Debug.Log("네트워크 연결 없음");
+        }
+    }
 }

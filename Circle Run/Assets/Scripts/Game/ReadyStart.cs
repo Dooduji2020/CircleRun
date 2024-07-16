@@ -19,9 +19,4 @@ public class ReadyStart : MonoBehaviour {
         text = this.GetComponent<TextMeshProUGUI>();
         text.DOFade(0, 1).SetDelay(2f).SetEase(Ease.InCubic).SetLoops(-1, LoopType.Yoyo);
     }
-
-   
-
-
-   
 }

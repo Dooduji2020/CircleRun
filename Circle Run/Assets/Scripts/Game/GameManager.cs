@@ -34,9 +34,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Sprite _activeSoundSprite, _inactiveSoundSprite;
 
-    [Header("이어하기 팝업")]
-    public ContinueUI continuePop;
-    
+    private bool isRewardAds,isCoupon = false;
 
     private void Awake()
     {
@@ -153,7 +151,11 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
         yield return MoveCamera (new Vector3(_cameraStartPos.x,-_cameraStartPos.y,_cameraStartPos.z));
-
+        if(DataManager.userItem.continueCoupon > 0 && isCoupon)
+        {
+            isCoupon = true;
+            --DataManager.userItem.continueCoupon;
+        }
         _endPanel.SetActive(true);
         _endScoreText.text = score.ToString();
 

@@ -6,7 +6,7 @@ using DG.Tweening;
 
 public class MoveUI : MonoBehaviour
 {
-    private RectTransform myRect;
+    protected RectTransform myRect;
 
     [Header("이동 방향 && 시작지점 && 스피드")]
     public MoveAngle angle;
@@ -19,7 +19,7 @@ public class MoveUI : MonoBehaviour
     {
         Init();
     }
-    private void Init()
+    protected virtual void Init()
     {
         myRect = GetComponent<RectTransform>();
         originPos = myRect.anchoredPosition;
@@ -39,7 +39,7 @@ public class MoveUI : MonoBehaviour
                 break;
         }
     }
-    public void Move()
+    public virtual void Move()
     {
         if(isOrigin)
         {

@@ -6,11 +6,13 @@ using GoogleMobileAds.Api;
 
 public class AdsManager : MonoBehaviour
 {
-    //���󱤰�
+    public static AdsManager Instance;
+
+    //보상광고
     private const string rewardAdID = "ca-app-pub-7346251641612501/6566400313";
     private const string testRewardAdID = "ca-app-pub-3940256099942544/5224354917";
 
-    //���鱤��
+    //전면광고
     private const string InterstitialAdID = "ca-app-pub-7346251641612501/6597232048";
     private const string testInterstitialAdID = "ca-app-pub-3940256099942544/1033173712";
 
@@ -19,6 +21,18 @@ public class AdsManager : MonoBehaviour
     private InitializationStatus initStatus;
     private InterstitialAd _interstitialAd;
     private RewardedAd _rewardAd;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(this.gameObject);
+            Init();
+        }
+        else
+            Destroy(this.gameObject);
+    }
     private void Init()
     {
         RequestConfiguration requestConfiguration = new RequestConfiguration();
@@ -88,7 +102,6 @@ public class AdsManager : MonoBehaviour
     {
         if (_rewardAd == null || !_rewardAd.CanShowAd())
             return;
-
         _rewardAd.Show(callback);
         RewardAdLoad();
     }
