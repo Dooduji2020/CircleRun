@@ -62,12 +62,12 @@ public class TitleManager : MonoBehaviour
     {
         yield return new WaitForSeconds(1.5f);
         float timer = 0;
-        while (BackEnd.SendQueue.UnprocessedFuncCount > 0 && timer < 5f)
+        while (SendQueue.UnprocessedFuncCount > 0 && timer < 5f)
         {
             timer += Time.deltaTime;
             yield return null;
         }
-        if (timer >= 5f && BackEnd.SendQueue.UnprocessedFuncCount > 0)
+        if (timer >= 5f && SendQueue.UnprocessedFuncCount > 0)
         {
             //Backend SendQueue 작업 실패 시 (유저 데이터 초기화 및 데이터 로드)
             Debug.Log(DataManager.userScore.DailyScore);
@@ -78,15 +78,16 @@ public class TitleManager : MonoBehaviour
                 nickNameTxt.text = Backend.UserNickName;
             else
                 nickNameUI.gameObject.SetActive(true);
+
+            DataManager.Instance.Init(() =>
+            {
+                couponTxt.text = DataManager.userItem.continueCoupon.ToString();
+                shieldTxt.text = DataManager.userItem.shield.ToString();
+                LoadingManager.Instance.LoadingStop();
+                foreach (var i in moveUI)
+                    i.Move();
+            });
         }
-        LoadingManager.Instance.LoadingStop();
-
-        yield return new WaitForSeconds(1f);
-        
-        foreach (var i in moveUI)
-            i.Move();
-        yield return null;
-
         yield break;
     }
 }

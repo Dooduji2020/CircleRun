@@ -10,6 +10,7 @@ public class ContinueUI : MonoBehaviour
     public Image IMG;
     public TextMeshProUGUI continueTxt;
     public Button sendBtn;
+    public MoveUI moveUI;
 
     private event Action sendButtonEvent;
 
@@ -22,12 +23,12 @@ public class ContinueUI : MonoBehaviour
     {
         if(isCoupon)
         {
-            //ÄíÆù ÀÌ¹ÌÁö ¹× Action¿¬°á
+            //ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ ï¿½ï¿½ Actionï¿½ï¿½ï¿½ï¿½
         }
         else
         {
             sendButtonEvent += () => AdsManager.Instance.ShowRewardAd((reward) => { });
-            // ±¤°í ÈÄ ºÎÈ° ÀÌ¹ÌÁö 
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½È° ï¿½Ì¹ï¿½ï¿½ï¿½ 
         }
         sendBtn.interactable = true;
     }

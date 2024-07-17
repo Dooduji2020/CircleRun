@@ -325,14 +325,14 @@ public class BackEndManager : MonoBehaviour
     }
     #endregion
     #region GameData
-    public T GetGameData<T>(string tableName) where T : BackEndBase, new()
+    public BackEndGameData<T> GetGameData<T>(string tableName) where T : BackEndBase, new()
     {
-        var bro = Backend.GameData.GetMyData(tableName, Backend.UserInDate);
-        T data = new T();
+        var bro = Backend.GameData.GetMyData(tableName, new Where());
+        BackEndGameData<T> data = new BackEndGameData<T>();
         if (bro.IsSuccess())
         {
             string json = bro.GetFlattenJSON().ToJson();
-            data = JsonUtility.FromJson<T>(json);
+            data = JsonConvert.DeserializeObject<BackEndGameData<T>>(json);//JsonUtility.FromJson<T>(json);
         }
         else
         {

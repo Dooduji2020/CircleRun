@@ -1,9 +1,15 @@
 using System.Collections.Generic;
+using BackEnd;
 
 public class BackEndBase
 {
     public string inDate;
     public string owner_inDate;
+    public string updatedAt;
+}
+public class BackEndGameData<T> where T : BackEndBase
+{
+    public T[] rows;
 }
 #region User
 public class UserScore : BackEndBase
@@ -16,9 +22,9 @@ public class UserScore : BackEndBase
 }
 public class UserItem : BackEndBase
 {
-    public int continueCoupon = 2;
-    public int shield = 2;
-    public bool adsRemove = false;
+    public int continueCoupon;
+    public int shield;
+    public bool adsRemove;
 }
 #endregion
 

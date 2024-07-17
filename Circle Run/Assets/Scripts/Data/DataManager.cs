@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,8 +22,13 @@ public class DataManager : MonoBehaviour
         else
             Destroy(this.gameObject);
     }
-    public void Init()
-    { }
+    public void Init(Action callback)
+    { 
+        userItem = BackEndManager.Instance.GetGameData<UserItem>("UserItemData").rows[0];
+        userScore = BackEndManager.Instance.GetGameData<UserScore>("UserData").rows[0];
+
+        callback?.Invoke();
+    }
     public void UserItemUpdate(System.Action<bool> callback)
     {
         LoadingManager.Instance.LoadingStart();
