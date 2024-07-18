@@ -6,6 +6,7 @@ using UnityEngine.Events;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 public class GameManager : MonoBehaviour
 {
@@ -29,6 +30,8 @@ public class GameManager : MonoBehaviour
     private GameObject _endPanel;
     [SerializeField]
     private ContinueUI _continueUI;
+    [SerializeField]
+    private InGameRankingUI _rankUI;
 
     [SerializeField]
     private Image _soundImage;
@@ -37,6 +40,9 @@ public class GameManager : MonoBehaviour
     private Sprite _activeSoundSprite, _inactiveSoundSprite;
 
     private bool isRewardAds, isCoupon = false;
+
+    public Image[] shieldIMG;
+    public int shield;
 
     private void Awake()
     {
@@ -137,7 +143,12 @@ public class GameManager : MonoBehaviour
         }
         cameraTransform.position = cameraPos;
     }
-
+    public void ShieldUse()
+    {
+        --shield;
+        shieldIMG[shield].gameObject.SetActive(false);
+        shieldIMG[shield].DOColor(Color.gray, 1f).OnComplete(()=>shieldIMG[shield].gameObject.SetActive(false));
+    }
     public void EndGame()
     {
         StartCoroutine(GameOver());
@@ -153,18 +164,24 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
         yield return MoveCamera(new Vector3(_cameraStartPos.x, -_cameraStartPos.y, _cameraStartPos.z));
-        if (DataManager.userItem.continueCoupon > 0 && isCoupon)
+        if (DataManager.userItem.continueCoupon > 0 && !isCoupon)
         {
             isCoupon = true;
-            --DataManager.userItem.continueCoupon;
+            _continueUI.Open(isCoupon);
+            _continueUI.closeAction += () => _rankUI.Open(score);
         }
+        else if(!isRewardAds)
+        {
+            isRewardAds = true;
+        }
+        else
+            _rankUI.Open(score);
 
         _endPanel.SetActive(true);
-        _continueUI.Open(isCoupon);
         _endScoreText.text = score.ToString();
 
-        bool sound = (PlayerPrefs.HasKey(Constants.DATA.SETTINGS_SOUND) ?
-          PlayerPrefs.GetInt(Constants.DATA.SETTINGS_SOUND) : 1) == 1;
+        //bool sound = (PlayerPrefs.HasKey(Constants.DATA.SETTINGS_SOUND) ?
+        //  PlayerPrefs.GetInt(Constants.DATA.SETTINGS_SOUND) : 1) == 1;
         // _soundImage.sprite = sound ? _activeSoundSprite : _inactiveSoundSprite;
 
         int highScore = PlayerPrefs.HasKey(Constants.DATA.HIGH_SCORE) ? PlayerPrefs.GetInt(Constants.DATA.HIGH_SCORE) : 0;

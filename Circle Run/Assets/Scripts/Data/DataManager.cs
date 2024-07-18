@@ -9,9 +9,33 @@ public class DataManager : MonoBehaviour
 
     public static UserScore userScore;
     public static UserItem userItem;
-    public static RankList dailyRanking = new RankList();
-    public static RankList weekRanking = new RankList();
+    public static RankList dailyRanking;
+    public static RankList weekRanking;
 
+    public static int DailyScore
+    {
+        set
+        {
+            if (userScore.DailyScore < value)
+            {
+                userScore.DailyScore = value;
+                BackEndManager.Instance.RankingUpdate(Ranking.Daily, value);
+            }
+        }
+        get => userScore.DailyScore;
+    }
+    public static int WeekScore
+    {
+        get => userScore.weekScore;
+        set
+        {
+            if (userScore.weekScore < value)
+            {
+                userScore.weekScore = value;
+                BackEndManager.Instance.RankingUpdate(Ranking.Week, value);
+            }
+        }
+    }
     private void Awake()
     {
         if (Instance == null)
@@ -29,13 +53,5 @@ public class DataManager : MonoBehaviour
 
         callback?.Invoke();
     }
-    public void UserItemUpdate(System.Action<bool> callback)
-    {
-        LoadingManager.Instance.LoadingStart();
-        Dictionary<string, string> dic = new Dictionary<string, string>();
-        dic.Add("", userItem.continueCoupon.ToString());
-        dic.Add("", userItem.shield.ToString());
-        dic.Add("", userItem.adsRemove.ToString());
-        BackEndManager.Instance.GameDataUpdate("UserItemData",userItem.inDate,dic, callback);
-    }
+
 }

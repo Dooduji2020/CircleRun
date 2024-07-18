@@ -13,6 +13,7 @@ public class ContinueUI : MonoBehaviour
     public MoveUI moveUI;
 
     private event Action sendButtonEvent;
+    public Action closeAction;
 
     private void Awake()
     {
@@ -23,12 +24,24 @@ public class ContinueUI : MonoBehaviour
     {
         if(isCoupon)
         {
-            //���� �̹��� �� Action����
+            
+            BackEndManager.Instance.UseContinueCoupon((result) => {
+                if (result)
+                {
+                    --DataManager.userItem.continueCoupon;
+                    closeAction = null;
+                    this.gameObject.SetActive(false);
+                    //게임 진행
+                }
+                else
+                {
+                    Debug.Log("error");
+                }
+            });
         }
         else
         {
             sendButtonEvent += () => AdsManager.Instance.ShowRewardAd((reward) => { });
-            // ���� �� ��Ȱ �̹��� 
         }
         sendBtn.interactable = true;
     }
@@ -37,5 +50,10 @@ public class ContinueUI : MonoBehaviour
         sendButtonEvent?.Invoke();
         sendBtn.interactable = false;
         sendButtonEvent = null;
+    }
+    public void Close()
+    {
+        closeAction?.Invoke();
+        closeAction = null;
     }
 }

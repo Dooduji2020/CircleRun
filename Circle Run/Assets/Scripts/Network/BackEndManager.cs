@@ -304,13 +304,14 @@ public class BackEndManager : MonoBehaviour
             {
                 string json = rank.GetFlattenJSON().ToJson();
                 RankList data = JsonConvert.DeserializeObject<RankList>(json);
-                RankingDataSet(data, ranking);
+                //RankingDataSet(data, ranking);
             }
         }
         else
         {
             Debug.Log("Fail");
         }
+        LoadingManager.Instance.LoadingStop();
     }
     private string GetRankingTable(Ranking ranking)
     {
@@ -327,7 +328,7 @@ public class BackEndManager : MonoBehaviour
     #region GameData
     public BackEndGameData<T> GetGameData<T>(string tableName) where T : BackEndBase, new()
     {
-        var bro = Backend.GameData.GetMyData(tableName, new Where());
+        var bro = Backend.GameData.GetMyData(tableName, new Where(),1);
         BackEndGameData<T> data = new BackEndGameData<T>();
         if (bro.IsSuccess())
         {
@@ -350,6 +351,28 @@ public class BackEndManager : MonoBehaviour
             //게임데이터 추가 에러, 팝업 이나 문구 띄우고, 네트워크 상태 체크
         }
     }
+    public void UseContinueCoupon(System.Action<bool> callback)
+    {
+        LoadingManager.Instance.LoadingStart();
+        UserItem item = DataManager.userItem;
+        Dictionary<string, string> dic = new Dictionary<string, string>();
+        dic.Add("continueCoupon", (item.continueCoupon - 1).ToString());
+        GameDataUpdate("UserItemData", item.inDate, dic, callback);
+    }
+    public void UseShield()
+    {
+        Param param = new Param();
+        UserItem item = DataManager.userItem;
+        --DataManager.userItem.shield;
+        param.Add("shield", (item.shield-1).ToString());
+        SendQueue.Enqueue(Backend.GameData.UpdateV2, "UserItemData", item.inDate, Backend.UserInDate, param, (callback) => { 
+            if(callback.IsSuccess())
+            { }
+            else
+            { }
+        });
+    }
+
     public void GameDataUpdate(string tableName, string inDate,Dictionary<string, string> dic, Action<bool> callback)
     {
         Param param = new Param();

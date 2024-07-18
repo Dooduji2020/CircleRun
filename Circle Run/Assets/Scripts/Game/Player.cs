@@ -14,6 +14,8 @@ public class Player : MonoBehaviour
     private bool canMove;
     private bool canShoot;
 
+    
+
     [SerializeField]
     private AudioClip _moveClip, _pointClip, _scoreClip, _loseClip;
 
@@ -87,21 +89,29 @@ public class Player : MonoBehaviour
             collision.gameObject.GetComponent<Score>().OnGameEnded();
         }
 
-        if(collision.CompareTag(Constants.Tags.OBSTACLE))
+        if(collision.CompareTag(Constants.Tags.OBSTACLE) || collision.CompareTag(Constants.Tags.BOSS))
         {
-            Destroy(Instantiate(_explosionPrefab,transform.position,Quaternion.identity), 3f);
-            AudioManager.Instance.PlaySound(_loseClip);            
-            GameManager.Instance.EndGame();
-            Destroy(gameObject);
+            if (GameManager.Instance.shield > 0)
+            {
+                GameManager.Instance.ShieldUse();
+                BackEndManager.Instance.UseShield();
+            }
+            else
+            {
+                Destroy(Instantiate(_explosionPrefab, transform.position, Quaternion.identity), 3f);
+                AudioManager.Instance.PlaySound(_loseClip);
+                GameManager.Instance.EndGame();
+                this.gameObject.SetActive(false);
+            }
         }
 
-        if(collision.CompareTag(Constants.Tags.BOSS))
-        {
-            Destroy(Instantiate(_explosionPrefab,transform.position,Quaternion.identity), 3f);
-            AudioManager.Instance.PlaySound(_loseClip);            
-            GameManager.Instance.EndGame();
-            Destroy(gameObject);
-        }
+        //if(collision.CompareTag(Constants.Tags.BOSS))
+        //{
+        //    Destroy(Instantiate(_explosionPrefab,transform.position,Quaternion.identity), 3f);
+        //    AudioManager.Instance.PlaySound(_loseClip);            
+        //    GameManager.Instance.EndGame();
+        //    this.gameObject.SetActive(false);
+        //}
     }
 
     private void ColorChanged(Color col)
