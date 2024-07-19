@@ -32,7 +32,10 @@ public class BackEndManager : MonoBehaviour
     private void Awake()
     {
         if (Instance == null)
+        {
             Instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
         else
             Destroy(this.gameObject);
     }
@@ -294,22 +297,19 @@ public class BackEndManager : MonoBehaviour
     {
         string table = GetRankingTable(ranking);
         Param param = new Param();
-        param.Add("DailyScore", score);
+        if(ranking == Ranking.Daily)
+            param.Add("DailyScore", score);
+        else
+            param.Add("weekScore", score);
         var bro = Backend.URank.User.UpdateUserScore(table, "UserData", DataManager.userScore.inDate, param);
         if (bro.IsSuccess())
         {
             Debug.Log("Success");
-            var rank = Backend.URank.User.GetMyRank(table, 2);
-            if (rank.IsSuccess())
-            {
-                string json = rank.GetFlattenJSON().ToJson();
-                RankList data = JsonConvert.DeserializeObject<RankList>(json);
-                //RankingDataSet(data, ranking);
-            }
         }
         else
         {
-            Debug.Log("Fail");
+            Debug.Log("Fail : " + bro.GetMessage());
+            //랭킹 다시 시도
         }
         LoadingManager.Instance.LoadingStop();
     }
@@ -333,7 +333,7 @@ public class BackEndManager : MonoBehaviour
         if (bro.IsSuccess())
         {
             string json = bro.GetFlattenJSON().ToJson();
-            data = JsonConvert.DeserializeObject<BackEndGameData<T>>(json);//JsonUtility.FromJson<T>(json);
+            data = JsonConvert.DeserializeObject<BackEndGameData<T>>(json); //JsonUtility.FromJson<T>(json);
         }
         else
         {
@@ -355,8 +355,8 @@ public class BackEndManager : MonoBehaviour
     {
         LoadingManager.Instance.LoadingStart();
         UserItem item = DataManager.userItem;
-        Dictionary<string, string> dic = new Dictionary<string, string>();
-        dic.Add("continueCoupon", (item.continueCoupon - 1).ToString());
+        Dictionary<string, int> dic = new Dictionary<string, int>();
+        dic.Add("continueCoupon", item.continueCoupon - 1);
         GameDataUpdate("UserItemData", item.inDate, dic, callback);
     }
     public void UseShield()
@@ -364,30 +364,42 @@ public class BackEndManager : MonoBehaviour
         Param param = new Param();
         UserItem item = DataManager.userItem;
         --DataManager.userItem.shield;
-        param.Add("shield", (item.shield-1).ToString());
-        SendQueue.Enqueue(Backend.GameData.UpdateV2, "UserItemData", item.inDate, Backend.UserInDate, param, (callback) => { 
+        param.Add("shield", item.shield-1);
+        SendQueue.Enqueue(Backend.PlayerData.UpdateMyData, "UserItemData", item.inDate, param, (callback) => { 
             if(callback.IsSuccess())
             { }
             else
             { }
         });
     }
+    public void ScoreUpdate()
+    {
+        LoadingManager.Instance.LoadingStart();
+        Param param = new Param();
+        UserScore score = DataManager.userScore;
+        param.Add("DailyScore", score.DailyScore);
+        param.Add("weekScore", score.weekScore);
+        RankingUpdate(Ranking.Daily, score.DailyScore);
+        RankingUpdate(Ranking.Week, score.weekScore);
+        //SendQueue.Enqueue(Backend.PlayerData.UpdateMyData, "UserData", score.inDate, param, (callback) => {
+        //    LoadingManager.Instance.LoadingStop();
 
-    public void GameDataUpdate(string tableName, string inDate,Dictionary<string, string> dic, Action<bool> callback)
+        //});
+    }
+    public void GameDataUpdate(string tableName, string inDate, Dictionary<string, int> dic, Action<bool> callback)
     {
         Param param = new Param();
         foreach (var i in dic)
             param.Add(i.Key, i.Value);
-        Backend.GameData.UpdateV2(tableName, inDate, Backend.UserInDate, param, (result) =>
+        var result = Backend.PlayerData.UpdateMyData(tableName, inDate, param);
+        bool isResult = result.IsSuccess();
+        if (isResult)
+            callback?.Invoke(isResult);
+        else
         {
-            bool isResult = result.IsSuccess();
-            if (isResult)
-                callback?.Invoke(isResult);
-            else
-            {
-            }
-            LoadingManager.Instance.LoadingStop();
-        });
+            Debug.Log("Error Message : " + result.GetMessage());
+        }
+        LoadingManager.Instance.LoadingStop();
     }
     #endregion
 }

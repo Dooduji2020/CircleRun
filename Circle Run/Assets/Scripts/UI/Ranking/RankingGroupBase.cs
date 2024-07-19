@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public abstract class RankingGroupBase : MonoBehaviour
 {
@@ -7,8 +8,10 @@ public abstract class RankingGroupBase : MonoBehaviour
     protected Transform slotTr;
 
     [SerializeField]
-    protected RankingSlot[] slots;
+    protected List<RankingSlot> slots;
 
+    [SerializeField]
+    protected Button button;
 
     public abstract void Init(List<RankingData> datas);
 

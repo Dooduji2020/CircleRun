@@ -6,11 +6,14 @@ public class RankingDaily : RankingGroupBase
 {
     public override void Init(List<RankingData> datas)
     {
-        int count = slots.Length - (slots.Length - datas.Count);
-        for(int i = 0;i<slots.Length;i++)
+        for (int i = 0; i < datas.Count; i++)
         {
-            if (count <= i)
-                slots[i].Init(null);
+            if (i >= slots.Count)
+            {
+                RankingSlot slot = Instantiate(Resources.Load<RankingSlot>("Prefabs/UI/normal_score"),slotTr);
+                slot.Init(datas[i]);
+                slots.Add(slot);
+            }
             else
                 slots[i].Init(datas[i]);
         }

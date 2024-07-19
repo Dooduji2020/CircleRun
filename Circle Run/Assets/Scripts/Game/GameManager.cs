@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instance { get; private set; }
 
+    public Player player;
+
     [SerializeField]
     private TMP_Text _scoreText, _endScoreText, _highScoreText;
 
@@ -39,7 +41,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Sprite _activeSoundSprite, _inactiveSoundSprite;
 
-    private bool isRewardAds, isCoupon = false;
+    public bool isRewardAds, isCoupon = false;
 
     public Image[] shieldIMG;
     public int shield;
@@ -127,6 +129,27 @@ public class GameManager : MonoBehaviour
         CurrentColorId = 0;
         GameStarted?.Invoke();
     }
+    private IEnumerator IReStartGame()
+    {
+        hasGameEnded = false;
+        //Camera.main.transform.position = _cameraStartPos;
+        _scoreText.gameObject.SetActive(false);
+        yield return MoveCamera(_cameraEndPos);
+
+        //Score
+        _scoreText.gameObject.SetActive(true);
+        //score = 0;
+        _scoreText.text = score.ToString();
+        _scoreAnimator.Play(_scoreClip.name, -1, 0f);
+
+        StartCoroutine(SpawnObstacles());
+        StartCoroutine(SpawnObstacles2());
+        StartCoroutine(SpawnBoss());
+
+
+        //CurrentColorId = 0;
+        GameStarted?.Invoke();
+    }
 
     private IEnumerator MoveCamera(Vector3 cameraPos)
     {
@@ -162,45 +185,52 @@ public class GameManager : MonoBehaviour
         hasGameEnded = true;
         _scoreText.gameObject.SetActive(false);
 
-        yield return new WaitForSeconds(1f);
-        yield return MoveCamera(new Vector3(_cameraStartPos.x, -_cameraStartPos.y, _cameraStartPos.z));
-        if (DataManager.userItem.continueCoupon > 0 && !isCoupon)
+        //yield return new WaitForSeconds(1f);
+        if (DataManager.userItem.continueCoupon > 0 && !isCoupon)   
         {
+            _continueUI.Open(false);
             isCoupon = true;
-            _continueUI.Open(isCoupon);
-            _continueUI.closeAction += () => _rankUI.Open(score);
+            _continueUI.closeAction += EndGame;
         }
-        else if(!isRewardAds)
+        else if (!isRewardAds)  
         {
+            _continueUI.Open(true);
             isRewardAds = true;
+            _continueUI.closeAction += EndGame;
+            
         }
         else
+        {
+            _continueUI.gameObject.SetActive(false);
+            _endPanel.SetActive(true);
+            yield return MoveCamera(new Vector3(_cameraStartPos.x, -_cameraStartPos.y, _cameraStartPos.z));
             _rankUI.Open(score);
-
-        _endPanel.SetActive(true);
+        }
         _endScoreText.text = score.ToString();
-
-        //bool sound = (PlayerPrefs.HasKey(Constants.DATA.SETTINGS_SOUND) ?
-        //  PlayerPrefs.GetInt(Constants.DATA.SETTINGS_SOUND) : 1) == 1;
-        // _soundImage.sprite = sound ? _activeSoundSprite : _inactiveSoundSprite;
-
-        int highScore = PlayerPrefs.HasKey(Constants.DATA.HIGH_SCORE) ? PlayerPrefs.GetInt(Constants.DATA.HIGH_SCORE) : 0;
-        if (score > highScore)
+        if (score > DataManager.DailyScore)
         {
             _highScoreText.text = "NEW BEST";
 
             //Play HighScore Animation
             _highScoreAnimator.Play(_highScoreClip.name, -1, 0f);
 
-            highScore = score;
-            PlayerPrefs.SetInt(Constants.DATA.HIGH_SCORE, highScore);
+            DataManager.DailyScore = score;
         }
         else
         {
-            _highScoreText.text = "BEST " + highScore.ToString();
+            _highScoreText.text = "BEST " + DataManager.DailyScore.ToString();
         }
     }
-
+    public void GameContinuePlay()
+    {
+        player.GameReStart();
+        StartCoroutine(IReStartDelay());
+    }
+    IEnumerator IReStartDelay()
+    {
+        yield return new WaitForSeconds(2f);
+        StartCoroutine(IReStartGame());
+    }
 
     #endregion
 

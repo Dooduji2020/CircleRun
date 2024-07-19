@@ -32,6 +32,7 @@ public class UserItem : BackEndBase
 public class RankingData
 {
     public string gamerInDate;
+    public string nickname;
     public string nickName;
     public int score;
     public int index;

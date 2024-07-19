@@ -46,6 +46,12 @@ public class Player : MonoBehaviour
         canMove = true;
         canShoot = true;
     }
+    public void GameReStart()
+    {
+        this.gameObject.SetActive(true);
+        GameManager.Instance.GameStarted += GameStarted;
+        GameManager.Instance.ColorChanged += ColorChanged;
+    }
 
     private void Update()
     {
@@ -102,6 +108,8 @@ public class Player : MonoBehaviour
                 AudioManager.Instance.PlaySound(_loseClip);
                 GameManager.Instance.EndGame();
                 this.gameObject.SetActive(false);
+                canMove = false;
+                canShoot = false;
             }
         }
 

@@ -20,7 +20,7 @@ public class RankingSlot : MonoBehaviour
         else
         {
             data = _data;
-            nickNameTxt.text = data.nickName;
+            nickNameTxt.text = data.nickname;
             scoreTxt.text = data.score.ToString();
             classTxt.text = data.rank.ToString();
         }

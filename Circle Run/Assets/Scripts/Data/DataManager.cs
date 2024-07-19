@@ -19,7 +19,7 @@ public class DataManager : MonoBehaviour
             if (userScore.DailyScore < value)
             {
                 userScore.DailyScore = value;
-                BackEndManager.Instance.RankingUpdate(Ranking.Daily, value);
+                //BackEndManager.Instance.RankingUpdate(Ranking.Daily, value);
             }
         }
         get => userScore.DailyScore;
@@ -32,7 +32,7 @@ public class DataManager : MonoBehaviour
             if (userScore.weekScore < value)
             {
                 userScore.weekScore = value;
-                BackEndManager.Instance.RankingUpdate(Ranking.Week, value);
+                //BackEndManager.Instance.RankingUpdate(Ranking.Week, value);
             }
         }
     }

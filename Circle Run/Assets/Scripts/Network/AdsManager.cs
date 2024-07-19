@@ -42,7 +42,7 @@ public class AdsManager : MonoBehaviour
         {
             initStatus = _initStatus;
             //InterstitialAdLoad();
-            //RewardAdLoad();
+            RewardAdLoad();
         });
     }
     private void AdsInitCheck()
@@ -101,7 +101,10 @@ public class AdsManager : MonoBehaviour
     public void ShowRewardAd(System.Action<Reward> callback)
     {
         if (_rewardAd == null || !_rewardAd.CanShowAd())
-            return;
+        {
+            callback?.Invoke(null);
+            return; 
+        }
         _rewardAd.Show(callback);
         RewardAdLoad();
     }

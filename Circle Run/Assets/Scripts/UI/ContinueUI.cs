@@ -14,46 +14,60 @@ public class ContinueUI : MonoBehaviour
 
     private event Action sendButtonEvent;
     public Action closeAction;
-
     private void Awake()
     {
         sendBtn.onClick.AddListener(ContinueSend);
-        sendBtn.interactable = false;
+    }
+    private void Start()
+    {
+        moveUI.Move();
     }
     public void Open(bool isCoupon = false)
     {
-        if(isCoupon)
+        if (sendButtonEvent != null)
+            sendButtonEvent = null;
+        if (isCoupon)
         {
-            
-            BackEndManager.Instance.UseContinueCoupon((result) => {
-                if (result)
-                {
-                    --DataManager.userItem.continueCoupon;
-                    closeAction = null;
-                    this.gameObject.SetActive(false);
-                    //게임 진행
-                }
-                else
-                {
-                    Debug.Log("error");
-                }
-            });
+            this.gameObject.SetActive(true);
+            sendButtonEvent += () => {
+                BackEndManager.Instance.UseContinueCoupon((result) => {
+                    if (result)
+                    {
+                        --DataManager.userItem.continueCoupon;
+                        closeAction = null;
+                        GameManager.Instance.GameContinuePlay();
+                        this.gameObject.SetActive(false);
+                        //게임 진행
+                    }
+                    else
+                    {
+                        Debug.Log("error");
+                    }
+                });
+            };
         }
         else
         {
-            sendButtonEvent += () => AdsManager.Instance.ShowRewardAd((reward) => { });
+            this.gameObject.SetActive(true);
+            sendButtonEvent += () => AdsManager.Instance.ShowRewardAd((reward) => {
+                closeAction = null;
+                GameManager.Instance.GameContinuePlay();
+                this.gameObject.SetActive(false);
+            });
         }
         sendBtn.interactable = true;
     }
     private void ContinueSend()
     {
-        sendButtonEvent?.Invoke();
         sendBtn.interactable = false;
+        sendButtonEvent?.Invoke();
         sendButtonEvent = null;
+        closeAction = null;
     }
     public void Close()
     {
         closeAction?.Invoke();
         closeAction = null;
+        sendButtonEvent = null;
     }
 }

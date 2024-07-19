@@ -19,7 +19,7 @@ public class TitleManager : MonoBehaviour
         if (Instance == null)
             Instance = this;
         else
-            Destroy(this.gameObject);
+            Destroy(this.gameObject); 
     }
     private void Start()
     {

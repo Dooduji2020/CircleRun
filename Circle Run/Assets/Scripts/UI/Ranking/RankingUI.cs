@@ -7,8 +7,10 @@ public class RankingUI : MonoBehaviour
 {
     public Toggle[] toggles;
     public RankingToggle[] _toggles;
-    public GameObject weekObj;
-    public GameObject dailyObj;
+    public GameObject[] rankObj;
+    public RankingDaily dailyRank;
+    public RankingWeek weekRank;
+
     [ContextMenu("Setting")]
     private void Setting()
     {
@@ -18,25 +20,14 @@ public class RankingUI : MonoBehaviour
         for (int i = 0; i <= (int)Ranking.Week; i++)
         {
             int index = i;
+            Init((Ranking)index);
             toggles[index].onValueChanged.AddListener((isOn) => {
-                if (isOn)
-                    Init((Ranking)index);
+                rankObj[index].SetActive(isOn);
                 _toggles[index].OnToggle(isOn);
                 Debug.Log(index);
             });
         }
         toggles[0].isOn = true;
-    }
-    private void RankingSlotInit(RankList data)
-    {
-        // int count = rankingSlots.Length - (rankingSlots.Length - data.rows.Count);
-        // for(int i = 0;i<rankingSlots.Length;i++)
-        // {
-        //     if (count <= i)
-        //         rankingSlots[i].Init(null);
-        //     else
-        //         rankingSlots[i].Init(data.rows[i]);
-        // }
     }
     private void Init(Ranking ranking = Ranking.Daily)
     {
@@ -45,12 +36,13 @@ public class RankingUI : MonoBehaviour
         {
             case Ranking.Daily:
                 data = DataManager.dailyRanking;
+                dailyRank.Init(data.rows);
                 break;
             case Ranking.Week:
                 data = DataManager.weekRanking;
+                weekRank.Init(data.rows);
                 break;
         }
-        RankingSlotInit(data);
     }
     public void Open()
     {
