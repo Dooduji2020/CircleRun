@@ -12,37 +12,19 @@ public class AudioManager : MonoBehaviour
     [SerializeField]
     private AudioClip _clickSound;
 
-    private bool isSoundMuted;
-    private bool IsSoundMuted
-    {
-        get
-        {
-            isSoundMuted = (PlayerPrefs.HasKey(Constants.DATA.SETTINGS_SOUND)
-                ? PlayerPrefs.GetInt(Constants.DATA.SETTINGS_SOUND) : 1) == 0;
-            return isSoundMuted;
-        }
-        set
-        {
-            isSoundMuted = value;
-            PlayerPrefs.SetInt(Constants.DATA.SETTINGS_SOUND, isSoundMuted ? 0 : 1);
-        }
-    }
-
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            _effectSource.mute = PlayerPrefs.GetInt("Sound", 1) > 0 ? false : true;
         }
         else
         {
             Destroy(gameObject);
             return;
         }
-
-        PlayerPrefs.SetInt(Constants.DATA.SETTINGS_SOUND, IsSoundMuted ? 0 : 1);
-        _effectSource.mute = IsSoundMuted;      
 
     }
 
@@ -51,7 +33,8 @@ public class AudioManager : MonoBehaviour
         var buttons = FindObjectsOfType<Button>(true);
         for (int i = 0; i < buttons.Length; i++)
         {
-            buttons[i].onClick.AddListener(() => {
+            buttons[i].onClick.AddListener(() =>
+            {
                 PlaySound(_clickSound);
             });
         }
@@ -61,9 +44,8 @@ public class AudioManager : MonoBehaviour
     {
         _effectSource.PlayOneShot(clip);
     }
-
-    public void ToggleSound()
+    public void SoundMute(bool mute)
     {
-        _effectSource.mute = IsSoundMuted;
+        _effectSource.mute = mute;
     }
 }

@@ -46,16 +46,16 @@ public class NickNameUI : MonoBehaviour
                 }
                 else
                 {
-                    string key = " ";
+                    string key = "NickName_Fail";
                     switch (error)
                     {
                         case "BadParameterException":  // 공백 등
+                        key = "NickName_Fail";
                             break;
                         case "DuplicatedParameterException":   // 중복
+                        key = "NickName_Duplication";
                             break;
 
-                        default:
-                            break;
                     }
                     LocalizationManager.ChangedTxt(key, errorTxt);
                     errorTxt.gameObject.SetActive(true);

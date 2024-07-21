@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using DG.Tweening;
 
 public class Obstacle : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class Obstacle : MonoBehaviour
     private bool hasGameFinished,
         canRotate,
         isVertical;
-
+    
     private void Start()
     {
         hasGameFinished = false;
@@ -21,7 +22,11 @@ public class Obstacle : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(0, 0, isVertical ? 90f : 0);
     }
-
+    public void Fade()
+    {
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.DOFade(0, 1f).SetLoops(-1, LoopType.Yoyo);
+    }
     private void OnEnable()
     {
         GameManager.Instance.GameEnded += OnGameEnded;

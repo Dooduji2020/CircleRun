@@ -14,7 +14,7 @@ public class LoadingUI : MonoBehaviour
     }
     public void LoadingStart()
     {
-        canvas.sortingOrder = 2;
+        canvas.sortingOrder = 10;
         isLoading = true;
         loadingTxt.text = loadingText;
         gameObject.SetActive(true);

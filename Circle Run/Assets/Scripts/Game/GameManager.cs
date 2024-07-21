@@ -33,6 +33,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private ContinueUI _continueUI;
     [SerializeField]
+    private ContinueUI _adsContinueUI;
+
+    [SerializeField]
     private InGameRankingUI _rankUI;
 
     [SerializeField]
@@ -46,6 +49,10 @@ public class GameManager : MonoBehaviour
     public Image[] shieldIMG;
     public int shield;
 
+    [HideInInspector]
+    public bool isPlay = false;
+
+    private float timer = 0;
     private void Awake()
     {
         Instance = this;
@@ -54,11 +61,35 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         AudioManager.Instance.AddButtonSound();
-
-
-        StartCoroutine(IStartGame());
+        if (PlayerPrefs.GetInt("Tutorial", 0) > 0) StartCoroutine(IStartGame());
+        else
+        {
+            //튜토리얼 진행
+            TutorialStart();
+        }
     }
-
+    private void Update()
+    {
+        if (isPlay)
+        {
+            timer += Time.deltaTime;
+            if (timer > 1)
+            {
+                timer = 0;
+                score += 1;
+                _scoreText.text = score.ToString();
+            }
+        }
+    }
+    private void TutorialStart()
+    {
+        Instantiate(Resources.Load<Tutorial>("Prefabs/UI/Tutorial"), GameObject.Find("UICanvas").transform);
+    }
+    public void TutorialSpwan()
+    {
+        Vector3 spawnPos = _obstacleSpawnPos[UnityEngine.Random.Range(0, _obstacleSpawnPos.Count)];
+        GameObject enemy = Instantiate(_obstaclePrefab, spawnPos, Quaternion.identity);
+    }
     #endregion
 
     #region UI
@@ -70,7 +101,8 @@ public class GameManager : MonoBehaviour
 
     public void ReloadGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        if (DataManager.userItem.shield > 0) selectUI.Open();
+        else SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void ToggleSound()
@@ -80,12 +112,11 @@ public class GameManager : MonoBehaviour
         sound = !sound;
         PlayerPrefs.SetInt(Constants.DATA.SETTINGS_SOUND, sound ? 1 : 0);
         _soundImage.sprite = sound ? _activeSoundSprite : _inactiveSoundSprite;
-        AudioManager.Instance.ToggleSound();
     }
 
     public void UpdateScore()
     {
-        score++;
+        score += 10;
         _scoreText.text = score.ToString();
         _scoreAnimator.Play(_scoreClip.name, -1, 0f);
 
@@ -105,11 +136,16 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private float _timeToMoveCamera;
 
+    public ShieldSelectUI selectUI;
+
     private bool hasGameEnded;
     public UnityAction GameStarted, GameEnded;
 
     private IEnumerator IStartGame()
     {
+        shield = DataManager.Instance.useShieldCount;
+        for (int i = 0; i < shield; i++)
+            shieldIMG[i].gameObject.SetActive(true);
         hasGameEnded = false;
         Camera.main.transform.position = _cameraStartPos;
         _scoreText.gameObject.SetActive(false);
@@ -125,7 +161,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(SpawnObstacles2());
         StartCoroutine(SpawnBoss());
 
-
+        isPlay = true;
         CurrentColorId = 0;
         GameStarted?.Invoke();
     }
@@ -169,44 +205,31 @@ public class GameManager : MonoBehaviour
     public void ShieldUse()
     {
         --shield;
-        shieldIMG[shield].gameObject.SetActive(false);
-        shieldIMG[shield].DOColor(Color.gray, 1f).OnComplete(()=>shieldIMG[shield].gameObject.SetActive(false));
+        //shieldIMG[shield].gameObject.SetActive(false);
+        Tweener colorTween = shieldIMG[shield].DOColor(Color.gray, 1f);
+        Tweener scaleTween = shieldIMG[shield].rectTransform.DOScale(new Vector3(3f, 3f, 3f), 1f);
+        Sequence mySequence = DOTween.Sequence();
+        mySequence.Join(colorTween);
+        mySequence.Join(scaleTween);
+        mySequence.OnComplete(() => { shieldIMG[shield].rectTransform.localScale = new Vector3(1f, 1f, 1f); });
     }
     public void EndGame()
     {
+        isPlay = false;
         StartCoroutine(GameOver());
     }
 
     [SerializeField] private Animator _highScoreAnimator;
     [SerializeField] private AnimationClip _highScoreClip;
 
+    private void AdsPopOpne()
+    {
+        _adsContinueUI.Open();
+        _adsContinueUI.closeAction += GameOverLast;
+        _continueUI.gameObject.SetActive(false);
+    }
     private IEnumerator GameOver()
     {
-        hasGameEnded = true;
-        _scoreText.gameObject.SetActive(false);
-
-        //yield return new WaitForSeconds(1f);
-        if (DataManager.userItem.continueCoupon > 0 && !isCoupon)   
-        {
-            _continueUI.Open(false);
-            isCoupon = true;
-            _continueUI.closeAction += EndGame;
-        }
-        else if (!isRewardAds)  
-        {
-            _continueUI.Open(true);
-            isRewardAds = true;
-            _continueUI.closeAction += EndGame;
-            
-        }
-        else
-        {
-            _continueUI.gameObject.SetActive(false);
-            _endPanel.SetActive(true);
-            yield return MoveCamera(new Vector3(_cameraStartPos.x, -_cameraStartPos.y, _cameraStartPos.z));
-            _rankUI.Open(score);
-        }
-        _endScoreText.text = score.ToString();
         if (score > DataManager.DailyScore)
         {
             _highScoreText.text = "NEW BEST";
@@ -216,19 +239,56 @@ public class GameManager : MonoBehaviour
 
             DataManager.DailyScore = score;
         }
+        _highScoreText.text = "BEST " + DataManager.DailyScore.ToString();
+        yield return new WaitForSeconds(1f);
+        hasGameEnded = true;
+        _scoreText.gameObject.SetActive(false);
+
+        //yield return new WaitForSeconds(1f);
+        if (DataManager.userItem.continueCoupon > 0 && !isCoupon)
+        {
+            _continueUI.Open();
+            isCoupon = true;
+            _continueUI.closeAction += AdsPopOpne;
+        }
+        else if (!isRewardAds)
+        {
+            _adsContinueUI.Open();
+            isRewardAds = true;
+            _adsContinueUI.closeAction += GameOverLast;
+        }
         else
         {
-            _highScoreText.text = "BEST " + DataManager.DailyScore.ToString();
+            _continueUI.gameObject.SetActive(false);
+            _adsContinueUI.gameObject.SetActive(false);
+            _endPanel.SetActive(true);
+            yield return MoveCamera(new Vector3(_cameraStartPos.x, -_cameraStartPos.y, _cameraStartPos.z));
+            _rankUI.Open(score);
         }
+        _endScoreText.text = score.ToString();
+    }
+    private void GameOverLast()
+    {
+        StartCoroutine(GameOverTitle());
+    }
+    IEnumerator GameOverTitle()
+    {
+        _continueUI.gameObject.SetActive(false);
+        _adsContinueUI.gameObject.SetActive(false);
+        _endPanel.SetActive(true);
+        yield return MoveCamera(new Vector3(_cameraStartPos.x, -_cameraStartPos.y, _cameraStartPos.z));
+        _rankUI.Open(score);
+        _endScoreText.text = score.ToString();
     }
     public void GameContinuePlay()
     {
-        player.GameReStart();
         StartCoroutine(IReStartDelay());
     }
     IEnumerator IReStartDelay()
     {
         yield return new WaitForSeconds(2f);
+        isPlay = true;
+        player.GameReStart();
         StartCoroutine(IReStartGame());
     }
 

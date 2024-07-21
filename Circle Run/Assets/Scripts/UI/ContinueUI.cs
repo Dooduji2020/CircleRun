@@ -11,7 +11,7 @@ public class ContinueUI : MonoBehaviour
     public TextMeshProUGUI continueTxt;
     public Button sendBtn;
     public MoveUI moveUI;
-
+    public bool isCoupon = true;
     private event Action sendButtonEvent;
     public Action closeAction;
     private void Awake()
@@ -22,40 +22,40 @@ public class ContinueUI : MonoBehaviour
     {
         moveUI.Move();
     }
-    public void Open(bool isCoupon = false)
+    public void Open()
     {
-        if (sendButtonEvent != null)
-            sendButtonEvent = null;
         if (isCoupon)
         {
-            this.gameObject.SetActive(true);
-            sendButtonEvent += () => {
-                BackEndManager.Instance.UseContinueCoupon((result) => {
-                    if (result)
-                    {
-                        --DataManager.userItem.continueCoupon;
-                        closeAction = null;
-                        GameManager.Instance.GameContinuePlay();
-                        this.gameObject.SetActive(false);
-                        //게임 진행
-                    }
-                    else
-                    {
-                        Debug.Log("error");
-                    }
-                });
-            };
+            sendButtonEvent += () =>
+        {
+            BackEndManager.Instance.UseContinueCoupon((result) =>
+            {
+                if (result)
+                {
+                    --DataManager.userItem.continueCoupon;
+                    closeAction = null;
+                    GameManager.Instance.GameContinuePlay();
+                    this.gameObject.SetActive(false);
+                    //게임 진행
+                }
+                else
+                {
+                    Debug.Log("error");
+                }
+            });
+        };
         }
         else
         {
-            this.gameObject.SetActive(true);
-            sendButtonEvent += () => AdsManager.Instance.ShowRewardAd((reward) => {
-                closeAction = null;
-                GameManager.Instance.GameContinuePlay();
-                this.gameObject.SetActive(false);
-            });
+            sendButtonEvent += () => AdsManager.Instance.ShowRewardAd((reward) =>
+        {
+            closeAction = null;
+            GameManager.Instance.GameContinuePlay();
+            this.gameObject.SetActive(false);
+        });
         }
         sendBtn.interactable = true;
+        this.gameObject.SetActive(true);
     }
     private void ContinueSend()
     {
@@ -67,6 +67,7 @@ public class ContinueUI : MonoBehaviour
     public void Close()
     {
         closeAction?.Invoke();
+
         closeAction = null;
         sendButtonEvent = null;
     }

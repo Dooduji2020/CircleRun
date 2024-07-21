@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -30,19 +28,6 @@ public class InGameRankingUI : MonoBehaviour
     private bool HighScore(int score)
     {
         bool isScore = false;
-
-        if (DataManager.WeekScore < score)
-        {
-            DataManager.WeekScore = score;
-            weekRankIMG.sprite = up;
-            weekRankIMG.color = Color.green;
-            isScore = true;
-        }
-        else
-        {
-            weekRankIMG.sprite = noChange;
-            weekRankIMG.color = Color.gray;
-        }
         if (DataManager.DailyScore < score)
         {
             DataManager.DailyScore = score;
@@ -55,10 +40,25 @@ public class InGameRankingUI : MonoBehaviour
             dailyRankIMG.sprite = noChange;
             dailyRankIMG.color = Color.gray;
         }
+        if (DataManager.WeekScore < score)
+        {
+            DataManager.WeekScore = score;
+            weekRankIMG.sprite = up;
+            weekRankIMG.color = Color.green;
+            isScore = true;
+        }
+        else
+        {
+            weekRankIMG.sprite = noChange;
+            weekRankIMG.color = Color.gray;
+        }
         weekScore.text = DataManager.WeekScore.ToString();
         dailyScore.text = DataManager.DailyScore.ToString();
         if (isScore)
+        {
             BackEndManager.Instance.ScoreUpdate();
+            BackEndManager.Instance.GetRanking();
+        }
 
         return isScore;
     }

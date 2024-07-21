@@ -1,20 +1,22 @@
+using System.Collections;
+using DG.Tweening;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
     [SerializeField]
-    private float _moveTime,_rotateRadius;
+    private float _moveTime, _rotateRadius;
 
     [SerializeField]
     private Vector3 _center;
-
+    public CircleCollider2D circleCollider;
     private float currentRotateAngle;
     private float rotateSpeed;
 
-    private bool canMove;
-    private bool canShoot;
+    public bool canMove;
+    public bool canShoot;
 
-    
+    private bool shield_delay = false;
 
     [SerializeField]
     private AudioClip _moveClip, _pointClip, _scoreClip, _loseClip;
@@ -38,7 +40,7 @@ public class Player : MonoBehaviour
     private void OnDisable()
     {
         GameManager.Instance.GameStarted -= GameStarted;
-        GameManager.Instance.ColorChanged -=ColorChanged;
+        GameManager.Instance.ColorChanged -= ColorChanged;
     }
 
     private void GameStarted()
@@ -55,7 +57,7 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        if(canShoot && Input.GetMouseButtonDown(0))
+        if (canShoot && Input.GetMouseButtonDown(0))
         {
             rotateSpeed *= -1f;
             AudioManager.Instance.PlaySound(_moveClip);
@@ -79,28 +81,32 @@ public class Player : MonoBehaviour
         {
             currentRotateAngle = 360f;
         }
-        if(currentRotateAngle > 360f)
+        if (currentRotateAngle > 360f)
         {
             currentRotateAngle = 0f;
         }
 
     }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.CompareTag(Constants.Tags.SCORE))
+        if (collision.CompareTag(Constants.Tags.SCORE))
         {
             GameManager.Instance.UpdateScore();
             AudioManager.Instance.PlaySound(_scoreClip);
             collision.gameObject.GetComponent<Score>().OnGameEnded();
         }
 
-        if(collision.CompareTag(Constants.Tags.OBSTACLE) || collision.CompareTag(Constants.Tags.BOSS))
+        if (collision.CompareTag(Constants.Tags.OBSTACLE) || collision.CompareTag(Constants.Tags.BOSS))
         {
+            if (shield_delay)
+                return;
+
             if (GameManager.Instance.shield > 0)
             {
+                shield_delay = true;
                 GameManager.Instance.ShieldUse();
                 BackEndManager.Instance.UseShield();
+                StartCoroutine(ShieldDelay());
             }
             else
             {
@@ -120,6 +126,16 @@ public class Player : MonoBehaviour
         //    GameManager.Instance.EndGame();
         //    this.gameObject.SetActive(false);
         //}
+    }
+    IEnumerator ShieldDelay()
+    {
+        SpriteRenderer renderer = GetComponent<SpriteRenderer>();
+        Sequence sequence = DOTween.Sequence();
+        sequence.Append(renderer.DOFade(0.2f, 0.3f));
+        sequence.Append(renderer.DOFade(1f, 0.3f));
+        sequence.SetLoops(3, LoopType.Restart);
+        yield return new WaitForSeconds(1.5f);
+        shield_delay = false;
     }
 
     private void ColorChanged(Color col)

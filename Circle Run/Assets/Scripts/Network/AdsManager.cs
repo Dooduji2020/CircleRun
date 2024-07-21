@@ -102,11 +102,11 @@ public class AdsManager : MonoBehaviour
     {
         if (_rewardAd == null || !_rewardAd.CanShowAd())
         {
-            callback?.Invoke(null);
             return; 
         }
         _rewardAd.Show(callback);
         RewardAdLoad();
+        
     }
     public void ShowInterstitialAd()
     {

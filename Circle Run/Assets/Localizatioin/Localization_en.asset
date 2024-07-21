@@ -1,0 +1,151 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Localization_en
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: e1b96d4e9fa6c420dba7347dd98136f5, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 147607497203712
+    m_Localized: Network Error
+    m_Metadata:
+      m_Items: []
+  - m_Id: 147607513980928
+    m_Localized: Retry!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 147607513980929
+    m_Localized: The circle rotates infinitely in one direction.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 147607513980930
+    m_Localized: Tap the screen to switch directions.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 147607518175232
+    m_Localized: Go to get the Stars, Collect them!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 147607518175233
+    m_Localized: 'Tap the start button.
+
+      Let''s Play!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 147607518175235
+    m_Localized: Watch the Video to continue the game!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 147607518175236
+    m_Localized: Use a Continue Ticket to keep playing the game!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 147607518175237
+    m_Localized: Make New High Score
+    m_Metadata:
+      m_Items: []
+  - m_Id: 254015941107712
+    m_Localized: Weekly Record Updated
+    m_Metadata:
+      m_Items: []
+  - m_Id: 254015941107713
+    m_Localized: Daily Record Updated
+    m_Metadata:
+      m_Items: []
+  - m_Id: 254015941107714
+    m_Localized: Network Error, Reload Application.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 254015941107715
+    m_Localized: Purchase Completed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 254015941107716
+    m_Localized: Purchase Failed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 254015941107717
+    m_Localized: Congratulations!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 254015941107718
+    m_Localized: '"   " RANK IN ! '
+    m_Metadata:
+      m_Items: []
+  - m_Id: 254015941107719
+    m_Localized: Log-out
+    m_Metadata:
+      m_Items: []
+  - m_Id: 254015941107720
+    m_Localized: Delete Account
+    m_Metadata:
+      m_Items: []
+  - m_Id: 254015941107721
+    m_Localized: Restore
+    m_Metadata:
+      m_Items: []
+  - m_Id: 254015941107722
+    m_Localized: Continue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 254015941107723
+    m_Localized: Confirm
+    m_Metadata:
+      m_Items: []
+  - m_Id: 254015941107724
+    m_Localized: Cancel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 254015941107725
+    m_Localized: 'App update required.
+
+      Redirecting to the store'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 254015941107726
+    m_Localized: Get the reward Item!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 254015941107727
+    m_Localized: You are BANNED!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263494262841344
+    m_Localized: "Hi ! \nWelcome to the DONGRAMI world."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 254015941107728
+    m_Localized: This username is already in use
+    m_Metadata:
+      m_Items: []
+  - m_Id: 254015941107729
+    m_Localized: This username is available.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 254015941107730
+    m_Localized: This username is unavailable.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 258395574624256
+    m_Localized: Create the username
+    m_Metadata:
+      m_Items: []
+  - m_Id: 259405357506560
+    m_Localized: Please enter your Google Play ID.
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using BackEnd;
 
@@ -46,5 +47,17 @@ public enum Ranking
 {
     Daily,
     Week
+}
+#endregion
+
+#region TimeData
+public class TimeData : BackEndBase
+{
+    public DateTime ShieldAds;
+    public DateTime CouponAds;
+    public DateTime Shield;
+    public DateTime Coupon;
+    public int ShieldAdsCount;
+    public int CouponAdsCount;
 }
 #endregion

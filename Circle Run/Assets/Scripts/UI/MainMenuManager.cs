@@ -4,33 +4,40 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Video;
 
 public class MainMenuManager : MonoBehaviour
 {
-    [SerializeField]
-    private Image _soundImage;
-
-    [SerializeField]
-    private Sprite _activeSoundSprite, _inactiveSoundSprite;
-
+    public static MainMenuManager Instance { get; private set; }
     public GameObject shopUI;
     public RankingUI rankingUI;
-
+    public ShieldSelectUI shieldSelectUI;
+    public OptionUI optionUI;
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+    }
     private void Start()
     {
-        bool sound = (PlayerPrefs.HasKey(Constants.DATA.SETTINGS_SOUND) ?
-           PlayerPrefs.GetInt(Constants.DATA.SETTINGS_SOUND) : 1) == 1;
-        _soundImage.sprite = sound ? _activeSoundSprite : _inactiveSoundSprite;
-
         AudioManager.Instance.AddButtonSound();
         //AuManager.Instance.AddButtonSound();
     }
-
+    public void Init()
+    {
+        optionUI.Init();
+    }
     public void ClickedPlay()
     {
-        SceneManager.LoadScene(Constants.DATA.GAMEPLAY_SCENE);
+        shieldSelectUI.Open();
     }
-
+    public void OpenOption()
+    {
+        optionUI.Open();
+    }
     public void ClickedQuit()
     {
 #if UNITY_EDITOR
@@ -41,13 +48,13 @@ public class MainMenuManager : MonoBehaviour
 
     public void ToggleSound()
     {
-        bool sound = (PlayerPrefs.HasKey(Constants.DATA.SETTINGS_SOUND) ? PlayerPrefs.GetInt(Constants.DATA.SETTINGS_SOUND)
-             : 1) == 1;
-        sound = !sound;
-        PlayerPrefs.SetInt(Constants.DATA.SETTINGS_SOUND, sound ? 1 : 0);
-        _soundImage.sprite = sound ? _activeSoundSprite : _inactiveSoundSprite;
-        //AudioManager.Instance.ToggleSound();
-        BgmManager.Instance.ToggleSound();
+        // bool sound = (PlayerPrefs.HasKey(Constants.DATA.SETTINGS_SOUND) ? PlayerPrefs.GetInt(Constants.DATA.SETTINGS_SOUND)
+        //      : 1) == 1;
+        // sound = !sound;
+        // PlayerPrefs.SetInt(Constants.DATA.SETTINGS_SOUND, sound ? 1 : 0);
+        // _soundImage.sprite = sound ? _activeSoundSprite : _inactiveSoundSprite;
+        // //AudioManager.Instance.ToggleSound();
+        // BgmManager.Instance.ToggleSound();
     }
 
     public void ShopOpen()

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using BackEnd;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 public class TitleManager : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class TitleManager : MonoBehaviour
     public TextMeshProUGUI shieldTxt;
     public TextMeshProUGUI couponTxt;
     public NickNameUI nickNameUI;
-
+    public GameObject loginErrorObj;
     [Header("Move UI")]
     public MoveUI[] moveUI;
 
@@ -19,35 +20,45 @@ public class TitleManager : MonoBehaviour
         if (Instance == null)
             Instance = this;
         else
-            Destroy(this.gameObject); 
+            Destroy(this.gameObject);
     }
     private void Start()
     {
-        LoadingManager.Instance.LoadingStart();
-        Invoke("Init", 2f);
+        if (!BackEndManager.isInit)
+        {
+            LoadingManager.Instance.LoadingStart();
+            Invoke("Init", 2f);
+        }
+        else
+        {
+            ItemUISet();
+            foreach (var i in moveUI)
+                i.Move();
+        }
+    }
+    public void ItemUISet()
+    {
+        nickNameTxt.text = Backend.UserNickName;
+        shieldTxt.text = DataManager.userItem.shield.ToString();
+        couponTxt.text = DataManager.userItem.continueCoupon.ToString();
     }
     private void Init()
     {
         if (!BackEndManager.isInit)
-            VersionCheckResult(BackEndManager.Instance.Init());
+        {
+            BackEndManager.Instance.Init();
+
+        }
         else
             LoadingManager.Instance.LoadingStop();
     }
-    private void VersionCheckResult(bool result)
+    public void VersionCheckResult(bool result)
     {
-        if (result)
-        {
-            BackEndManager.Instance.GetRanking();
-            StartCoroutine(LogoDelay());
-        }
-        else
-        {
 #if !UNITY_EDITOR && UNITY_ANDROID
             Application.OpenURL("");
 #elif !UNITY_EDITOR && UNITY_IOS
             Application.OpenURL("");
 #endif
-        }
     }
     public void TxtInit(string nickName, string shieldCount, string couponCount)
     {
@@ -57,6 +68,9 @@ public class TitleManager : MonoBehaviour
     }
     public void UserDataInit()
     {
+        Debug.Log("User Data Init");
+        BackEndManager.Instance.GetRanking();
+        StartCoroutine(LogoDelay());
     }
     IEnumerator LogoDelay()
     {
@@ -88,6 +102,17 @@ public class TitleManager : MonoBehaviour
                     i.Move();
             });
         }
+        MainMenuManager.Instance.Init();
         yield break;
     }
+    public void LoginError()
+    {
+        loginErrorObj.SetActive(true);
+        LoadingManager.Instance.LoadingStop();
+    }
+    public void GameReStart()
+    {
+        SceneManager.LoadScene(0);
+    }
+
 }
