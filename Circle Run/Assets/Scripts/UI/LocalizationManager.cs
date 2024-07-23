@@ -1,10 +1,10 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Localization;
 using TMPro;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.Settings;
-using System.Xml.Schema;
 
 public class LocalizationManager : MonoBehaviour
 {
@@ -58,18 +58,23 @@ public class LocalizationManager : MonoBehaviour
                 break;
         }
     }
-    public static void ChangedTxt(string key, TextMeshProUGUI text)
+    public void ChangedTxt(string key, TextMeshProUGUI text)
     {
         try
         {
             LocalizeStringEvent local = text.GetComponent<LocalizeStringEvent>();
-            local.enabled = true;
-            local.StringReference.SetReference("Localization", key);
+            StartCoroutine(LangaugeChange(key, local));
         }
         catch
         {
             text.text = "Localization Error";
         }
+    }
+    IEnumerator LangaugeChange(string key, LocalizeStringEvent text)
+    {
+        text.enabled = true;
+        text.StringReference.SetReference("Localization", key);
+        yield break;
     }
     public void SetLanguage()
     {

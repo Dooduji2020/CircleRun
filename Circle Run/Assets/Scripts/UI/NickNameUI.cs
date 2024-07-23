@@ -32,7 +32,7 @@ public class NickNameUI : MonoBehaviour
         {
             //닉네임 길이 조절
             string key = "";
-            LocalizationManager.ChangedTxt(key, errorTxt);
+            LocalizationManager.Instance.ChangedTxt(key, errorTxt);
             errorTxt.gameObject.SetActive(true);
         }
         else
@@ -57,7 +57,7 @@ public class NickNameUI : MonoBehaviour
                             break;
 
                     }
-                    LocalizationManager.ChangedTxt(key, errorTxt);
+                    LocalizationManager.Instance.ChangedTxt(key, errorTxt);
                     errorTxt.gameObject.SetActive(true);
                     nickNameInput.text = string.Empty;
                 }

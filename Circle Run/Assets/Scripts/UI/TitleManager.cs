@@ -84,7 +84,7 @@ public class TitleManager : MonoBehaviour
         if (timer >= 5f && SendQueue.UnprocessedFuncCount > 0)
         {
             //Backend SendQueue 작업 실패 시 (유저 데이터 초기화 및 데이터 로드)
-            Debug.Log(DataManager.userScore.DailyScore);
+            //Debug.Log(DataManager.userScore.DailyScore);
         }
         else
         {

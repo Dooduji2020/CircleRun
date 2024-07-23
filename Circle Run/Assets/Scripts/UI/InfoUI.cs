@@ -23,7 +23,7 @@ public class InfoUI : MonoBehaviour
         StartCoroutine(CloseDelay());
         gameObject.SetActive(true);
         canvas.sortingOrder = 2;
-        LocalizationManager.ChangedTxt(key, infoTxt);
+        LocalizationManager.Instance.ChangedTxt(key, infoTxt);
     }
     private void Close()
     {

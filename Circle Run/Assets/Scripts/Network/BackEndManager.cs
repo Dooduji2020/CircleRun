@@ -175,13 +175,13 @@ public class BackEndManager : MonoBehaviour
     #region Version&Init
     public void Init()
     {
-
+        Debug.Log("BackEnd Init");
         bool isResult = true;
         var bro = Backend.Initialize(true, true);
         if (bro.IsSuccess())
         {
-
             isResult = VersionCheck();
+            Debug.Log("Init Result : " + isResult);
             if (!isResult)
             {
                 TitleManager.Instance.VersionCheckResult(isResult);
@@ -189,11 +189,14 @@ public class BackEndManager : MonoBehaviour
             else
             {
                 var login = Backend.BMember.LoginWithTheBackendToken();
+                Debug.Log(login.IsSuccess() + " : Token Login Result");
                 if (!login.IsSuccess())
                 {
 #if UNITY_EDITOR
+                    Debug.Log("GeustLogin Start");
                     Backend.BMember.GuestLogin((callback) =>
                     {
+                        Debug.Log("GestLogin Result : " + callback.IsSuccess());
                         if (callback.IsSuccess())
                         {
                             BackEndDataSetting();
@@ -202,6 +205,7 @@ public class BackEndManager : MonoBehaviour
                         }
                         else
                         {
+                            Debug.Log("GuestLogin Fail : " + callback.GetMessage());
                             //씬을 다시 구성 
                         }
                     });
@@ -408,6 +412,17 @@ public class BackEndManager : MonoBehaviour
         {
             string json = bro.GetFlattenJSON().ToJson();
             data = JsonConvert.DeserializeObject<BackEndGameData<T>>(json); //JsonUtility.FromJson<T>(json);
+            Debug.Log(data.rows.Length);
+            if (data.rows.Length == 0)
+            {
+                var insert = Backend.GameData.Insert(tableName);
+                if(insert.IsSuccess())
+                {
+                    bro = Backend.GameData.GetMyData(tableName, new Where(), 1);
+                    json = bro.GetFlattenJSON().ToJson();
+                    data = JsonConvert.DeserializeObject<BackEndGameData<T>>(json);
+                }
+            }
         }
         else
         {
@@ -437,8 +452,7 @@ public class BackEndManager : MonoBehaviour
     {
         Param param = new Param();
         UserItem item = DataManager.userItem;
-        --DataManager.userItem.shield;
-        param.Add("shield", item.shield - 1);
+        param.Add("shield", item.shield);
         SendQueue.Enqueue(Backend.PlayerData.UpdateMyData, "UserItemData", item.inDate, param, (callback) =>
         {
             if (callback.IsSuccess())

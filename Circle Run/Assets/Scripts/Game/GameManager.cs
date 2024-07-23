@@ -143,6 +143,14 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator IStartGame()
     {
+        if (Define.PLAYCOUNT >= 5)
+        {
+            AdsManager.Instance.ShowInterstitialAd();
+            Define.PLAYCOUNT = 0;
+        }
+        else
+            ++Define.PLAYCOUNT;
+
         shield = DataManager.Instance.useShieldCount;
         for (int i = 0; i < shield; i++)
             shieldIMG[i].gameObject.SetActive(true);
@@ -224,6 +232,7 @@ public class GameManager : MonoBehaviour
 
     private void AdsPopOpne()
     {
+        isRewardAds = true;
         _adsContinueUI.Open();
         _adsContinueUI.closeAction += GameOverLast;
         _continueUI.gameObject.SetActive(false);
@@ -237,9 +246,9 @@ public class GameManager : MonoBehaviour
             //Play HighScore Animation
             _highScoreAnimator.Play(_highScoreClip.name, -1, 0f);
 
-            DataManager.DailyScore = score;
+            //DataManager.DailyScore = score;
         }
-        _highScoreText.text = "BEST " + DataManager.DailyScore.ToString();
+        _highScoreText.text = "BEST " + (DataManager.DailyScore < score ? score.ToString() : DataManager.DailyScore.ToString());
         yield return new WaitForSeconds(1f);
         hasGameEnded = true;
         _scoreText.gameObject.SetActive(false);

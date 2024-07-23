@@ -15,7 +15,7 @@ public class Tutorial : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        LocalizationManager.ChangedTxt(txtKey + index.ToString(), tutorialTxt);
+        LocalizationManager.Instance.ChangedTxt(txtKey + index.ToString(), tutorialTxt);
     }
     public void StepUp()
     {
@@ -26,28 +26,28 @@ public class Tutorial : MonoBehaviour
         {
             case 0:
                 GameManager.Instance.player.canMove = true;
-                LocalizationManager.ChangedTxt(txtKey + (index + 1).ToString(), tutorialTxt);
+                LocalizationManager.Instance.ChangedTxt(txtKey + (index + 1).ToString(), tutorialTxt);
                 break;
             case 1:
                 GameManager.Instance.player.canShoot = true;
-                LocalizationManager.ChangedTxt(txtKey + (index + 1).ToString(), tutorialTxt);
+                LocalizationManager.Instance.ChangedTxt(txtKey + (index + 1).ToString(), tutorialTxt);
                 break;
             case 2:
                 break;
             case 3:
-                LocalizationManager.ChangedTxt(txtKey + index.ToString(), tutorialTxt);
+                LocalizationManager.Instance.ChangedTxt(txtKey + index.ToString(), tutorialTxt);
                 break;
             case 4:
                 PlayerPrefs.SetInt("Tutorial", 1);
-                LocalizationManager.ChangedTxt(txtKey + index.ToString(), tutorialTxt);
+                LocalizationManager.Instance.ChangedTxt(txtKey + index.ToString(), tutorialTxt);
                 startBtn.gameObject.SetActive(true);
                 break;
         }
         ++index;
-        StartCoroutine(TutorialDelay());
+        StartCoroutine(TutorialDelay(index));
         Debug.Log("StepUp");
     }
-    IEnumerator TutorialDelay()
+    IEnumerator TutorialDelay(int index)
     {
         yield return new WaitForSeconds(4f);
         delay = false;

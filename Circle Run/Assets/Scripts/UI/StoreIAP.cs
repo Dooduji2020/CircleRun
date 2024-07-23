@@ -84,7 +84,7 @@ public class StroreIAP : MonoBehaviour
             yield return null;
         if (productID.Equals("001") && DataManager.userItem.adsRemove)
         {
-            LocalizationManager.ChangedTxt("Inapp_Success", priceTxt);
+            LocalizationManager.Instance.ChangedTxt("Inapp_Success", priceTxt);
         }
         else
         {
