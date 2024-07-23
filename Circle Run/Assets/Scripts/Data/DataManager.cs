@@ -62,12 +62,12 @@ public class DataManager : MonoBehaviour
     {
         Debug.LogError(timeData.Coupon.ToString("yyyy-MM-dd HH:mm:ss"));
         Param param = new Param();
-        param.Add("Coupon",timeData.Coupon.ToString("yyyy-MM-dd HH:mm:ss"));
-        param.Add("Shield",timeData.Shield.ToString("yyyy-MM-dd HH:mm:ss"));
-        param.Add("CouponAds",timeData.CouponAds.ToString("yyyy-MM-dd HH:mm:ss"));
-        param.Add("ShieldAds",timeData.ShieldAds.ToString("yyyy-MM-dd HH:mm:ss"));
-        param.Add("ShieldAdsCount",timeData.ShieldAdsCount);
-        param.Add("CouponAdsCount",timeData.CouponAdsCount);
+        param.Add("Coupon", timeData.Coupon.ToString("yyyy-MM-dd HH:mm:ss"));
+        param.Add("Shield", timeData.Shield.ToString("yyyy-MM-dd HH:mm:ss"));
+        param.Add("CouponAds", timeData.CouponAds.ToString("yyyy-MM-dd HH:mm:ss"));
+        param.Add("ShieldAds", timeData.ShieldAds.ToString("yyyy-MM-dd HH:mm:ss"));
+        param.Add("ShieldAdsCount", timeData.ShieldAdsCount);
+        param.Add("CouponAdsCount", timeData.CouponAdsCount);
         return param;
     }
     private void ItemTimeInit()
@@ -76,22 +76,27 @@ public class DataManager : MonoBehaviour
         int shieldCount = userItem.shield;
         if (couponCount >= 2 && shieldCount >= 2)
             return;
-
+        Param param = new Param();
         DateTime currentTime = BackEndManager.Instance.GetTime();
         if (couponCount < 2)
         {
             int index = 0;
             DateTime couponTime = timeData.Coupon;
             TimeSpan timeDifference = currentTime - couponTime;
+
             if (timeDifference.TotalMinutes >= 60)
+            {
+                timeData.Coupon = currentTime;
                 userItem.continueCoupon = 2;
+                param.Add("Coupon", currentTime.ToString("yyyy-MM-dd HH:mm:ss"));
+            }
             else if (timeDifference.TotalMinutes >= 30)
             {
                 ++index;
-                ++userItem.continueCoupon; 
+                ++userItem.continueCoupon;
             }
             if (userItem.continueCoupon < 2)
-                StartCoroutine(CouponTimer(currentTime,index)); 
+                StartCoroutine(CouponTimer(currentTime, index));
         }
         if (shieldCount < 2)
         {
@@ -99,18 +104,23 @@ public class DataManager : MonoBehaviour
             DateTime shieldTime = timeData.Shield;
             TimeSpan timeDifference = currentTime - shieldTime;
             if (timeDifference.TotalMinutes >= 60)
+            {
+                timeData.ShieldAds = currentTime;
                 userItem.shield = 2;
+                param.Add("Shield", timeData.Shield.ToString("yyyy-MM-dd HH:mm:ss"));
+            }
             else if (timeDifference.TotalMinutes >= 30)
             {
                 ++index;
-                ++userItem.shield; 
+                ++userItem.shield;
             }
-            if(userItem.shield < 2)
-                StartCoroutine(ShieldTimer(currentTime,index));
+            if (userItem.shield < 2)
+                StartCoroutine(ShieldTimer(currentTime, index));
         }
-        
+        if (param.Count > 0)
+            BackEndManager.Instance.SendQueueTimeUpdate(param, timeData.inDate);
     }
-    IEnumerator CouponTimer(DateTime timer,int index)
+    IEnumerator CouponTimer(DateTime timer, int index)
     {
         int upTimer = 30;
         if (index > 0)
@@ -135,7 +145,7 @@ public class DataManager : MonoBehaviour
         }
         yield break;
     }
-    IEnumerator ShieldTimer(DateTime timer,int index)
+    IEnumerator ShieldTimer(DateTime timer, int index)
     {
         int upTimer = 30;
         if (index > 0)

@@ -44,12 +44,12 @@ public class Tutorial : MonoBehaviour
                 break;
         }
         ++index;
-        StartCoroutine(TutorialDelay(index));
+        StartCoroutine(TutorialDelay());
         Debug.Log("StepUp");
     }
-    IEnumerator TutorialDelay(int index)
+    IEnumerator TutorialDelay()
     {
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(1.5f);
         delay = false;
         //다음 진행 클릭하라고 진행
     }

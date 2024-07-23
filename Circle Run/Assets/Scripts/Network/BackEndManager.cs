@@ -416,7 +416,7 @@ public class BackEndManager : MonoBehaviour
             if (data.rows.Length == 0)
             {
                 var insert = Backend.GameData.Insert(tableName);
-                if(insert.IsSuccess())
+                if (insert.IsSuccess())
                 {
                     bro = Backend.GameData.GetMyData(tableName, new Where(), 1);
                     json = bro.GetFlattenJSON().ToJson();
@@ -452,6 +452,7 @@ public class BackEndManager : MonoBehaviour
     {
         Param param = new Param();
         UserItem item = DataManager.userItem;
+        --item.shield;
         param.Add("shield", item.shield);
         SendQueue.Enqueue(Backend.PlayerData.UpdateMyData, "UserItemData", item.inDate, param, (callback) =>
         {
@@ -483,12 +484,16 @@ public class BackEndManager : MonoBehaviour
         var result = Backend.PlayerData.UpdateMyData(tableName, inDate, param);
         bool isResult = result.IsSuccess();
         if (isResult)
+        {
+            LoadingManager.Instance.LoadingStop();
             callback?.Invoke(isResult);
+        }
         else
         {
             Debug.Log("Error Message : " + result.GetMessage());
+            LoadingManager.Instance.LoadingStop();
         }
-        LoadingManager.Instance.LoadingStop();
+
     }
     public void ItemDataUpdate(Action<bool> action)
     {
@@ -522,7 +527,7 @@ public class BackEndManager : MonoBehaviour
         Backend.PlayerData.UpdateMyData("TimeCheck", inDate, param, (callback) =>
         {
             if (callback.IsSuccess())
-            { 
+            {
 
             }
             Debug.Log(callback.GetMessage());
@@ -531,11 +536,12 @@ public class BackEndManager : MonoBehaviour
     }
     public void SendQueueTimeUpdate(Param param, string inDate)
     {
-        SendQueue.Enqueue(Backend.PlayerData.UpdateMyData,"TimeCheck",inDate,param,(result)=>{
-            if(result.IsSuccess())
-            {}
+        SendQueue.Enqueue(Backend.PlayerData.UpdateMyData, "TimeCheck", inDate, param, (result) =>
+        {
+            if (result.IsSuccess())
+            { }
             else
-            {}
+            { }
             Debug.Log(result.GetMessage());
         });
     }

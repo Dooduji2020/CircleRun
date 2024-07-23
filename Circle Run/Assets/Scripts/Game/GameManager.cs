@@ -48,6 +48,8 @@ public class GameManager : MonoBehaviour
 
     public Image[] shieldIMG;
     public int shield;
+    public GameObject continueDelay;
+    public TextMeshProUGUI continueTxt;
 
     [HideInInspector]
     public bool isPlay = false;
@@ -295,7 +297,21 @@ public class GameManager : MonoBehaviour
     }
     IEnumerator IReStartDelay()
     {
-        yield return new WaitForSeconds(2f);
+        continueDelay.gameObject.SetActive(true);
+        
+        float timer = 3;
+        continueTxt.text = timer.ToString();
+        yield return new WaitForSeconds(1f);
+        while(timer > 0)
+        {
+            timer -= Time.deltaTime;
+            timer = Mathf.Max(timer,0);
+            continueTxt.text = ((int)timer).ToString();
+            yield return null;
+        }
+        continueTxt.text = "Start!!";
+        yield return new WaitForSeconds(1f);
+        continueDelay.SetActive(false);
         isPlay = true;
         player.GameReStart();
         StartCoroutine(IReStartGame());
