@@ -145,6 +145,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator IStartGame()
     {
+        yield return new WaitForSeconds(1f);
         if (Define.PLAYCOUNT >= 5)
         {
             AdsManager.Instance.ShowInterstitialAd();

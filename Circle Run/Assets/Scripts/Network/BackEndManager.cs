@@ -448,21 +448,15 @@ public class BackEndManager : MonoBehaviour
         dic.Add("continueCoupon", item.continueCoupon - 1);
         GameDataUpdate("UserItemData", item.inDate, dic, callback);
     }
-    public void UseShield(int amount, Action callback)
+    public void UseShield(int amount, Action<bool> callback)
     {
         Param param = new Param();
         UserItem item = DataManager.userItem;
         item.shield -= amount;
         param.Add("shield", item.shield);
-        Backend.PlayerData.UpdateMyData("UserItemData", item.inDate, param, (res) => {
-            if (res.IsSuccess())
-                callback?.Invoke();
-            else
-            {
-                // 에러 판넬
-                LoadingManager.Instance.LoadingStop();
-            }
-        });
+        var res = Backend.PlayerData.UpdateMyData("UserItemData", item.inDate, param);
+        callback?.Invoke(res.IsSuccess());
+
         //SendQueue.Enqueue(Backend.PlayerData.UpdateMyData, "UserItemData", item.inDate, param, (res) =>
         //{
         //    if (res.IsSuccess())

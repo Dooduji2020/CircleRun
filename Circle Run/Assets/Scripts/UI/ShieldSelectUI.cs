@@ -9,7 +9,7 @@ public class ShieldSelectUI : MonoBehaviour
         set
         {
             _shieldCount = value;
-            if(TitleManager.Instance != null)
+            if (TitleManager.Instance != null)
                 TitleManager.Instance.shieldTxt.text = (DataManager.userItem.shield - _shieldCount).ToString();
         }
     }
@@ -17,10 +17,14 @@ public class ShieldSelectUI : MonoBehaviour
     public void GameStart()
     {
         LoadingManager.Instance.LoadingStart();
-        BackEndManager.Instance.UseShield(shieldCount,()=> {
-            DataManager.Instance.useShieldCount = shieldCount;
-            SceneManager.LoadScene(Constants.DATA.GAMEPLAY_SCENE);
+        BackEndManager.Instance.UseShield(shieldCount, (res) =>
+        {
             LoadingManager.Instance.LoadingStop();
+            if (res)
+            {
+                DataManager.Instance.useShieldCount = shieldCount;
+                SceneManager.LoadScene(Constants.DATA.GAMEPLAY_SCENE);
+            }
         });
     }
     public void Open()
@@ -32,7 +36,7 @@ public class ShieldSelectUI : MonoBehaviour
     }
     public void Close()
     {
-        if(TitleManager.Instance != null)
+        if (TitleManager.Instance != null)
             TitleManager.Instance.shieldTxt.text = DataManager.userItem.shield.ToString();
         gameObject.SetActive(false);
     }

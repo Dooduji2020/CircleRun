@@ -133,10 +133,12 @@ public class Player : MonoBehaviour
     {
         SpriteRenderer renderer = GetComponent<SpriteRenderer>();
         shieldSpriteRenderer.gameObject.SetActive(true);
-        shieldSpriteRenderer.DOFade(0f, 0.5f);
-        shieldSpriteRenderer.transform.DOScale(1f, 0.5f).OnComplete(() => {
+        shieldSpriteRenderer.DOFade(0f, 1f);
+        shieldSpriteRenderer.transform.DOLocalMoveY(shieldSpriteRenderer.transform.localPosition.y + 5f, 0.6f);
+        shieldSpriteRenderer.transform.DOScale(1f, 1f).OnComplete(() => {
             shieldSpriteRenderer.color = Color.white;
             shieldSpriteRenderer.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
+            shieldSpriteRenderer.transform.localPosition = new Vector3(0,0,0);
             shieldSpriteRenderer.gameObject.SetActive(false);
         });
         Sequence sequence = DOTween.Sequence();
