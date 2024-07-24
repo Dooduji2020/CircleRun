@@ -10,6 +10,7 @@ public class LoadingUI : MonoBehaviour
     private Canvas canvas;
     private void Awake()
     {
+        DontDestroyOnLoad(this.gameObject);
         canvas = GetComponent<Canvas>();
     }
     public void LoadingStart()

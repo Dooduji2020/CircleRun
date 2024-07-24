@@ -443,4 +443,25 @@ public class GameManager : MonoBehaviour
         }
     }
     #endregion
+
+    private void OnApplicationFocus(bool focus)
+    {
+        if(!focus)
+        {
+            //안내 UI 띄우기
+            Time.timeScale = 0;
+            Debug.Log("Focus Out");
+        }
+        else
+        {
+            Debug.Log("Focus On");
+            StartCoroutine(ResumeAfterDelay(3));
+        }
+    }
+    private IEnumerator ResumeAfterDelay(float delay)
+    {
+        yield return new WaitForSecondsRealtime(delay); // 실제 시간으로 3초 대기
+        Time.timeScale = 1;
+        Debug.Log("Time.timeScale set to 1.");
+    }
 }

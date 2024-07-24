@@ -23,6 +23,9 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private GameObject _explosionPrefab;
+
+    public SpriteRenderer shieldSpriteRenderer;
+
     private void Awake()
     {
         currentRotateAngle = 0f;
@@ -105,7 +108,6 @@ public class Player : MonoBehaviour
             {
                 shield_delay = true;
                 GameManager.Instance.ShieldUse();
-                BackEndManager.Instance.UseShield();
                 StartCoroutine(ShieldDelay());
             }
             else
@@ -130,6 +132,13 @@ public class Player : MonoBehaviour
     IEnumerator ShieldDelay()
     {
         SpriteRenderer renderer = GetComponent<SpriteRenderer>();
+        shieldSpriteRenderer.gameObject.SetActive(true);
+        shieldSpriteRenderer.DOFade(0f, 0.5f);
+        shieldSpriteRenderer.transform.DOScale(1f, 0.5f).OnComplete(() => {
+            shieldSpriteRenderer.color = Color.white;
+            shieldSpriteRenderer.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
+            shieldSpriteRenderer.gameObject.SetActive(false);
+        });
         Sequence sequence = DOTween.Sequence();
         sequence.Append(renderer.DOFade(0.2f, 0.3f));
         sequence.Append(renderer.DOFade(1f, 0.3f));

@@ -15,6 +15,7 @@ public class LoadingManager : MonoBehaviour
                 {
                     GameObject newObj = new GameObject(typeof(LoadingManager).Name);
                     _Instance = newObj.AddComponent<LoadingManager>();
+                    DontDestroyOnLoad(_Instance.gameObject);
                 }
             }
             return _Instance;
@@ -22,7 +23,6 @@ public class LoadingManager : MonoBehaviour
     }
 
     private LoadingUI loadingUI;
-
     public void LoadingStart(bool isNetwork = false)
     { 
         if(loadingUI == null)

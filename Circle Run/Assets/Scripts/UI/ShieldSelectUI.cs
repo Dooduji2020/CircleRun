@@ -16,8 +16,12 @@ public class ShieldSelectUI : MonoBehaviour
     public ShieldSelcetButtton[] selectButton;
     public void GameStart()
     {
-        DataManager.Instance.useShieldCount = shieldCount;
-        SceneManager.LoadScene(Constants.DATA.GAMEPLAY_SCENE);
+        LoadingManager.Instance.LoadingStart();
+        BackEndManager.Instance.UseShield(shieldCount,()=> {
+            DataManager.Instance.useShieldCount = shieldCount;
+            SceneManager.LoadScene(Constants.DATA.GAMEPLAY_SCENE);
+            LoadingManager.Instance.LoadingStop();
+        });
     }
     public void Open()
     {

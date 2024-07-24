@@ -448,19 +448,31 @@ public class BackEndManager : MonoBehaviour
         dic.Add("continueCoupon", item.continueCoupon - 1);
         GameDataUpdate("UserItemData", item.inDate, dic, callback);
     }
-    public void UseShield()
+    public void UseShield(int amount, Action callback)
     {
         Param param = new Param();
         UserItem item = DataManager.userItem;
-        --item.shield;
+        item.shield -= amount;
         param.Add("shield", item.shield);
-        SendQueue.Enqueue(Backend.PlayerData.UpdateMyData, "UserItemData", item.inDate, param, (callback) =>
-        {
-            if (callback.IsSuccess())
-            { }
+        Backend.PlayerData.UpdateMyData("UserItemData", item.inDate, param, (res) => {
+            if (res.IsSuccess())
+                callback?.Invoke();
             else
-            { }
+            {
+                // 에러 판넬
+                LoadingManager.Instance.LoadingStop();
+            }
         });
+        //SendQueue.Enqueue(Backend.PlayerData.UpdateMyData, "UserItemData", item.inDate, param, (res) =>
+        //{
+        //    if (res.IsSuccess())
+        //        callback?.Invoke();
+        //    else
+        //    {
+        //        //에러 판넬
+        //        LoadingManager.Instance.LoadingStop();
+        //    }
+        //});
     }
     public void ScoreUpdate()
     {
@@ -476,6 +488,13 @@ public class BackEndManager : MonoBehaviour
 
         //});
     }
+    /// <summary>
+    /// 게임 데이터 업데이트
+    /// </summary>
+    /// <param name="tableName">테이블 명</param>
+    /// <param name="inDate">테이블 InDate</param>
+    /// <param name="dic">담을 내용</param>
+    /// <param name="callback">콜백</param>
     public void GameDataUpdate(string tableName, string inDate, Dictionary<string, int> dic, Action<bool> callback)
     {
         Param param = new Param();
@@ -522,6 +541,11 @@ public class BackEndManager : MonoBehaviour
         }
         return DateTime.UtcNow;
     }
+    /// <summary>
+    /// 시간 업데이트
+    /// </summary>
+    /// <param name="param">업데이트할 시간</param>
+    /// <param name="inDate">데이터 inDate</param>
     public void GetTimeUpdate(Param param, string inDate)
     {
         Backend.PlayerData.UpdateMyData("TimeCheck", inDate, param, (callback) =>
