@@ -53,6 +53,8 @@ public class GameManager : MonoBehaviour
 
     [HideInInspector]
     public bool isPlay = false;
+    [HideInInspector]
+    public bool isPause = false;
 
     private float timer = 0;
     private void Awake()
@@ -127,7 +129,14 @@ public class GameManager : MonoBehaviour
             CurrentColorId++;
         }
     }
-
+    public void GamePause()
+    {
+        isPause = true;
+    }
+    public void GamePlay()
+    {
+        isPause = false;
+    }
     #endregion
 
     #region GAME_START_END
@@ -167,7 +176,7 @@ public class GameManager : MonoBehaviour
         score = 0;
         _scoreText.text = score.ToString();
         _scoreAnimator.Play(_scoreClip.name, -1, 0f);
-
+        isPause =false;
         StartCoroutine(SpawnObstacles());
         StartCoroutine(SpawnObstacles2());
         StartCoroutine(SpawnBoss());
@@ -299,20 +308,21 @@ public class GameManager : MonoBehaviour
     IEnumerator IReStartDelay()
     {
         continueDelay.gameObject.SetActive(true);
-        
+
         float timer = 3;
         continueTxt.text = timer.ToString();
         yield return new WaitForSeconds(1f);
-        while(timer > 0)
+        while (timer > 0)
         {
             timer -= Time.deltaTime;
-            timer = Mathf.Max(timer,0);
+            timer = Mathf.Max(timer, 0);
             continueTxt.text = ((int)timer).ToString();
             yield return null;
         }
         continueTxt.text = "Start!!";
         yield return new WaitForSeconds(1f);
         continueDelay.SetActive(false);
+        isPause =false;
         isPlay = true;
         player.GameReStart();
         StartCoroutine(IReStartGame());
@@ -447,22 +457,36 @@ public class GameManager : MonoBehaviour
 
     private void OnApplicationFocus(bool focus)
     {
-        if(!focus)
+        if (!focus)
         {
             //안내 UI 띄우기
-            Time.timeScale = 0;
+            GamePause();
             Debug.Log("Focus Out");
         }
         else
         {
             Debug.Log("Focus On");
-            StartCoroutine(ResumeAfterDelay(3));
+            if(!hasGameEnded)
+                StartCoroutine(ResumeAfterDelay());
         }
     }
-    private IEnumerator ResumeAfterDelay(float delay)
+    private IEnumerator ResumeAfterDelay()
     {
-        yield return new WaitForSecondsRealtime(delay); // 실제 시간으로 3초 대기
-        Time.timeScale = 1;
+        continueDelay.gameObject.SetActive(true);
+        float timer = 3;
+        continueTxt.text = timer.ToString();
+        yield return new WaitForSeconds(1f);
+        while (timer > 0)
+        {
+            timer -= Time.deltaTime;
+            timer = Mathf.Max(timer, 0);
+            continueTxt.text = ((int)timer).ToString();
+            yield return null;
+        }
+        continueTxt.text = "Start!!";
+        yield return new WaitForSecondsRealtime(0.5f); // 실제 시간으로 3초 대기
+        continueDelay.gameObject.SetActive(false);
+        GamePlay();
         Debug.Log("Time.timeScale set to 1.");
     }
 }

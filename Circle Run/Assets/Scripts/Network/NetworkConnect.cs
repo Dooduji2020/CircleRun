@@ -3,6 +3,7 @@ using UnityEngine;
 public class NetworkConnect : MonoBehaviour
 {
     private static bool isConnect = false;
+    public static int tryCount = 0;
     public static bool CheckConnectInternet()
     {
         if (Application.internetReachability == NetworkReachability.NotReachable)
@@ -12,15 +13,18 @@ public class NetworkConnect : MonoBehaviour
         else
             isConnect = true;
 
+        if (!isConnect) ++tryCount;
+        else tryCount = 0;
+
         return isConnect;
     }
     private void Update()
     {
-        if(CheckConnectInternet())
+        if (CheckConnectInternet())
         { }
         else
         {
-            Debug.Log("³×Æ®¿öÅ© ¿¬°á ¾øÀ½");
+            Debug.Log("ï¿½ï¿½Æ®ï¿½ï¿½Å© ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
         }
     }
 }

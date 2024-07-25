@@ -25,6 +25,11 @@ public class ShieldSelectUI : MonoBehaviour
                 DataManager.Instance.useShieldCount = shieldCount;
                 SceneManager.LoadScene(Constants.DATA.GAMEPLAY_SCENE);
             }
+            else
+            {
+                InfoUI info = Instantiate(Resources.Load<InfoUI>("Prefabs/UI/InfoUI"));
+                info.Open("Network_Error");
+            }
         });
     }
     public void Open()

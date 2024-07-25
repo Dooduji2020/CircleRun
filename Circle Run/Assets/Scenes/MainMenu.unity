@@ -4873,6 +4873,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 61.799988
       objectReference: {fileID: 0}
+    - target: {fileID: 8824245875153461207, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8854305870176928286, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
       propertyPath: productId
       value: dongrami_shield2
@@ -4925,7 +4929,8 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8824245875153461207, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 6901823583594337289, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
@@ -6462,7 +6467,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bddd0e49fa4ead42a4696757fc58cde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testMode: 1
+  testMode: 0
 --- !u!4 &1393658098
 Transform:
   m_ObjectHideFlags: 0

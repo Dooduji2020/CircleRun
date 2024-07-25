@@ -50,7 +50,11 @@ public class TitleManager : MonoBehaviour
 
         }
         else
-            LoadingManager.Instance.LoadingStop();
+        {
+            if(!NetworkConnect.CheckConnectInternet())
+            {}
+            else LoadingManager.Instance.LoadingStop(); 
+        }
     }
     public void VersionCheckResult(bool result)
     {

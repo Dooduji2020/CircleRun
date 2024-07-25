@@ -511,16 +511,8 @@ public class BackEndManager : MonoBehaviour
             param.Add(i.Key, i.Value);
         var result = Backend.PlayerData.UpdateMyData(tableName, inDate, param);
         bool isResult = result.IsSuccess();
-        if (isResult)
-        {
-            LoadingManager.Instance.LoadingStop();
-            callback?.Invoke(isResult);
-        }
-        else
-        {
-            Debug.Log("Error Message : " + result.GetMessage());
-            LoadingManager.Instance.LoadingStop();
-        }
+        callback?.Invoke(isResult);
+        LoadingManager.Instance.LoadingStop();
 
     }
     public void ItemDataUpdate(Action<bool> action)

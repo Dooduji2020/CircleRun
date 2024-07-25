@@ -71,7 +71,7 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!canMove) return;
+        if (!canMove || GameManager.Instance.isPause) return;
 
         currentRotateAngle += rotateSpeed * Time.fixedDeltaTime;
 

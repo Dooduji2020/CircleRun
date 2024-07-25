@@ -7,6 +7,7 @@ public class Tutorial : MonoBehaviour
 {
     private const string txtKey = "Tutorial_00";
     public TextMeshProUGUI tutorialTxt;
+    public GameObject tutorialAnim;
     public Button startBtn;
     private int index = 0;
     private bool delay = false;
@@ -15,6 +16,7 @@ public class Tutorial : MonoBehaviour
     /// </summary>
     private void Awake()
     {
+        GameManager.Instance.GamePlay();
         LocalizationManager.Instance.ChangedTxt(txtKey + index.ToString(), tutorialTxt);
     }
     public void StepUp()
@@ -49,7 +51,10 @@ public class Tutorial : MonoBehaviour
     }
     IEnumerator TutorialDelay()
     {
+        tutorialAnim.SetActive(false);
         yield return new WaitForSeconds(1.5f);
+        if(index <= 4)
+            tutorialAnim.SetActive(true);
         delay = false;
         //다음 진행 클릭하라고 진행
     }

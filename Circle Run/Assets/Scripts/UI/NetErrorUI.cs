@@ -4,6 +4,10 @@ using UnityEngine.UI;
 
 public class NetErrorUI : MonoBehaviour
 {
+    public GameObject gameResetTxt;
+    public GameObject errorInfoTxt;
+    public GameObject confirmTxt;
+    public GameObject retryTxt;
     public Button retryButton;
     private Canvas myCanvas;
     private event Action retryEvent;

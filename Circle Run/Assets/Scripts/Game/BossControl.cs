@@ -34,7 +34,7 @@ public class BossControl : MonoBehaviour {
 
     private void FixedUpdate()
     {
-        if (hasGameFinished) return;
+        if (hasGameFinished || GameManager.Instance.isPause) return;
 
         transform.position += _moveSpeed * Time.fixedDeltaTime * Vector3.right;
 

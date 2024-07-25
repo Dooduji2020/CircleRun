@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 
@@ -41,6 +42,33 @@ public class ContinueUI : MonoBehaviour
                 else
                 {
                     Debug.Log("error");
+                    if (!NetworkConnect.CheckConnectInternet())
+                    {
+                        if (NetworkConnect.tryCount >= 3)
+                        {
+                            NetErrorUI errorUI = Instantiate(Resources.Load<NetErrorUI>("Prefabs/UI/NetWorkErrorUI"));
+                            errorUI.confirmTxt.SetActive(true);
+                            errorUI.retryTxt.SetActive(false);
+                            errorUI.errorInfoTxt.SetActive(false);
+                            errorUI.gameResetTxt.SetActive(true);
+                            errorUI.Init(() =>
+                            {
+                                GameManager.Instance.GoToMainMenu();
+                            });
+                        }
+                        else
+                        {
+                            InfoUI infoUI = Instantiate(Resources.Load<InfoUI>("Prefabs/UI/InfoUI"));
+                            infoUI.Open("Network_Error");
+                            sendBtn.interactable = true;
+                        }
+                    }
+                    else
+                    {
+                        InfoUI infoUI = Instantiate(Resources.Load<InfoUI>("Prefabs/UI/InfoUI"));
+                        infoUI.Open("Network_Error");
+                        sendBtn.interactable = true;
+                    }
                 }
             });
         };
