@@ -28,15 +28,15 @@ public class AdsManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(this.gameObject);
-            Init();
         }
         else
             Destroy(this.gameObject);
     }
-    private void Init()
+    public void Init()
     {
         RequestConfiguration requestConfiguration = new RequestConfiguration();
         requestConfiguration.TagForChildDirectedTreatment = TagForChildDirectedTreatment.True;
+        MobileAds.RaiseAdEventsOnUnityMainThread = true;
         MobileAds.SetRequestConfiguration(requestConfiguration);
         MobileAds.Initialize((InitializationStatus _initStatus) =>
         {
@@ -106,7 +106,6 @@ public class AdsManager : MonoBehaviour
         }
         _rewardAd.Show(callback);
         RewardAdLoad();
-        
     }
     public void ShowInterstitialAd()
     {

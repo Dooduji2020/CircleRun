@@ -146,6 +146,14 @@ MonoBehaviour:
     m_Localized: Please enter your Google Play ID.
     m_Metadata:
       m_Items: []
+  - m_Id: 1746551325773824
+    m_Localized: No rollback if you app closed?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1826344234831872
+    m_Localized: A network connection is required.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -35,39 +35,40 @@ public class StroreIAP : MonoBehaviour
                 DataManager.userItem.adsRemove = true;
                 // 광고 제거
                 break;
-            case "002":
+            case "dongrami_coupon1":
                 DataManager.userItem.continueCoupon += 5;
                 // 이어하기 5
                 break;
-            case "003":
+            case "dongrami_shield5":
                 // 쉴드 5
                 DataManager.userItem.shield += 5;
                 break;
-            case "004":
+            case "dongrami_itemset":
                 // 패키지 쉴 20 이어하기 15
                 DataManager.userItem.shield += 20;
                 DataManager.userItem.continueCoupon += 15;
                 break;
-            case "005":
+            case "dongrami_ingameset":
                 // 쉴드 2 이어하기 2  인게임 상품
                 DataManager.userItem.shield += 2;
                 DataManager.userItem.continueCoupon += 2;
                 break;
-            case "s_003":
+            case "dongrami_shield2":
                 // 쉴드 20
-                DataManager.userItem.shield += 20;
+                DataManager.userItem.shield += 200;
                 break;
-            case "c_002":
+            case "dongrami_coupon2":
                 // 컨티뉴 25
                 DataManager.userItem.continueCoupon += 25;
                 break;
         }
         BackEndManager.Instance.ItemDataUpdate((result) =>
         {
-
             InfoUI info = Instantiate(Resources.Load<InfoUI>("Prefabs/UI/InfoUI"));
             if (result)
                 info.Open("Inapp_Success");
+            else
+                info.Open("Inapp_Fail");
             LoadingManager.Instance.LoadingStop();
         });
         if (TitleManager.Instance != null)

@@ -48,11 +48,11 @@ public class ContinueUI : MonoBehaviour
         else
         {
             sendButtonEvent += () => AdsManager.Instance.ShowRewardAd((reward) =>
-        {
-            closeAction = null;
-            GameManager.Instance.GameContinuePlay();
-            this.gameObject.SetActive(false);
-        });
+            {
+                closeAction = null;
+                GameManager.Instance.GameContinuePlay();
+                this.gameObject.SetActive(false);
+            });
         }
         sendBtn.interactable = true;
         this.gameObject.SetActive(true);

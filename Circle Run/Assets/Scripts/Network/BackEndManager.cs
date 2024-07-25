@@ -31,6 +31,7 @@ public class BackEndManager : MonoBehaviour
         }
     }
     public static bool isInit = false;
+    private NetErrorUI netErrorUI;
     private void Awake()
     {
         if (Instance == null)
@@ -147,7 +148,14 @@ public class BackEndManager : MonoBehaviour
                 else
                 {
                     // 로그인 실패
-                    TitleManager.Instance.LoginError();
+                    LoadingManager.Instance.LoadingStop();
+                    if(netErrorUI == null)
+                        netErrorUI = Instantiate(Resources.Load<NetErrorUI>("Prefabs/UI/NetWorkErrorUI"));
+                    netErrorUI.Init(() => {
+                        LoadingManager.Instance.LoadingStart();
+                        Init();
+                    });
+                    //TitleManager.Instance.LoginError();
                     Debug.LogError("Login failed for some reason");
                 }
             });
@@ -223,6 +231,13 @@ public class BackEndManager : MonoBehaviour
         }
         else
         {
+            LoadingManager.Instance.LoadingStop();
+            if(netErrorUI == null)
+                netErrorUI = Instantiate(Resources.Load<NetErrorUI>("Prefabs/UI/NetWorkErrorUI"));
+            netErrorUI.Init(() => {
+                LoadingManager.Instance.LoadingStart();
+                Init();
+            });
         }
     }
     private void BackEndDataSetting()
@@ -542,15 +557,15 @@ public class BackEndManager : MonoBehaviour
     /// <param name="inDate">데이터 inDate</param>
     public void GetTimeUpdate(Param param, string inDate)
     {
-        Backend.PlayerData.UpdateMyData("TimeCheck", inDate, param, (callback) =>
+        var bro = Backend.PlayerData.UpdateMyData("TimeCheck", inDate, param);
+        if (bro.IsSuccess())
         {
-            if (callback.IsSuccess())
-            {
 
-            }
-            Debug.Log(callback.GetMessage());
-            LoadingManager.Instance.LoadingStop();
-        });
+        }
+        else
+        { }
+        Debug.Log(bro.GetMessage());
+        LoadingManager.Instance.LoadingStop();
     }
     public void SendQueueTimeUpdate(Param param, string inDate)
     {

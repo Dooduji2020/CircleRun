@@ -30,6 +30,7 @@ public class InfoUI : MonoBehaviour
         canvas.sortingOrder = -1;
         this.gameObject.SetActive(false);
         closeButton.interactable = false;
+        Destroy(this.gameObject);
     }
     IEnumerator CloseDelay()
     {

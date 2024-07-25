@@ -1104,9 +1104,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_StringReference:
     m_TableReference:
-      m_TableCollectionName: 
+      m_TableCollectionName: GUID:e1b96d4e9fa6c420dba7347dd98136f5
     m_TableEntryReference:
-      m_KeyId: 0
+      m_KeyId: 1746551325773824
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
@@ -4083,7 +4083,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1149089461191881301, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
       propertyPath: productId
-      value: c_002
+      value: dongrami_coupon2
       objectReference: {fileID: 0}
     - target: {fileID: 1183044785031363904, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
       propertyPath: m_AnchorMax.y
@@ -4179,7 +4179,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2147272461150417862, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
       propertyPath: productID
-      value: 003
+      value: dongrami_shield5
       objectReference: {fileID: 0}
     - target: {fileID: 2192513382589961453, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
       propertyPath: m_text
@@ -4219,7 +4219,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2931512186791861352, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
       propertyPath: productId
-      value: 004
+      value: dongrami_itemset
       objectReference: {fileID: 0}
     - target: {fileID: 3012519792532387935, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -4231,15 +4231,43 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3172531362531885346, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
       propertyPath: productID
-      value: s_003
+      value: dongrami_shield2
       objectReference: {fileID: 0}
     - target: {fileID: 3249125932254258710, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3269254531209777027, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3269254531209777027, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3269254531209777027, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1048619157}
+    - target: {fileID: 3269254531209777027, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3269254531209777027, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ClosePaymentObject
+      objectReference: {fileID: 0}
+    - target: {fileID: 3269254531209777027, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: StoreUI, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3269254531209777027, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 3324016275100297532, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
       propertyPath: productId
-      value: 003
+      value: dongrami_shield5
       objectReference: {fileID: 0}
     - target: {fileID: 3499053530088189467, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
       propertyPath: m_text
@@ -4339,7 +4367,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4254385047192484922, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
       propertyPath: productID
-      value: c_002
+      value: dongrami_coupon2
       objectReference: {fileID: 0}
     - target: {fileID: 4290393183095115461, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -4371,7 +4399,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4679111770164512372, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
       propertyPath: productID
-      value: 004
+      value: dongrami_itemset
       objectReference: {fileID: 0}
     - target: {fileID: 4902009682447010360, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -4519,7 +4547,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6840091302812118420, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
       propertyPath: productID
-      value: 002
+      value: dongrami_coupon1
       objectReference: {fileID: 0}
     - target: {fileID: 7005908896125720728, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
       propertyPath: m_text
@@ -4811,7 +4839,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8301692144134330285, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
       propertyPath: productId
-      value: 002
+      value: dongrami_coupon1
       objectReference: {fileID: 0}
     - target: {fileID: 8336773035275650512, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
       propertyPath: m_AnchorMax.y
@@ -4847,7 +4875,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8854305870176928286, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
       propertyPath: productId
-      value: s_003
+      value: dongrami_shield2
       objectReference: {fileID: 0}
     - target: {fileID: 8854480287098971625, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
       propertyPath: m_SizeDelta.x
@@ -4924,6 +4952,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 9142124335290012072, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
   m_PrefabInstance: {fileID: 1048619152}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1048619155 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5112091851489190409, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
+  m_PrefabInstance: {fileID: 1048619152}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1048619157
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4940,6 +4973,7 @@ MonoBehaviour:
   couponAdsTxt: {fileID: 886996793}
   shieldButton: {fileID: 1358301719}
   couponButton: {fileID: 801939406}
+  paymentObject: {fileID: 1048619155}
 --- !u!1 &1064526990 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6166962668872187728, guid: 75df7fe9acb9ccc4bbb587620f1db921, type: 3}
@@ -6428,7 +6462,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bddd0e49fa4ead42a4696757fc58cde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testMode: 0
+  testMode: 1
 --- !u!4 &1393658098
 Transform:
   m_ObjectHideFlags: 0
@@ -13735,7 +13769,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 381049521658095280, guid: 3b5000fa61aadf34d8f8fd97f5e268da, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -42.590027
+      value: -42.590088
       objectReference: {fileID: 0}
     - target: {fileID: 459708181403166876, guid: 3b5000fa61aadf34d8f8fd97f5e268da, type: 3}
       propertyPath: m_Type
@@ -15941,16 +15975,45 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1636917245339051548, guid: fec2dbf2b63f941eda1adefea84aa756, type: 3}
       propertyPath: m_text
-      value: "\uC274\uB4DC\uBCF5\uAD6C \uC548\uB428."
+      value: " \uAC8C\uC784 \uC2DC\uC791 \uD6C4 \uC801\uC6A9\uB41C \uC274\uB4DC\uB294
+        \uBC18\uD658\uB418\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4."
       objectReference: {fileID: 0}
     - target: {fileID: 1636917245339051548, guid: fec2dbf2b63f941eda1adefea84aa756, type: 3}
       propertyPath: m_fontSize
-      value: 50
+      value: 35.55
+      objectReference: {fileID: 0}
+    - target: {fileID: 1636917245339051548, guid: fec2dbf2b63f941eda1adefea84aa756, type: 3}
+      propertyPath: m_margin.x
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 1636917245339051548, guid: fec2dbf2b63f941eda1adefea84aa756, type: 3}
+      propertyPath: m_margin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1636917245339051548, guid: fec2dbf2b63f941eda1adefea84aa756, type: 3}
+      propertyPath: m_margin.z
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 1636917245339051548, guid: fec2dbf2b63f941eda1adefea84aa756, type: 3}
       propertyPath: m_fontAsset
       value: 
       objectReference: {fileID: 11400000, guid: a22a71b5a85014eba99ae703d83eda79, type: 2}
+    - target: {fileID: 1636917245339051548, guid: fec2dbf2b63f941eda1adefea84aa756, type: 3}
+      propertyPath: m_fontStyle
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1636917245339051548, guid: fec2dbf2b63f941eda1adefea84aa756, type: 3}
+      propertyPath: m_fontColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1636917245339051548, guid: fec2dbf2b63f941eda1adefea84aa756, type: 3}
+      propertyPath: m_fontColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1636917245339051548, guid: fec2dbf2b63f941eda1adefea84aa756, type: 3}
+      propertyPath: m_fontColor.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1636917245339051548, guid: fec2dbf2b63f941eda1adefea84aa756, type: 3}
       propertyPath: m_fontSizeMax
       value: 50
@@ -15974,6 +16037,10 @@ PrefabInstance:
     - target: {fileID: 1636917245339051548, guid: fec2dbf2b63f941eda1adefea84aa756, type: 3}
       propertyPath: m_enableAutoSizing
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1636917245339051548, guid: fec2dbf2b63f941eda1adefea84aa756, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 1636917245339051548, guid: fec2dbf2b63f941eda1adefea84aa756, type: 3}
       propertyPath: m_TextStyleHashCode

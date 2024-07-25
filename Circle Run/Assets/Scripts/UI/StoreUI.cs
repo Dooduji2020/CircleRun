@@ -10,6 +10,7 @@ public class StoreUI : MonoBehaviour
     public TextMeshProUGUI couponAdsTxt;
     public Button shieldButton;
     public Button couponButton;
+    public GameObject paymentObject;
 
     private const string countTxt = "FREE";
 
@@ -51,6 +52,14 @@ public class StoreUI : MonoBehaviour
         shieldAdsTxt.text = countTxt + $" {shieldCount}/2";
         couponAdsTxt.text = countTxt + $" {couponCount}/2";
     }
+    private void PaymentResult(bool completed = true)
+    {
+        paymentObject.SetActive(true);
+    }
+    public void ClosePaymentObject()
+    {
+        paymentObject.SetActive(false);
+    }
     public void RewardAds(int item)
     {
         switch (item)
@@ -59,43 +68,37 @@ public class StoreUI : MonoBehaviour
                 if (DataManager.timeData.ShieldAdsCount == 0)
                     return;
                 shieldButton.interactable = false;
-                AdsManager.Instance.ShowRewardAd((reward) =>
-                {
-                    DataManager.userItem.shield += 3;
+                AdsManager.Instance.ShowRewardAd((reward)=> {
+                    LoadingManager.Instance.LoadingStart();
+                    BackEndManager.Instance.ItemDataUpdate(null);
                     Debug.Log("Shield Reward Ads Show");
                     int shieldCount = --DataManager.timeData.ShieldAdsCount;
+                    if (DataManager.timeData.ShieldAdsCount == 0)
+                        DataManager.timeData.ShieldAds = BackEndManager.Instance.GetTime();
                     BackEndManager.Instance.GetTimeUpdate(DataManager.Instance.GetTimeParam(), DataManager.timeData.inDate);
                     shieldButton.interactable = true;
-                    shieldAdsTxt.text = countTxt + $" {shieldCount}/2";
-                    BackEndManager.Instance.ItemDataUpdate(null);
-                    if (DataManager.timeData.ShieldAdsCount == 0)
-                    {
-                        DataManager.timeData.ShieldAds = BackEndManager.Instance.GetTime();
-                        BackEndManager.Instance.GetTimeUpdate(DataManager.Instance.GetTimeParam(), DataManager.timeData.inDate);
-                    }
+                    shieldAdsTxt.text = countTxt + $" {DataManager.timeData.ShieldAdsCount}/2";
                     TitleManager.Instance.ItemUISet();
+                    PaymentResult();
                 });
                 break;
             case 1:  // 쿠폰 2개
                 if (DataManager.timeData.CouponAdsCount == 0)
                     return;
                 couponButton.interactable = false;
-                AdsManager.Instance.ShowRewardAd((reward) =>
-                {
+                AdsManager.Instance.ShowRewardAd((reward)=> {
+                    LoadingManager.Instance.LoadingStart();
                     DataManager.userItem.continueCoupon += 2;
+                    BackEndManager.Instance.ItemDataUpdate(null);
                     int couponCount = --DataManager.timeData.CouponAdsCount;
+                    if (DataManager.timeData.CouponAdsCount == 0)
+                        DataManager.timeData.CouponAds = BackEndManager.Instance.GetTime();
                     BackEndManager.Instance.GetTimeUpdate(DataManager.Instance.GetTimeParam(), DataManager.timeData.inDate);
                     shieldButton.interactable = true;
-                    shieldAdsTxt.text = countTxt + $" {couponCount}/2";
-                    BackEndManager.Instance.ItemDataUpdate(null);
-                    if (DataManager.timeData.CouponAdsCount == 0)
-                    {
-                        DataManager.timeData.CouponAds = BackEndManager.Instance.GetTime();
-                        BackEndManager.Instance.GetTimeUpdate(DataManager.Instance.GetTimeParam(), DataManager.timeData.inDate);
-                    }
+                    shieldAdsTxt.text = countTxt + $" {DataManager.timeData.CouponAdsCount}/2";
                     TitleManager.Instance.ItemUISet();
+                    PaymentResult();
                 });
-
                 break;
         }
         

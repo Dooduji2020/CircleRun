@@ -102,6 +102,8 @@ public class TitleManager : MonoBehaviour
                     i.Move();
             });
         }
+        AdsManager.Instance.Init();
+        NetworkManager.Instance.IAPInit();
         MainMenuManager.Instance.Init();
         yield break;
     }
