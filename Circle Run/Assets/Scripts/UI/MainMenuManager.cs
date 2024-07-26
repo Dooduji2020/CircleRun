@@ -9,7 +9,7 @@ using UnityEngine.Video;
 public class MainMenuManager : MonoBehaviour
 {
     public static MainMenuManager Instance { get; private set; }
-    public GameObject shopUI;
+    public StoreUI shopUI;
     public RankingUI rankingUI;
     public ShieldSelectUI shieldSelectUI;
     public OptionUI optionUI;
@@ -29,6 +29,7 @@ public class MainMenuManager : MonoBehaviour
     public void Init()
     {
         optionUI.Init();
+        shopUI.Init();
     }
     public void ClickedPlay()
     {
@@ -59,11 +60,11 @@ public class MainMenuManager : MonoBehaviour
 
     public void ShopOpen()
     {
-        shopUI.SetActive(true);
+        shopUI.gameObject.SetActive(true);
     }
     public void ShopClose()
     {
-        shopUI.SetActive(false);
+        shopUI.gameObject.SetActive(false);
     }
     public void RankingOpen()
     {

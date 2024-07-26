@@ -535,9 +535,7 @@ public class BackEndManager : MonoBehaviour
         {
             string time = bro.GetReturnValuetoJSON()["utcTime"].ToString();
             DateTime parsedDate = DateTime.Parse(time);
-            TimeSpan korean = new TimeSpan(9, 0, 0);
             // UTC 시간을 한국 시간대로 변환
-            parsedDate += korean;
             return parsedDate;
         }
         return DateTime.UtcNow;
@@ -571,5 +569,4 @@ public class BackEndManager : MonoBehaviour
         });
     }
     #endregion
-
 }

@@ -136,6 +136,9 @@ public class GameManager : MonoBehaviour
     public void GamePlay()
     {
         isPause = false;
+        StartCoroutine(SpawnObstacles());
+        StartCoroutine(SpawnObstacles2());
+        StartCoroutine(SpawnBoss());
     }
     #endregion
 
@@ -360,7 +363,7 @@ public class GameManager : MonoBehaviour
         var spawnPrefab = isScore ? _scorePrefab : _obstaclePrefab;
         Vector3 spawnPos = _obstacleSpawnPos[UnityEngine.Random.Range(0, _obstacleSpawnPos.Count)];
 
-        while (!hasGameEnded)
+        while (!hasGameEnded && !isPause)
         {
             GameObject enemy = Instantiate(spawnPrefab, spawnPos, Quaternion.identity);
             enemy.GetComponent<SpriteRenderer>().color = GetRandomColor();
@@ -388,7 +391,7 @@ public class GameManager : MonoBehaviour
         var spawnPrefab = isScore ? _scorePrefab : _obstaclePrefab2;
         Vector3 spawnPos = _obstacleSpawnPos2[UnityEngine.Random.Range(0, _obstacleSpawnPos2.Count)];
 
-        while (!hasGameEnded)
+        while (!hasGameEnded && !isPause)
         {
             GameObject enemy = Instantiate(spawnPrefab, spawnPos, Quaternion.identity);
             enemy.GetComponent<SpriteRenderer>().color = GetRandomColor();
@@ -417,7 +420,7 @@ public class GameManager : MonoBehaviour
         var spawnPrefab = isScore ? _scorePrefab : _bossPrefab;
         Vector3 spawnPos = _bossSpawnPos[UnityEngine.Random.Range(0, _bossSpawnPos.Count)];
 
-        while (!hasGameEnded)
+        while (!hasGameEnded && !isPause)
         {
             Instantiate(spawnPrefab, spawnPos, Quaternion.identity);
             isScore = UnityEngine.Random.Range(0, 3) == 0;

@@ -19,8 +19,6 @@ public class TitleManager : MonoBehaviour
     {
         if (Instance == null)
             Instance = this;
-        else
-            Destroy(this.gameObject);
     }
     private void Start()
     {
@@ -31,6 +29,7 @@ public class TitleManager : MonoBehaviour
         }
         else
         {
+            Init();
             ItemUISet();
             foreach (var i in moveUI)
                 i.Move();
@@ -51,9 +50,12 @@ public class TitleManager : MonoBehaviour
         }
         else
         {
-            if(!NetworkConnect.CheckConnectInternet())
-            {}
-            else LoadingManager.Instance.LoadingStop(); 
+            //if (!NetworkConnect.CheckConnectInternet())
+            //{ }
+            //else {
+                MainMenuManager.Instance.Init();
+                LoadingManager.Instance.LoadingStop();
+            //}
         }
     }
     public void VersionCheckResult(bool result)
@@ -101,6 +103,7 @@ public class TitleManager : MonoBehaviour
             {
                 couponTxt.text = DataManager.userItem.continueCoupon.ToString();
                 shieldTxt.text = DataManager.userItem.shield.ToString();
+                BackEndManager.Instance.GetRankReward();
                 LoadingManager.Instance.LoadingStop();
                 foreach (var i in moveUI)
                     i.Move();
