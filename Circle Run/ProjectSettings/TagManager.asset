@@ -9,6 +9,7 @@ TagManager:
   - Sound
   - Center
   - Boss
+  - Score2
   layers:
   - Default
   - TransparentFX

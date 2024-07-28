@@ -45,7 +45,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 147607518175235
-    m_Localized: Watch the Video to continue the game!
+    m_Localized: "You have no continue ticket, \nWatch the Video to continue the
+      game!"
     m_Metadata:
       m_Items: []
   - m_Id: 147607518175236
@@ -123,7 +124,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 263494262841344
-    m_Localized: "Hi ! \nWelcome to the DONGRAMI world."
+    m_Localized: How to Play?
     m_Metadata:
       m_Items: []
   - m_Id: 254015941107728
@@ -147,7 +148,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1746551325773824
-    m_Localized: No rollback if you app closed?
+    m_Localized: No rollback if you app closed
     m_Metadata:
       m_Items: []
   - m_Id: 1826344234831872

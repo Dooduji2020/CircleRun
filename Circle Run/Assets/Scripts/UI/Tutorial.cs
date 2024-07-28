@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEditor.Localization.Plugins.XLIFF.V12;
 public class Tutorial : MonoBehaviour
 {
     private const string txtKey = "Tutorial_00";
@@ -16,8 +17,13 @@ public class Tutorial : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        GameManager.Instance.GamePlay();
-        LocalizationManager.Instance.ChangedTxt(txtKey + index.ToString(), tutorialTxt);
+        tutorialAnim.SetActive(false);
+        //GameManager.Instance.GamePlay();
+        //LocalizationManager.Instance.ChangedTxt(txtKey + index.ToString(), tutorialTxt);
+    }
+    private void Start()
+    {
+        StartCoroutine(TutorialDelay());
     }
     public void StepUp()
     {
@@ -51,11 +57,40 @@ public class Tutorial : MonoBehaviour
     }
     IEnumerator TutorialDelay()
     {
-        tutorialAnim.SetActive(false);
+        int index = 0;
+        LocalizationManager.Instance.ChangedTxt(txtKey + index.ToString(), tutorialTxt);
+        ++index;
         yield return new WaitForSeconds(1.5f);
-        if(index <= 4)
-            tutorialAnim.SetActive(true);
-        delay = false;
+        GameManager.Instance.player.canMove = true;
+        LocalizationManager.Instance.ChangedTxt(txtKey + index.ToString(), tutorialTxt);
+        yield return new WaitForSeconds(2f);
+
+        while (index < 3)
+        {
+            if (index == 2)
+            {
+                GameManager.Instance.player.canShoot = true;
+                tutorialAnim.SetActive(true);
+            }
+            LocalizationManager.Instance.ChangedTxt(txtKey + index.ToString(), tutorialTxt);
+            ++index;
+            yield return new WaitForSeconds(2f);
+        }
+        yield return new WaitForSeconds(2f);
+        LocalizationManager.Instance.ChangedTxt(txtKey + index.ToString(), tutorialTxt);
+        tutorialAnim.SetActive(false);
+        GameManager.Instance.player.canShoot = false;
+        GameManager.Instance.player.canMove = false;
+        GameManager.Instance.TutorialStar();
+        ++index;
+        yield return new WaitForSeconds(2f);
+        PlayerPrefs.SetInt("Tutorial", 1);
+        LocalizationManager.Instance.ChangedTxt(txtKey + index.ToString(), tutorialTxt);
+        startBtn.gameObject.SetActive(true);
+        // if(index <= 4)
+        //     tutorialAnim.SetActive(true);
+        // delay = false;
+        // StepUp();
         //다음 진행 클릭하라고 진행
     }
     public void TutorialEndGameStart()

@@ -76,9 +76,9 @@ public class StoreUI : MonoBehaviour
                     Debug.Log("Shield Reward Ads Show");
                     int shieldCount = --DataManager.timeData.ShieldAdsCount;
 
-                    if (DataManager.timeData.ShieldAdsCount == 0)
+                    if (DataManager.timeData.ShieldAdsCount < 2)
                         DataManager.timeData.ShieldAds = BackEndManager.Instance.GetTime();
-                    else
+                    if (DataManager.timeData.ShieldAdsCount > 0)
                         shieldButton.interactable = true;
                     BackEndManager.Instance.GetTimeUpdate(DataManager.Instance.GetTimeParam(), DataManager.timeData.inDate);
                     shieldAdsTxt.text = countTxt + $" {DataManager.timeData.ShieldAdsCount}/2";
@@ -95,9 +95,9 @@ public class StoreUI : MonoBehaviour
                     DataManager.userItem.continueCoupon += 2;
                     BackEndManager.Instance.ItemDataUpdate(null);
                     int couponCount = --DataManager.timeData.CouponAdsCount;
-                    if (DataManager.timeData.CouponAdsCount == 0)
+                    if (DataManager.timeData.CouponAdsCount < 2)
                         DataManager.timeData.CouponAds = BackEndManager.Instance.GetTime();
-                    else
+                    if (DataManager.timeData.CouponAdsCount > 0)
                         couponButton.interactable = true;
                     BackEndManager.Instance.GetTimeUpdate(DataManager.Instance.GetTimeParam(), DataManager.timeData.inDate);
                     couponAdsTxt.text = countTxt + $" {DataManager.timeData.CouponAdsCount}/2";

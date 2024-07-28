@@ -11,6 +11,8 @@ public class AudioManager : MonoBehaviour
 
     [SerializeField]
     private AudioClip _clickSound;
+    [SerializeField]
+    private AudioClip _shieldSound;
 
     private void Awake()
     {
@@ -38,6 +40,10 @@ public class AudioManager : MonoBehaviour
                 PlaySound(_clickSound);
             });
         }
+    }
+    public void ShieldSound()
+    {
+        _effectSource.PlayOneShot(_shieldSound);
     }
 
     public void PlaySound(AudioClip clip)

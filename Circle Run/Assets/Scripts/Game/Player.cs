@@ -98,6 +98,12 @@ public class Player : MonoBehaviour
             AudioManager.Instance.PlaySound(_scoreClip);
             collision.gameObject.GetComponent<Score>().OnGameEnded();
         }
+        if (collision.CompareTag(Constants.Tags.SCORE+"2"))
+        {
+            GameManager.Instance.UpdateScore();
+            AudioManager.Instance.PlaySound(_scoreClip);
+            collision.gameObject.GetComponent<Score2>().OnGameEnded();
+        }
 
         if (collision.CompareTag(Constants.Tags.OBSTACLE) || collision.CompareTag(Constants.Tags.BOSS))
         {
@@ -107,6 +113,9 @@ public class Player : MonoBehaviour
             if (GameManager.Instance.shield > 0)
             {
                 shield_delay = true;
+                 Destroy(Instantiate(_explosionPrefab, collision.transform.position, Quaternion.identity), 3f);
+                 Destroy(collision.gameObject);
+                AudioManager.Instance.ShieldSound();
                 GameManager.Instance.ShieldUse();
                 StartCoroutine(ShieldDelay());
             }
@@ -141,10 +150,10 @@ public class Player : MonoBehaviour
             shieldSpriteRenderer.transform.localPosition = new Vector3(0,0,0);
             shieldSpriteRenderer.gameObject.SetActive(false);
         });
-        Sequence sequence = DOTween.Sequence();
-        sequence.Append(renderer.DOFade(0.2f, 0.3f));
-        sequence.Append(renderer.DOFade(1f, 0.3f));
-        sequence.SetLoops(3, LoopType.Restart);
+        renderer.DOFade(0.2f,0.2f).SetLoops(10,LoopType.Yoyo);
+        GameManager.Instance.GamePause();
+        yield return new WaitForSeconds(1.5f);
+        GameManager.Instance.GamePlay();
         yield return new WaitForSeconds(1.5f);
         shield_delay = false;
     }

@@ -492,6 +492,7 @@ public class BackEndManager : MonoBehaviour
         param.Add("weekScore", score.weekScore);
         RankingUpdate(Ranking.Daily, score.DailyScore);
         RankingUpdate(Ranking.Week, score.weekScore);
+        GetRanking();
         //SendQueue.Enqueue(Backend.PlayerData.UpdateMyData, "UserData", score.inDate, param, (callback) => {
         //    LoadingManager.Instance.LoadingStop();
 

@@ -7,6 +7,7 @@ using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
+using UnityEditor.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -57,6 +58,8 @@ public class GameManager : MonoBehaviour
     public bool isPause = false;
 
     private float timer = 0;
+
+    public bool isAlpha = false;
     private void Awake()
     {
         Instance = this;
@@ -74,7 +77,7 @@ public class GameManager : MonoBehaviour
     }
     private void Update()
     {
-        if (isPlay)
+        if (isPlay && !isPause)
         {
             timer += Time.deltaTime;
             if (timer > 1)
@@ -82,6 +85,8 @@ public class GameManager : MonoBehaviour
                 timer = 0;
                 score += 1;
                 _scoreText.text = score.ToString();
+                if (!isAlpha && score >= 15)
+                    isAlpha = true;
             }
         }
     }
@@ -140,6 +145,13 @@ public class GameManager : MonoBehaviour
         StartCoroutine(SpawnObstacles2());
         StartCoroutine(SpawnBoss());
     }
+    public void TutorialStar()
+    {
+        Vector3 playerPos = player.transform.position;
+        Vector3 pos = new Vector3(_obstacleSpawnPos[0].x, playerPos.y, _obstacleSpawnPos[0].z);
+        Score star = Instantiate(_scorePrefab, pos, Quaternion.identity).GetComponent<Score>();
+        isPlay = true;
+    }
     #endregion
 
     #region GAME_START_END
@@ -157,7 +169,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator IStartGame()
     {
-        yield return new WaitForSeconds(1f);
+        //yield return new WaitForSeconds(1f);
         if (Define.PLAYCOUNT >= 5)
         {
             AdsManager.Instance.ShowInterstitialAd();
@@ -173,13 +185,13 @@ public class GameManager : MonoBehaviour
         Camera.main.transform.position = _cameraStartPos;
         _scoreText.gameObject.SetActive(false);
         yield return MoveCamera(_cameraEndPos);
-
+        yield return new WaitForSeconds(1f);
         //Score
         _scoreText.gameObject.SetActive(true);
         score = 0;
         _scoreText.text = score.ToString();
         _scoreAnimator.Play(_scoreClip.name, -1, 0f);
-        isPause =false;
+        isPause = false;
         StartCoroutine(SpawnObstacles());
         StartCoroutine(SpawnObstacles2());
         StartCoroutine(SpawnBoss());
@@ -314,7 +326,7 @@ public class GameManager : MonoBehaviour
 
         float timer = 3;
         continueTxt.text = timer.ToString();
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.5f);
         while (timer > 0)
         {
             timer -= Time.deltaTime;
@@ -322,10 +334,11 @@ public class GameManager : MonoBehaviour
             continueTxt.text = ((int)timer).ToString();
             yield return null;
         }
-        continueTxt.text = "Start!!";
-        yield return new WaitForSeconds(1f);
         continueDelay.SetActive(false);
-        isPause =false;
+        _scoreText.gameObject.SetActive(true);
+        _scoreText.text = "Start";
+        yield return new WaitForSeconds(1f);
+        isPause = false;
         isPlay = true;
         player.GameReStart();
         StartCoroutine(IReStartGame());
@@ -339,7 +352,7 @@ public class GameManager : MonoBehaviour
     private List<Color> EnemyColors;
 
     [SerializeField]
-    private GameObject _obstaclePrefab, _obstaclePrefab2, _bossPrefab, _scorePrefab;
+    private GameObject _obstaclePrefab, _obstaclePrefab2, _bossPrefab, _scorePrefab, _scorePrefab2;
 
     [SerializeField]
     private List<Vector3> _obstacleSpawnPos;
@@ -388,7 +401,7 @@ public class GameManager : MonoBehaviour
 
         var timeInterval = new WaitForSeconds(_obstacleSpawnTime2);
         bool isScore = UnityEngine.Random.Range(0, 3) == 0;
-        var spawnPrefab = isScore ? _scorePrefab : _obstaclePrefab2;
+        var spawnPrefab = isScore ? _scorePrefab2 : _obstaclePrefab2;
         Vector3 spawnPos = _obstacleSpawnPos2[UnityEngine.Random.Range(0, _obstacleSpawnPos2.Count)];
 
         while (!hasGameEnded && !isPause)
@@ -396,7 +409,7 @@ public class GameManager : MonoBehaviour
             GameObject enemy = Instantiate(spawnPrefab, spawnPos, Quaternion.identity);
             enemy.GetComponent<SpriteRenderer>().color = GetRandomColor();
             isScore = UnityEngine.Random.Range(0, 3) == 0;
-            spawnPrefab = isScore ? _scorePrefab : _obstaclePrefab2;
+            spawnPrefab = isScore ? _scorePrefab2 : _obstaclePrefab2;
             spawnPos = _obstacleSpawnPos2[UnityEngine.Random.Range(0, _obstacleSpawnPos2.Count)];
             yield return timeInterval;
 
@@ -469,7 +482,7 @@ public class GameManager : MonoBehaviour
         else
         {
             Debug.Log("Focus On");
-            if(!hasGameEnded)
+            if (!hasGameEnded)
                 StartCoroutine(ResumeAfterDelay());
         }
     }

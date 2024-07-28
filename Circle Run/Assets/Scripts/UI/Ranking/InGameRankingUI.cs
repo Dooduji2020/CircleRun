@@ -57,7 +57,6 @@ public class InGameRankingUI : MonoBehaviour
         if (isScore)
         {
             BackEndManager.Instance.ScoreUpdate();
-            BackEndManager.Instance.GetRanking();
         }
 
         return isScore;

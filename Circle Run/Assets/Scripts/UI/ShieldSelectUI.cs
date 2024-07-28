@@ -34,10 +34,14 @@ public class ShieldSelectUI : MonoBehaviour
     }
     public void Open()
     {
-        shieldCount = 0;
-        gameObject.SetActive(true);
-        foreach (var i in selectButton)
-            i.Init();
+        if (PlayerPrefs.GetInt("Tutorial", 0) == 0) SceneManager.LoadScene(Constants.DATA.GAMEPLAY_SCENE);
+        else
+        {
+            shieldCount = 0;
+            gameObject.SetActive(true);
+            foreach (var i in selectButton)
+                i.Init();
+        }
     }
     public void Close()
     {

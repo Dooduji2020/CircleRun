@@ -10,7 +10,6 @@ public class Score : MonoBehaviour
       _rotateSpeed;
 
     private bool hasGameFinished;
-
     private void Start()
     {
         hasGameFinished = false;
@@ -31,21 +30,30 @@ public class Score : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (hasGameFinished) return;
-
+        if (hasGameFinished || GameManager.Instance.isPause) return;
         transform.position += _moveSpeed * Time.fixedDeltaTime * Vector3.left;
         transform.Rotate(_rotateSpeed * Time.fixedDeltaTime * Vector3.forward);
-            
+
         if (transform.position.x < _maxOffset)
         {
             Destroy(gameObject);
         }
+    }
+    private void Move()
+    {
+        transform.position += _moveSpeed * Time.fixedDeltaTime * Vector3.right;
+        transform.Rotate(_rotateSpeed * Time.fixedDeltaTime * Vector3.forward);
 
+        if (transform.position.x < _maxOffset)
+        {
+            Destroy(gameObject);
+        }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision) {
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
 
-        if(collision.CompareTag(Constants.Tags.BOSS))
+        if (collision.CompareTag(Constants.Tags.BOSS))
         {
             Destroy(gameObject);
         }

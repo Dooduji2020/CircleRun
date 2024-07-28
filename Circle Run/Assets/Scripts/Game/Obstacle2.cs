@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections;
-
+using DG.Tweening;
 public class Obstacle2 : MonoBehaviour
 {
     [SerializeField]
@@ -18,10 +18,19 @@ public class Obstacle2 : MonoBehaviour
         hasGameFinished = false;
         canRotate = Random.Range(0, 4) == 0;
         isVertical = Random.Range(0, 2) == 0;
-
+        if (GameManager.Instance.isAlpha)
+        {
+            int rand = UnityEngine.Random.Range(0, 10);
+            if (rand > 7)
+                Fade();
+        }
         transform.rotation = Quaternion.Euler(0, 0, isVertical ? -90f : 0);
     }
-
+    public void Fade()
+    {
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.DOFade(0.2f, 0.5f).SetLoops(-1, LoopType.Yoyo);
+    }
     private void OnEnable()
     {
         GameManager.Instance.GameEnded += OnGameEnded;
@@ -38,7 +47,7 @@ public class Obstacle2 : MonoBehaviour
 
         transform.position += _moveSpeed * Time.fixedDeltaTime * Vector3.right;
 
-        if(canRotate)
+        if (canRotate)
         {
             transform.Rotate(_rotateSpeed * Time.fixedDeltaTime * Vector3.forward);
         }
@@ -65,7 +74,7 @@ public class Obstacle2 : MonoBehaviour
         float speed = 1 / _destroyTime;
         var updateTime = new WaitForFixedUpdate();
 
-        while(timeElapsed < 1f)
+        while (timeElapsed < 1f)
         {
             timeElapsed += speed * Time.fixedDeltaTime;
             transform.localScale = startScale + timeElapsed * scaleOffset;

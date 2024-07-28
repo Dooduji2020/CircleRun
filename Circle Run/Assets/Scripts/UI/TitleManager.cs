@@ -72,6 +72,12 @@ public class TitleManager : MonoBehaviour
         shieldTxt.text = shieldCount;
         couponTxt.text = couponCount;
     }
+    public void TimerText(int index, int min, int sec)
+    {
+        string time = $"{min}:{sec}";
+        if(index == 0) shieldTxt.text = time;
+        else couponTxt.text = time;
+    }
     public void UserDataInit()
     {
         Debug.Log("User Data Init");
@@ -103,7 +109,7 @@ public class TitleManager : MonoBehaviour
             {
                 couponTxt.text = DataManager.userItem.continueCoupon.ToString();
                 shieldTxt.text = DataManager.userItem.shield.ToString();
-                BackEndManager.Instance.GetRankReward();
+                //BackEndManager.Instance.GetRankReward();
                 LoadingManager.Instance.LoadingStop();
                 foreach (var i in moveUI)
                     i.Move();

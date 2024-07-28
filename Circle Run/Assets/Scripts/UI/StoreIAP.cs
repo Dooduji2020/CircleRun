@@ -55,7 +55,7 @@ public class StroreIAP : MonoBehaviour
                 break;
             case "dongrami_shield2":
                 // 쉴드 20
-                DataManager.userItem.shield += 200;
+                DataManager.userItem.shield += 20;
                 break;
             case "dongrami_coupon2":
                 // 컨티뉴 25

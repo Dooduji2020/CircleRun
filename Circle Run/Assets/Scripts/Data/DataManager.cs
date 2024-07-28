@@ -135,6 +135,10 @@ public class DataManager : MonoBehaviour
                 Debug.Log(timer);
                 time = 0;
                 TimeSpan timeDifference = timer - timeData.Coupon;
+                if (userItem.continueCoupon == 0)
+                {
+                    TitleManager.Instance.TimerText(1,timeDifference.Minutes,timeDifference.Seconds);
+                }
                 if (timeDifference.TotalMinutes >= upTimer)
                 {
                     ++userItem.continueCoupon;
