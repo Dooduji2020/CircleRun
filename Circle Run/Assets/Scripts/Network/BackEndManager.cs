@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
 #elif UNITY_IOS
+using AppleAuth;
 #endif
 
 public class BackEndManager : MonoBehaviour
@@ -44,6 +45,7 @@ public class BackEndManager : MonoBehaviour
     }
     private void Start()
     {
+#if UNITY_ANDROID
         PlayGamesClientConfiguration config = new PlayGamesClientConfiguration
        .Builder()
        .RequestServerAuthCode(false)
@@ -54,6 +56,7 @@ public class BackEndManager : MonoBehaviour
         PlayGamesPlatform.InitializeInstance(config);
         PlayGamesPlatform.DebugLogEnabled = true; // 디버그 로그를 보고 싶지 않다면 false로 바꿔주세요.
         PlayGamesPlatform.Activate();
+#endif
     }
     private void BackEndDataInit()
     {
@@ -149,9 +152,10 @@ public class BackEndManager : MonoBehaviour
                 {
                     // 로그인 실패
                     LoadingManager.Instance.LoadingStop();
-                    if(netErrorUI == null)
+                    if (netErrorUI == null)
                         netErrorUI = Instantiate(Resources.Load<NetErrorUI>("Prefabs/UI/NetWorkErrorUI"));
-                    netErrorUI.Init(() => {
+                    netErrorUI.Init(() =>
+                    {
                         LoadingManager.Instance.LoadingStart();
                         Init();
                     });
@@ -163,6 +167,7 @@ public class BackEndManager : MonoBehaviour
     }
     public string GetTokens()
     {
+#if UNITY_ANDROID
         if (PlayGamesPlatform.Instance.localUser.authenticated)
         {
             // 유저 토큰 받기 첫 번째 방법
@@ -176,9 +181,29 @@ public class BackEndManager : MonoBehaviour
             Debug.Log("접속되어 있지 않습니다. PlayGamesPlatform.Instance.localUser.authenticated :  fail");
             return null;
         }
+#elif UNITY_IOS
+#endif
     }
     #endregion
     #region Apple
+    public void AppleLogin()
+    {
+
+    }
+    public void AppleAuth()
+    {
+        BackendReturnObject bro = Backend.BMember.AuthorizeFederation("idToken", FederationType.Apple, "siwa");
+        if (bro.IsSuccess())
+        {
+            Debug.Log("APPLE 로그인 성공");
+            //성공 처리
+        }
+        else
+        {
+            Debug.LogError("Apple 로그인 실패");
+            //실패 처리
+        }
+    }
     #endregion
     #region Version&Init
     public void Init()
@@ -192,7 +217,7 @@ public class BackEndManager : MonoBehaviour
             Debug.Log("Init Result : " + isResult);
             if (!isResult)
             {
-                TitleManager.Instance.VersionCheckResult(isResult);
+                //TitleManager.Instance.VersionCheckResult(isResult);
             }
             else
             {
@@ -232,9 +257,10 @@ public class BackEndManager : MonoBehaviour
         else
         {
             LoadingManager.Instance.LoadingStop();
-            if(netErrorUI == null)
+            if (netErrorUI == null)
                 netErrorUI = Instantiate(Resources.Load<NetErrorUI>("Prefabs/UI/NetWorkErrorUI"));
-            netErrorUI.Init(() => {
+            netErrorUI.Init(() =>
+            {
                 LoadingManager.Instance.LoadingStart();
                 Init();
             });
@@ -259,10 +285,10 @@ public class BackEndManager : MonoBehaviour
     {
         bool isResult = true;
 #if !UNITY_EDITOR
+
         var bro = Backend.Utils.GetLatestVersion();
         if (bro.IsSuccess())
         {
-              
             string serverVersion = bro.GetReturnValuetoJSON()["version"].ToString();
 
             if (serverVersion == Application.version)
@@ -271,8 +297,12 @@ public class BackEndManager : MonoBehaviour
             if (forceUpdate == "1")  // 선택적 업데이트
             { }
             else if (forceUpdate == "2")  // 강제 업데이트 
-            {
-                 Application.OpenURL("https://play.google.com/store/apps/details?id=com.novembernine.dongrami&hl=ko");
+            { 
+                
+#if UNITY_ANDROID
+Application.OpenURL("https://play.google.com/store/apps/details?id=com.novembernine.dongrami&hl=ko");
+#else
+#endif
             }
         }
         else
@@ -346,7 +376,7 @@ public class BackEndManager : MonoBehaviour
             LitJson.JsonData json = bro.GetReturnValuetoJSON()["postList"];
             if (json.Count > 0)
             {
-                
+
                 Debug.Log(json.ToJson());
                 for (int i = 0; i < json.Count; i++)
                 {
@@ -356,14 +386,15 @@ public class BackEndManager : MonoBehaviour
                     char num = title[title.Length - 2];
 
                     int rank = num - '0';
-                    RankReward(title, rank,ref shield,ref coupon);
+                    RankReward(title, rank, ref shield, ref coupon);
                 }
                 DataManager.userItem.shield += shield;
                 DataManager.userItem.continueCoupon += coupon;
                 Dictionary<string, int> dic = new Dictionary<string, int>();
                 dic.Add("shield", DataManager.userItem.shield);
                 dic.Add("continueCoupon", DataManager.userItem.continueCoupon);
-                GameDataUpdate("UserItemData", DataManager.userItem.inDate, dic,(result) => {
+                GameDataUpdate("UserItemData", DataManager.userItem.inDate, dic, (result) =>
+                {
                     if (result)
                     {
                         SendQueue.Enqueue(Backend.UPost.ReceivePostItemAll, PostType.Rank, (callback) =>
@@ -382,9 +413,9 @@ public class BackEndManager : MonoBehaviour
     }
     private void RankReward(string title, int rank, ref int shield, ref int coupon)
     {
-        if(title.EndsWith("daily") || title.EndsWith("Daily"))
+        if (title.EndsWith("daily") || title.EndsWith("Daily"))
         {
-            switch(rank)
+            switch (rank)
             {
                 case 1:
                     shield += 2;
@@ -403,7 +434,7 @@ public class BackEndManager : MonoBehaviour
                     break;
             }
         }
-        else if(title.EndsWith("week") || title.EndsWith("Week"))
+        else if (title.EndsWith("week") || title.EndsWith("Week"))
         {
             switch (rank)
             {
@@ -413,7 +444,7 @@ public class BackEndManager : MonoBehaviour
                     break;
                 case 2:
                     shield += 7;
-                    coupon +=7;
+                    coupon += 7;
                     break;
                 case 3:
                     shield += 5;

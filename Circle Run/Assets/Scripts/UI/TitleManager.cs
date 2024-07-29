@@ -64,7 +64,7 @@ public class TitleManager : MonoBehaviour
     public void VersionCheckResult(bool result)
     {
 #if !UNITY_EDITOR && UNITY_ANDROID
-            Application.OpenURL("");
+            Application.OpenURL("https://play.google.com/store/apps/details?id=com.novembernine.dongrami");
 #elif !UNITY_EDITOR && UNITY_IOS
             Application.OpenURL("");
 #endif
