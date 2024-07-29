@@ -259,10 +259,10 @@ public class BackEndManager : MonoBehaviour
     {
         bool isResult = true;
 #if !UNITY_EDITOR
-
         var bro = Backend.Utils.GetLatestVersion();
         if (bro.IsSuccess())
         {
+              
             string serverVersion = bro.GetReturnValuetoJSON()["version"].ToString();
 
             if (serverVersion == Application.version)
@@ -271,7 +271,9 @@ public class BackEndManager : MonoBehaviour
             if (forceUpdate == "1")  // 선택적 업데이트
             { }
             else if (forceUpdate == "2")  // 강제 업데이트 
-            { }
+            {
+                 Application.OpenURL("https://play.google.com/store/apps/details?id=com.novembernine.dongrami&hl=ko");
+            }
         }
         else
         {
