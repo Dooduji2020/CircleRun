@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
-using UnityEditor.Localization.Plugins.XLIFF.V12;
 public class Tutorial : MonoBehaviour
 {
     private const string txtKey = "Tutorial_00";

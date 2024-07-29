@@ -7,7 +7,6 @@ using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
-using UnityEditor.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -352,7 +351,7 @@ public class GameManager : MonoBehaviour
     private List<Color> EnemyColors;
 
     [SerializeField]
-    private GameObject _obstaclePrefab, _obstaclePrefab2, _bossPrefab, _scorePrefab, _scorePrefab2;
+    private GameObject _obstaclePrefab, _obstaclePrefab2, _bossPrefab, _bossPrefab2, _scorePrefab, _scorePrefab2;
 
     [SerializeField]
     private List<Vector3> _obstacleSpawnPos;
@@ -430,7 +429,10 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(5.0f);
         var timeInterval = new WaitForSeconds(_bossSpawnTime);
         bool isScore = UnityEngine.Random.Range(0, 3) == 0;
+        //bool isAngle = UnityEngine.Random.Range(0, 4) % 2 == 0;
+        //var prefab = isAngle ? _bossPrefab : _bossPrefab2;
         var spawnPrefab = isScore ? _scorePrefab : _bossPrefab;
+        //List<Vector3> pos = isAngle ? _bossSpawnPos : _obstacleSpawnPos;
         Vector3 spawnPos = _bossSpawnPos[UnityEngine.Random.Range(0, _bossSpawnPos.Count)];
 
         while (!hasGameEnded && !isPause)

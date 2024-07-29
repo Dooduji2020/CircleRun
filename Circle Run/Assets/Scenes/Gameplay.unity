@@ -6103,6 +6103,7 @@ MonoBehaviour:
   _obstaclePrefab: {fileID: 9011169248650655875, guid: 98c73e750af73744a806b8d4b11f170f, type: 3}
   _obstaclePrefab2: {fileID: 9011169248650655875, guid: 3bd8c5776fca87b439e6c5a55634a415, type: 3}
   _bossPrefab: {fileID: 6497745028438197736, guid: c37394a997d595f499b2e44a0a602edc, type: 3}
+  _bossPrefab2: {fileID: 6497745028438197736, guid: 904ba2010f3fddf4c829c2eef1600e9c, type: 3}
   _scorePrefab: {fileID: 5843919788333106201, guid: 6237fd0d4610d864c99cc9148bc80714, type: 3}
   _scorePrefab2: {fileID: 5843919788333106201, guid: 5b723778c765d4bc3a2fd755533fcf3c, type: 3}
   _obstacleSpawnPos:

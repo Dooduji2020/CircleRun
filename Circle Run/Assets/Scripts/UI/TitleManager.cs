@@ -12,6 +12,9 @@ public class TitleManager : MonoBehaviour
     public TextMeshProUGUI couponTxt;
     public NickNameUI nickNameUI;
     public GameObject loginErrorObj;
+    public GameObject rewardPop;
+    public TextMeshProUGUI shield;
+    public TextMeshProUGUI coupon;
     [Header("Move UI")]
     public MoveUI[] moveUI;
 
@@ -109,8 +112,8 @@ public class TitleManager : MonoBehaviour
             {
                 couponTxt.text = DataManager.userItem.continueCoupon.ToString();
                 shieldTxt.text = DataManager.userItem.shield.ToString();
-                //BackEndManager.Instance.GetRankReward();
-                LoadingManager.Instance.LoadingStop();
+                BackEndManager.Instance.GetRankReward();
+                
                 foreach (var i in moveUI)
                     i.Move();
             });
@@ -119,6 +122,16 @@ public class TitleManager : MonoBehaviour
         NetworkManager.Instance.IAPInit();
         MainMenuManager.Instance.Init();
         yield break;
+    }
+    public void RankRewardPop(int _shield, int _coupon)
+    {
+        shield.text = _shield.ToString();
+        coupon.text = _coupon.ToString();
+        rewardPop.SetActive(true);
+    }
+    public void RankRewardClose()
+    {
+        rewardPop.SetActive(false);
     }
     public void LoginError()
     {

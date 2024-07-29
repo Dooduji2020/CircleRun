@@ -336,20 +336,87 @@ public class BackEndManager : MonoBehaviour
     #region Ranking
     public void GetRankReward()
     {
+        int shield = 0;
+        int coupon = 0;
         var bro = Backend.UPost.GetPostList(PostType.Rank, 10);
         if (bro.IsSuccess())
         {
             LitJson.JsonData json = bro.GetReturnValuetoJSON()["postList"];
             if (json.Count > 0)
             {
-                SendQueue.Enqueue(Backend.UPost.ReceivePostItemAll, PostType.Rank, (callback) =>
-                {
-                });
+                
+                Debug.Log(json.ToJson());
                 for (int i = 0; i < json.Count; i++)
                 {
-                    string text = json[i].ToString();
-                    string info = json[i][""].ToString();
+                    string title = json[i]["title"].ToString();
+
+                    int endIndex = title.IndexOf(")");
+                    char num = title[title.Length - 2];
+
+                    int rank = num - '0';
+                    RankReward(title, rank,ref shield,ref coupon);
                 }
+                DataManager.userItem.shield += shield;
+                DataManager.userItem.continueCoupon += coupon;
+                Dictionary<string, int> dic = new Dictionary<string, int>();
+                dic.Add("shield", DataManager.userItem.shield);
+                dic.Add("continueCoupon", DataManager.userItem.continueCoupon);
+                GameDataUpdate("UserItemData", DataManager.userItem.inDate, dic,(result) => {
+                    if (result)
+                    {
+                        SendQueue.Enqueue(Backend.UPost.ReceivePostItemAll, PostType.Rank, (callback) =>
+                      {
+                      });
+                    }
+                });
+                TitleManager.Instance.RankRewardPop(shield, coupon);
+                LoadingManager.Instance.LoadingStop();
+                //SendQueue.Enqueue(Backend.UPost.ReceivePostItemAll, PostType.Rank, (callback) =>
+                //{
+                //});
+            }
+        }
+        LoadingManager.Instance.LoadingStop();
+    }
+    private void RankReward(string title, int rank, ref int shield, ref int coupon)
+    {
+        if(title.EndsWith("daily") || title.EndsWith("Daily"))
+        {
+            switch(rank)
+            {
+                case 1:
+                    shield += 2;
+                    coupon += 2;
+                    break;
+                case 2:
+                    shield += 1;
+                    coupon += 1;
+                    break;
+                case 3:
+                    coupon += 1;
+                    break;
+                case 4:
+                case 5:
+                    shield += 1;
+                    break;
+            }
+        }
+        else if(title.EndsWith("week") || title.EndsWith("Week"))
+        {
+            switch (rank)
+            {
+                case 1:
+                    shield += 10;
+                    coupon += 10;
+                    break;
+                case 2:
+                    shield += 7;
+                    coupon +=7;
+                    break;
+                case 3:
+                    shield += 5;
+                    coupon += 5;
+                    break;
             }
         }
     }
