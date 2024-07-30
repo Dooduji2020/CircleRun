@@ -368,6 +368,9 @@ Application.OpenURL("https://play.google.com/store/apps/details?id=com.novembern
     #region Ranking
     public void GetRankReward()
     {
+        int t = 0;
+        int e = 0;
+        RankReward("Daily DailyReward", 1,ref t,ref e);
         int shield = 0;
         int coupon = 0;
         var bro = Backend.UPost.GetPostList(PostType.Rank, 10);
@@ -390,6 +393,7 @@ Application.OpenURL("https://play.google.com/store/apps/details?id=com.novembern
                 }
                 DataManager.userItem.shield += shield;
                 DataManager.userItem.continueCoupon += coupon;
+                TitleManager.Instance.ItemUISet();
                 Dictionary<string, int> dic = new Dictionary<string, int>();
                 dic.Add("shield", DataManager.userItem.shield);
                 dic.Add("continueCoupon", DataManager.userItem.continueCoupon);
@@ -413,7 +417,7 @@ Application.OpenURL("https://play.google.com/store/apps/details?id=com.novembern
     }
     private void RankReward(string title, int rank, ref int shield, ref int coupon)
     {
-        if (title.EndsWith("daily") || title.EndsWith("Daily"))
+        if (title.StartsWith("daily") || title.StartsWith("Daily"))
         {
             switch (rank)
             {
@@ -434,7 +438,7 @@ Application.OpenURL("https://play.google.com/store/apps/details?id=com.novembern
                     break;
             }
         }
-        else if (title.EndsWith("week") || title.EndsWith("Week"))
+        else if (title.StartsWith("week") || title.StartsWith("Week"))
         {
             switch (rank)
             {
