@@ -14,5 +14,6 @@ public abstract class RankingGroupBase : MonoBehaviour
     protected Button button;
 
     public abstract void Init(List<RankingData> datas);
+    public abstract void OnOff(bool isOn);
 
 }

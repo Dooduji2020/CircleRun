@@ -6,10 +6,10 @@ public class Obstacle : MonoBehaviour
 {
     [SerializeField]
     private float _moveSpeed,
-        _maxOffset,
-        _destroyTime,
-        _rotateSpeed;
+      _destroyTime,
+      _rotateSpeed;
 
+    float _maxOffset;
     private bool hasGameFinished,
         canRotate,
         isVertical;
@@ -26,6 +26,7 @@ public class Obstacle : MonoBehaviour
                 Fade();
         }
         transform.rotation = Quaternion.Euler(0, 0, isVertical ? 90f : 0);
+        _maxOffset = GameManager.Instance.minOffsetX + -2f;
     }
     public void Fade()
     {

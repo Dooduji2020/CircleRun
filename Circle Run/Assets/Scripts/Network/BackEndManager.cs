@@ -290,9 +290,12 @@ public class BackEndManager : MonoBehaviour
         if (bro.IsSuccess())
         {
             string serverVersion = bro.GetReturnValuetoJSON()["version"].ToString();
-
+            Debug.LogError("Version Server : "+serverVersion);
+            Debug.LogError("Version App : "+Application.version);
             if (serverVersion == Application.version)
-            { }  //버전 일치 다음 진행 
+            { }  //버전 일치 다음 진행
+            else
+            {
             string forceUpdate = bro.GetReturnValuetoJSON()["type"].ToString();
             if (forceUpdate == "1")  // 선택적 업데이트
             { }
@@ -303,6 +306,7 @@ public class BackEndManager : MonoBehaviour
 Application.OpenURL("https://play.google.com/store/apps/details?id=com.novembernine.dongrami&hl=ko");
 #else
 #endif
+            }
             }
         }
         else
@@ -660,7 +664,7 @@ Application.OpenURL("https://play.google.com/store/apps/details?id=com.novembern
         else
         { }
         Debug.Log(bro.GetMessage());
-        LoadingManager.Instance.LoadingStop();
+        
     }
     public void SendQueueTimeUpdate(Param param, string inDate)
     {

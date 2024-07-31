@@ -9,9 +9,7 @@ public class RankingUI : MonoBehaviour
 {
     public Toggle[] toggles;
     public RankingToggle[] _toggles;
-    public GameObject[] rankObj;
-    public RankingDaily dailyRank;
-    public RankingWeek weekRank;
+    public RankingGroupBase[] rankObj;
     public GameObject rewardPop;
     public GameObject rewardParent;
     public TextMeshProUGUI[] itemCount;
@@ -25,29 +23,32 @@ public class RankingUI : MonoBehaviour
         for (int i = 0; i <= (int)Ranking.Week; i++)
         {
             int index = i;
-            Init((Ranking)index);
             toggles[index].onValueChanged.AddListener((isOn) => {
-                rankObj[index].SetActive(isOn);
+                 rankObj[index].OnOff(isOn);
                 _toggles[index].OnToggle(isOn);
                 Debug.Log(index);
             });
         }
         toggles[0].isOn = true;
     }
-    private void Init(Ranking ranking = Ranking.Daily)
+    public void Init()
+    {
+        Init(Ranking.Daily);
+        Init(Ranking.Week);
+    }
+    private void Init(Ranking ranking)
     {
         RankList data = new RankList();
         switch(ranking)
         {
             case Ranking.Daily:
                 data = DataManager.dailyRanking;
-                dailyRank.Init(data.rows);
                 break;
             case Ranking.Week:
                 data = DataManager.weekRanking;
-                weekRank.Init(data.rows);
                 break;
         }
+        rankObj[(int)ranking].Init(data.rows);
     }
     public void OpenRewardPop(int index)
     {
@@ -76,8 +77,12 @@ public class RankingUI : MonoBehaviour
     }
     public void Open()
     {
-        Init();
+        LoadingManager.Instance.LoadingStart();
         gameObject.SetActive(true);
+        Init(Ranking.Daily);
+        Init(Ranking.Week);
+        toggles[0].isOn = true;
+        LoadingManager.Instance.LoadingStop();
     }
     public void Close()
     {

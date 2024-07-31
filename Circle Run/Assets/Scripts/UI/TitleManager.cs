@@ -121,6 +121,7 @@ public class TitleManager : MonoBehaviour
         AdsManager.Instance.Init();
         NetworkManager.Instance.IAPInit();
         MainMenuManager.Instance.Init();
+        yield return new WaitForSeconds(1.5f);
         yield break;
     }
     public void RankRewardPop(int _shield, int _coupon)

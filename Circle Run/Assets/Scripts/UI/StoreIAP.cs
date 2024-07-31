@@ -14,7 +14,25 @@ public class StroreIAP : MonoBehaviour
     private CodelessIAPButton iapButton;
     private Button button;
 
-    private void Awake()
+    private void Start()
+    {
+        if (NetworkManager.GetInitialization) 
+        {
+            if (productID.Equals("001") && DataManager.userItem.adsRemove)
+            {
+                LocalizationManager.Instance.ChangedTxt("Inapp_Success", priceTxt);
+            }
+            else
+            {
+                priceTxt.text = NetworkManager.Instance.Getprice(productID);
+                button.interactable = true;
+            }
+        }
+        else
+            StartCoroutine(PriceInit());
+        Debug.Log("Start");
+    }
+    public void Init()
     {
         button = GetComponent<Button>();
         button.interactable = false;
@@ -22,7 +40,6 @@ public class StroreIAP : MonoBehaviour
         iapButton.onPurchaseComplete.AddListener(PurchaseComplete);
         iapButton.onPurchaseFailed.AddListener(PurchaseFailed);
         priceTxt.text = "Loading..";
-        StartCoroutine(PriceInit());
     }
     private void PurchaseComplete(Product product)
     {

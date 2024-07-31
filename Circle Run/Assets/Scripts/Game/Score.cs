@@ -5,15 +5,16 @@ public class Score : MonoBehaviour
 {
     [SerializeField]
     private float _moveSpeed,
-      _maxOffset,
       _destroyTime,
       _rotateSpeed;
 
+    float _maxOffset;
     private bool hasGameFinished;
     private void Start()
     {
         hasGameFinished = false;
         ColorChanged(GameManager.Instance.CurrentColor);
+        _maxOffset = GameManager.Instance.minOffsetX + -2f;
     }
 
     private void OnEnable()

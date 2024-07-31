@@ -6085,6 +6085,8 @@ MonoBehaviour:
   _cameraStartPos: {x: 0, y: 40, z: -10}
   _cameraEndPos: {x: 0, y: 0, z: -10}
   _timeToMoveCamera: 0.64
+  maxOffsetX: 0
+  minOffsetX: 0
   selectUI: {fileID: 756626686}
   _highScoreAnimator: {fileID: 1723793609}
   _highScoreClip: {fileID: 7400000, guid: 45d99dd10150b3346a40b2576884b0bf, type: 2}
@@ -6650,7 +6652,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 100.000046}
+  m_AnchoredPosition: {x: 0, y: 100.00006}
   m_SizeDelta: {x: 0, y: -200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &412692390
@@ -28943,7 +28945,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 100.000046}
+  m_AnchoredPosition: {x: 0, y: 100.00006}
   m_SizeDelta: {x: 0, y: -200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &878871485

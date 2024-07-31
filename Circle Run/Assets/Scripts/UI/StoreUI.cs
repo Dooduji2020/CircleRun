@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using System;
 public class StoreUI : MonoBehaviour
 {
+    public StroreIAP[] iapButton;
     public TextMeshProUGUI shieldAdsTxt;
     public TextMeshProUGUI couponAdsTxt;
     public Button shieldButton;
@@ -13,7 +14,6 @@ public class StoreUI : MonoBehaviour
     public GameObject paymentObject;
 
     private const string countTxt = "FREE";
-
 
     public void Init()
     {
@@ -40,7 +40,7 @@ public class StoreUI : MonoBehaviour
             }
         }
         if(isTime)
-            BackEndManager.Instance.SendQueueTimeUpdate(DataManager.Instance.GetTimeParam(),DataManager.timeData.inDate);
+            BackEndManager.Instance.GetTimeUpdate(DataManager.Instance.GetTimeParam(),DataManager.timeData.inDate);
 
         int shieldCount = DataManager.timeData.ShieldAdsCount;
         int couponCount = DataManager.timeData.CouponAdsCount;
@@ -52,6 +52,13 @@ public class StoreUI : MonoBehaviour
 
         shieldAdsTxt.text = countTxt + $" {shieldCount}/2";
         couponAdsTxt.text = countTxt + $" {couponCount}/2";
+
+        foreach (StroreIAP i in iapButton)
+            i.Init();
+    }
+    public void Open()
+    {
+        this.gameObject.SetActive(true);
     }
     private void PaymentResult(bool completed = true)
     {
@@ -84,6 +91,7 @@ public class StoreUI : MonoBehaviour
                     shieldAdsTxt.text = countTxt + $" {DataManager.timeData.ShieldAdsCount}/2";
                     TitleManager.Instance.ItemUISet();
                     PaymentResult();
+                    LoadingManager.Instance.LoadingStop();
                 });
                 break;
             case 1:  // 쿠폰 2개
@@ -103,6 +111,7 @@ public class StoreUI : MonoBehaviour
                     couponAdsTxt.text = countTxt + $" {DataManager.timeData.CouponAdsCount}/2";
                     TitleManager.Instance.ItemUISet();
                     PaymentResult();
+                    LoadingManager.Instance.LoadingStop();
                 });
                 break;
         }

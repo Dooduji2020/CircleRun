@@ -13,4 +13,8 @@ public class RankingWeek : RankingGroupBase
             ++index;
         }
     }
+    public override void OnOff(bool isOn)
+    {
+        this.gameObject.SetActive(isOn);
+    }
 }

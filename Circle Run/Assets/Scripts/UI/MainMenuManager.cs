@@ -30,6 +30,7 @@ public class MainMenuManager : MonoBehaviour
     {
         optionUI.Init();
         shopUI.Init();
+        rankingUI.Init();
     }
     public void ClickedPlay()
     {
@@ -60,7 +61,7 @@ public class MainMenuManager : MonoBehaviour
 
     public void ShopOpen()
     {
-        shopUI.gameObject.SetActive(true);
+        shopUI.Open();
     }
     public void ShopClose()
     {
@@ -68,10 +69,10 @@ public class MainMenuManager : MonoBehaviour
     }
     public void RankingOpen()
     {
-        rankingUI.gameObject.SetActive(true);
+        rankingUI.Open();
     }
     public void RankingClose()
     {
-        rankingUI.gameObject.SetActive(false);
+        rankingUI.Close();
     }
 }

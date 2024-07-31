@@ -161,13 +161,40 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private float _timeToMoveCamera;
 
+    [HideInInspector]
+    public float maxOffsetX, minOffsetX;
+    
+    
     public ShieldSelectUI selectUI;
 
     private bool hasGameEnded;
+    private float spwanDelay = 1f;
+    
     public UnityAction GameStarted, GameEnded;
+    private void LimitedPositionX()
+    {
+        Camera camera = Camera.main;
 
+        if(camera.orthographic)
+        {
+            float orthoSize = camera.orthographicSize;
+            float aspectRatio = Screen.width / (float)Screen.height;
+
+            minOffsetX = (camera.transform.position.x - orthoSize * aspectRatio) + -1f;
+            maxOffsetX = (camera.transform.position.x + orthoSize * aspectRatio) + 1f; 
+        }
+        foreach(var i in _obstacleSpawnPos)
+        {
+            i.Set(maxOffsetX, i.y, 0);
+        }
+        foreach (var i in _obstacleSpawnPos2)
+        {
+            i.Set(minOffsetX, i.y, 0);
+        }
+    }
     private IEnumerator IStartGame()
     {
+        LimitedPositionX();
         //yield return new WaitForSeconds(1f);
         if (Define.PLAYCOUNT >= 5)
         {
@@ -191,9 +218,11 @@ public class GameManager : MonoBehaviour
         _scoreText.text = score.ToString();
         _scoreAnimator.Play(_scoreClip.name, -1, 0f);
         isPause = false;
-        StartCoroutine(SpawnObstacles());
-        StartCoroutine(SpawnObstacles2());
-        StartCoroutine(SpawnBoss());
+        
+        StartCoroutine(ObstaclesSpawn());
+        //StartCoroutine(SpawnObstacles());
+        //StartCoroutine(SpawnObstacles2());
+        //StartCoroutine(SpawnBoss());
 
         isPlay = true;
         CurrentColorId = 0;
@@ -367,6 +396,41 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private float _bossSpawnTime;
 
+    private IEnumerator ObstaclesSpawn()
+    {
+        var timeInterval = new WaitForSeconds(_obstacleSpawnTime);
+        bool isScore = UnityEngine.Random.Range(0, 3) == 0;
+        bool isScore2 = UnityEngine.Random.Range(0, 3) == 0;
+        var spawnPrefab = isScore ? _scorePrefab : _obstaclePrefab;
+        var spawnPrefab2 = isScore2 ? _scorePrefab2 : _obstaclePrefab2;
+        int pos = UnityEngine.Random.Range(0, _obstacleSpawnPos.Count);
+        int pos2 = pos == 2 ? 0 : pos++;
+        Vector3 spawnPos = _obstacleSpawnPos[pos];
+        Vector3 spawnPos2 = _obstacleSpawnPos2[pos2];
+        while (!hasGameEnded && !isPause)
+        {
+            GameObject enemy = Instantiate(spawnPrefab, spawnPos, Quaternion.identity);
+            enemy.GetComponent<SpriteRenderer>().color = GetRandomColor();
+            yield return new WaitForSeconds(spwanDelay);
+            GameObject enemy2 = Instantiate(spawnPrefab2, spawnPos2, Quaternion.identity);
+            enemy2.GetComponent<SpriteRenderer>().color = GetRandomColor();
+
+            isScore = UnityEngine.Random.Range(0, 3) == 0;
+            isScore2 = UnityEngine.Random.Range(0, 3) == 0;
+            spawnPrefab = isScore ? _scorePrefab : _obstaclePrefab;
+            spawnPrefab2 = isScore2 ? _scorePrefab : _obstaclePrefab2;
+            pos = UnityEngine.Random.Range(0, _obstacleSpawnPos.Count);
+            pos2 = pos == 2 ? 0 : pos++;
+            spawnPos = _obstacleSpawnPos[pos];
+            spawnPos2 = _obstacleSpawnPos2[pos2];
+
+            yield return timeInterval;
+            Color GetRandomColor()
+            {
+                return EnemyColors[UnityEngine.Random.Range(0, EnemyColors.Count)];
+            }
+        }
+    }
 
     private IEnumerator SpawnObstacles()
     {

@@ -18,4 +18,8 @@ public class RankingDaily : RankingGroupBase
                 slots[i].Init(datas[i]);
         }
     }
+    public override void OnOff(bool isOn)
+    {
+        this.gameObject.SetActive(isOn);
+    }
 }
