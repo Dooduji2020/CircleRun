@@ -6,9 +6,9 @@ public class BossControl : MonoBehaviour {
 
   
     [SerializeField]
-    private float _moveSpeed, _maxOffset, _destroyTime;
+    private float _moveSpeed,_destroyTime;
         
-
+    private float _maxOffset;
     private bool hasGameFinished,
         
         isVertical;
@@ -19,7 +19,7 @@ public class BossControl : MonoBehaviour {
         
         isVertical = Random.Range(0, 2) == 0;
         transform.rotation = Quaternion.Euler(0, 0, -90f);
-        
+        _maxOffset = GameManager.Instance.maxOffsetX;
     }
 
     private void OnEnable()

@@ -16,7 +16,7 @@ public class StroreIAP : MonoBehaviour
 
     private void Start()
     {
-        if (NetworkManager.GetInitialization) 
+        if (NetworkManager.GetInitialization)
         {
             if (productID.Equals("001") && DataManager.userItem.adsRemove)
             {
@@ -24,6 +24,8 @@ public class StroreIAP : MonoBehaviour
             }
             else
             {
+                if (button == null)
+                    Init();
                 priceTxt.text = NetworkManager.Instance.Getprice(productID);
                 button.interactable = true;
             }

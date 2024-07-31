@@ -654,12 +654,12 @@ Application.OpenURL("https://play.google.com/store/apps/details?id=com.novembern
     /// </summary>
     /// <param name="param">업데이트할 시간</param>
     /// <param name="inDate">데이터 inDate</param>
-    public void GetTimeUpdate(Param param, string inDate)
+    public void GetTimeUpdate(Param param, string inDate, Action callback = null)
     {
         var bro = Backend.PlayerData.UpdateMyData("TimeCheck", inDate, param);
         if (bro.IsSuccess())
         {
-
+            callback?.Invoke();
         }
         else
         { }

@@ -34,9 +34,22 @@ public class ContinueUI : MonoBehaviour
                 if (result)
                 {
                     --DataManager.userItem.continueCoupon;
-                    closeAction = null;
-                    GameManager.Instance.GameContinuePlay();
-                    this.gameObject.SetActive(false);
+                    if (DataManager.userItem.continueCoupon == 0)
+                    {
+                        DataManager.timeData.Coupon = BackEndManager.Instance.GetTime();
+                        BackEndManager.Instance.GetTimeUpdate(DataManager.Instance.GetTimeParam(), DataManager.timeData.inDate, () =>
+                        {
+                            closeAction = null;
+                            GameManager.Instance.GameContinuePlay();
+                            this.gameObject.SetActive(false);
+                        });
+                    }
+                    else
+                    {
+                        closeAction = null;
+                        GameManager.Instance.GameContinuePlay();
+                        this.gameObject.SetActive(false);
+                    }
                     //게임 진행
                 }
                 else

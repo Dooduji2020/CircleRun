@@ -126,6 +126,7 @@ public class DataManager : MonoBehaviour
         if (index > 0)
             upTimer += 30;
         float time = 0;
+        DateTime tempTime = timeData.Coupon;
         while (userItem.continueCoupon < 2)
         {
             time += Time.deltaTime;
@@ -137,12 +138,17 @@ public class DataManager : MonoBehaviour
                 TimeSpan timeDifference = timer - timeData.Coupon;
                 if (userItem.continueCoupon == 0)
                 {
-                    TitleManager.Instance.TimerText(1,timeDifference.Minutes,timeDifference.Seconds);
+                    int min = upTimer - (int)timeDifference.TotalMinutes;
+                    int sec = 59 - (int)timeDifference.Seconds;
+                    TitleManager.Instance.TimerText(1, min, sec);
                 }
                 if (timeDifference.TotalMinutes >= upTimer)
                 {
                     ++userItem.continueCoupon;
-                    upTimer += 30;
+                    BackEndManager.Instance.ItemDataUpdate((result) => { });
+                    timeData.Coupon = BackEndManager.Instance.GetTime();
+                    BackEndManager.Instance.GetTimeUpdate(GetTimeParam(), timeData.inDate);
+                    yield return new WaitForSeconds(2f);
                 }
             }
             yield return null;
@@ -161,12 +167,22 @@ public class DataManager : MonoBehaviour
             if (time >= 1f)
             {
                 timer = timer.AddSeconds(1);
+                Debug.Log(timer);
                 time = 0;
                 TimeSpan timeDifference = timer - timeData.Coupon;
+                if (userItem.shield == 0)
+                {
+                    int min = upTimer - (int)timeDifference.TotalMinutes;
+                    int sec = 59 - (int)timeDifference.Seconds;
+                    TitleManager.Instance.TimerText(1, min, sec);
+                }
                 if (timeDifference.TotalMinutes >= upTimer)
                 {
-                    ++userItem.continueCoupon;
-                    upTimer += 30;
+                    ++userItem.shield;
+                    BackEndManager.Instance.ItemDataUpdate((result) => { });
+                    timeData.Shield = BackEndManager.Instance.GetTime();
+                    BackEndManager.Instance.GetTimeUpdate(GetTimeParam(), timeData.inDate);
+                    yield return new WaitForSeconds(2f);
                 }
             }
             yield return null;

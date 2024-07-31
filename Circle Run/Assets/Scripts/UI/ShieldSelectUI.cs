@@ -19,16 +19,30 @@ public class ShieldSelectUI : MonoBehaviour
         LoadingManager.Instance.LoadingStart();
         BackEndManager.Instance.UseShield(shieldCount, (res) =>
         {
-            LoadingManager.Instance.LoadingStop();
+
             if (res)
             {
                 DataManager.Instance.useShieldCount = shieldCount;
-                SceneManager.LoadScene(Constants.DATA.GAMEPLAY_SCENE);
+                if (DataManager.Instance.useShieldCount == 0)
+                {
+                    DataManager.timeData.Shield = BackEndManager.Instance.GetTime();
+                    BackEndManager.Instance.GetTimeUpdate(DataManager.Instance.GetTimeParam(), DataManager.timeData.inDate, () =>
+                    {
+                        LoadingManager.Instance.LoadingStop();
+                        SceneManager.LoadScene(Constants.DATA.GAMEPLAY_SCENE);
+                    });
+                }
+                else
+                {
+                    LoadingManager.Instance.LoadingStop();
+                    SceneManager.LoadScene(Constants.DATA.GAMEPLAY_SCENE);
+                }
             }
             else
             {
                 InfoUI info = Instantiate(Resources.Load<InfoUI>("Prefabs/UI/InfoUI"));
                 info.Open("Network_Error");
+                LoadingManager.Instance.LoadingStop();
             }
         });
     }
