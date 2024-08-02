@@ -6120,6 +6120,10 @@ MonoBehaviour:
   - {x: -15, y: 0, z: 0}
   - {x: -15, y: 4, z: 0}
   - {x: -15, y: -4, z: 0}
+  _bossSpawnPos2:
+  - {x: 15, y: 0, z: 0}
+  - {x: 15, y: 4, z: 0}
+  - {x: 15, y: -4, z: 0}
   _obstacleSpawnTime: 1.4
   _obstacleSpawnTime2: 2.5
   _bossSpawnTime: 18

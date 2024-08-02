@@ -177,7 +177,7 @@ public class GameManager : MonoBehaviour
     public ShieldSelectUI selectUI;
 
     private bool hasGameEnded;
-    private float spwanDelay = 1f;
+    private float spwanDelay = 2f;
 
     public UnityAction GameStarted, GameEnded;
     private void LimitedPositionX()
@@ -196,7 +196,10 @@ public class GameManager : MonoBehaviour
         foreach (var i in _obstacleSpawnPos)
         {
             i.Set(maxOffsetX, i.y, 0);
+            _bossSpawnPos2[index] = i;
+            ++index;
         }
+        index = 0;
         foreach (var i in _obstacleSpawnPos2)
         {
             i.Set(minOffsetX, i.y, 0);
@@ -401,6 +404,8 @@ public class GameManager : MonoBehaviour
     private List<Vector3> _obstacleSpawnPos2;
     [SerializeField]
     private List<Vector3> _bossSpawnPos;
+    [SerializeField]
+    private List<Vector3> _bossSpawnPos2;
 
     [SerializeField]
     private float _obstacleSpawnTime;
@@ -430,8 +435,16 @@ public class GameManager : MonoBehaviour
             if (isBoss)
             {
                 isBoss = false;
-                GameObject boss = Instantiate(_bossPrefab, _bossSpawnPos[pos], Quaternion.identity);
-                
+                bool angle = UnityEngine.Random.Range(0, 2) == 0;
+                if (angle)
+                {
+                    GameObject boss = Instantiate(_bossPrefab, _bossSpawnPos[pos], Quaternion.identity);
+                }
+                else
+                {
+                    GameObject boss = Instantiate(_bossPrefab2, _bossSpawnPos2[pos], Quaternion.identity); 
+                }
+
                 yield return null;
             }
             isScore = UnityEngine.Random.Range(0, 4) == 0;

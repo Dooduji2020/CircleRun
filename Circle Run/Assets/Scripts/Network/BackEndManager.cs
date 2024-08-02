@@ -211,6 +211,11 @@ public class BackEndManager : MonoBehaviour
         Debug.Log("BackEnd Init");
         bool isResult = true;
         var bro = Backend.Initialize(true, true);
+        //string id = Backend.BMember.GetGuestID();
+        //Debug.Log("로컬 기기에 저장된 아이디 :" + id);
+        //if (id.Length > 0)
+        //    Backend.BMember.DeleteGuestInfo();
+        //return;
         if (bro.IsSuccess())
         {
             isResult = VersionCheck();

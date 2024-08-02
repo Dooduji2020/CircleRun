@@ -17,34 +17,40 @@ public class ShieldSelectUI : MonoBehaviour
     public void GameStart()
     {
         LoadingManager.Instance.LoadingStart();
-        BackEndManager.Instance.UseShield(shieldCount, (res) =>
+        if (shieldCount > 0)
         {
+            BackEndManager.Instance.UseShield(shieldCount, (res) =>
+          {
 
-            if (res)
-            {
-                DataManager.Instance.useShieldCount = shieldCount;
-                if (DataManager.Instance.useShieldCount == 0)
-                {
-                    DataManager.timeData.Shield = BackEndManager.Instance.GetTime();
-                    BackEndManager.Instance.GetTimeUpdate(DataManager.Instance.GetTimeParam(), DataManager.timeData.inDate, () =>
-                    {
-                        LoadingManager.Instance.LoadingStop();
-                        SceneManager.LoadScene(Constants.DATA.GAMEPLAY_SCENE);
-                    });
-                }
-                else
-                {
-                    LoadingManager.Instance.LoadingStop();
-                    SceneManager.LoadScene(Constants.DATA.GAMEPLAY_SCENE);
-                }
-            }
-            else
-            {
-                InfoUI info = Instantiate(Resources.Load<InfoUI>("Prefabs/UI/InfoUI"));
-                info.Open("Network_Error");
-                LoadingManager.Instance.LoadingStop();
-            }
-        });
+              if (res)
+              {
+                  DataManager.Instance.useShieldCount = shieldCount;
+                  if (DataManager.Instance.useShieldCount == 0)
+                  {
+                      DataManager.timeData.Shield = BackEndManager.Instance.GetTime();
+                      BackEndManager.Instance.GetTimeUpdate(DataManager.Instance.GetTimeParam(), DataManager.timeData.inDate, () =>
+                      {
+                          LoadingManager.Instance.LoadingStop();
+                          SceneManager.LoadScene(Constants.DATA.GAMEPLAY_SCENE);
+                      });
+                  }
+                  else
+                  {
+                      LoadingManager.Instance.LoadingStop();
+                      SceneManager.LoadScene(Constants.DATA.GAMEPLAY_SCENE);
+                  }
+              }
+              else
+              {
+                  InfoUI info = Instantiate(Resources.Load<InfoUI>("Prefabs/UI/InfoUI"));
+                  info.Open("Network_Error");
+                  LoadingManager.Instance.LoadingStop();
+              }
+          });
+        }
+        else
+            LoadingManager.Instance.LoadingStop();
+            SceneManager.LoadScene(Constants.DATA.GAMEPLAY_SCENE);
     }
     public void Open()
     {

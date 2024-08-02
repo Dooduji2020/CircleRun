@@ -7,9 +7,9 @@ public class BossControl2 : MonoBehaviour
 
 
     [SerializeField]
-    private float _moveSpeed, _maxOffset, _destroyTime;
+    private float _moveSpeed, _destroyTime;
 
-
+    private float _maxOffset;
     private bool hasGameFinished,
 
         isVertical;
@@ -19,8 +19,8 @@ public class BossControl2 : MonoBehaviour
         hasGameFinished = false;
 
         isVertical = Random.Range(0, 2) == 0;
-        transform.rotation = Quaternion.Euler(0, 0, -90f);
-
+        transform.rotation = Quaternion.Euler(0, 0, 90f);
+        _maxOffset = -GameManager.Instance.maxOffsetX;
     }
 
     private void OnEnable()
@@ -37,9 +37,9 @@ public class BossControl2 : MonoBehaviour
     {
         if (hasGameFinished || GameManager.Instance.isPause) return;
 
-        transform.position += _moveSpeed * Time.fixedDeltaTime * Vector3.right;
+        transform.position += _moveSpeed * Time.fixedDeltaTime * Vector3.left;
 
-        if (transform.position.x > _maxOffset)
+        if (transform.position.x < _maxOffset)
         {
             Destroy(gameObject);
         }

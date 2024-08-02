@@ -1,16 +1,17 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
-using System.Collections.Generic;
-using BackEnd;
 using System.Text;
 
 public class NickNameUI : MonoBehaviour
 {
     public TextMeshProUGUI errorTxt;
     public TMP_InputField nickNameInput;
+    public Button sendButton;
 
     private void Awake()
     {
+        nickNameInput.onValueChanged.AddListener((input) => NickNameCheck(input));
         nickNameInput.onEndEdit.AddListener((input) =>
         {
             if (errorTxt.gameObject.activeSelf)
@@ -21,18 +22,34 @@ public class NickNameUI : MonoBehaviour
     }
     private void OnEnable()
     {
+        nickNameInput.textComponent.color = Color.black;
         nickNameInput.text = string.Empty;
+    }
+    private void NickNameCheck(string nick)
+    {
+        int bytes = Encoding.UTF8.GetByteCount(nick);
+        Debug.Log(bytes);
+        if (nick.Length < 2 && bytes <= 3)
+        {
+            nickNameInput.textComponent.color = Color.red;
+            sendButton.gameObject.SetActive(false);
+        }
+        else if (nick.Length >= 2 && bytes >= 4)
+        {
+            nickNameInput.textComponent.color = Color.green;
+            sendButton.gameObject.SetActive(true);
+        }
     }
     public void NickNameSend()
     {
-        LoadingManager.Instance.LoadingStart();
+        //LoadingManager.Instance.LoadingStart();
         string input = nickNameInput.text;
-        byte[] bytes = Encoding.UTF8.GetBytes(input);
-        if (bytes.Length <= 3 || bytes.Length < 10)
+        int bytes = Encoding.UTF8.GetByteCount(input);
+        Debug.Log(bytes);
+        Debug.Log(input.Length);
+        if (input.Length < 2 && bytes < 4)
         {
-            //닉네임 길이 조절
-            string key = "";
-            LocalizationManager.Instance.ChangedTxt(key, errorTxt);
+            LocalizationManager.Instance.ChangedTxt("NickName_Info", errorTxt);
             errorTxt.gameObject.SetActive(true);
         }
         else

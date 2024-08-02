@@ -78,6 +78,7 @@ public class DataManager : MonoBehaviour
             return;
         Param param = new Param();
         DateTime currentTime = BackEndManager.Instance.GetTime();
+        Debug.LogError("currentTime"+currentTime.ToString("yyyy-MM-dd HH:mm:ss"));
         if (couponCount < 2)
         {
             int index = 0;
@@ -119,6 +120,11 @@ public class DataManager : MonoBehaviour
         }
         if (param.Count > 0)
             BackEndManager.Instance.SendQueueTimeUpdate(param, timeData.inDate);
+    }
+    public void CouponTimerStart()
+    {
+        DateTime time = BackEndManager.Instance.GetTime();
+        StartCoroutine(CouponTimer(time, 0));
     }
     IEnumerator CouponTimer(DateTime timer, int index)
     {
@@ -169,12 +175,12 @@ public class DataManager : MonoBehaviour
                 timer = timer.AddSeconds(1);
                 Debug.Log(timer);
                 time = 0;
-                TimeSpan timeDifference = timer - timeData.Coupon;
+                TimeSpan timeDifference = timer - timeData.Shield;
                 if (userItem.shield == 0)
                 {
                     int min = upTimer - (int)timeDifference.TotalMinutes;
                     int sec = 59 - (int)timeDifference.Seconds;
-                    TitleManager.Instance.TimerText(1, min, sec);
+                    TitleManager.Instance.TimerText(0, min, sec);
                 }
                 if (timeDifference.TotalMinutes >= upTimer)
                 {

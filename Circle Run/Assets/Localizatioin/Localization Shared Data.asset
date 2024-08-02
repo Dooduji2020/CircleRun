@@ -147,6 +147,10 @@ MonoBehaviour:
     m_Key: Network_Init
     m_Metadata:
       m_Items: []
+  - m_Id: 4637875280465920
+    m_Key: NickName_Info
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

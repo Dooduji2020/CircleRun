@@ -155,6 +155,10 @@ MonoBehaviour:
     m_Localized: A network connection is required.
     m_Metadata:
       m_Items: []
+  - m_Id: 4637875280465920
+    m_Localized: At least 4 English letters, at least 2 Korean letters
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
