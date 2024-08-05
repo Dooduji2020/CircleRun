@@ -40,6 +40,8 @@ public class ContinueUI : MonoBehaviour
                         BackEndManager.Instance.GetTimeUpdate(DataManager.Instance.GetTimeParam(), DataManager.timeData.inDate, () =>
                         {
                             closeAction = null;
+                            GameManager.Instance.isRewardAds = false;
+                            GameManager.Instance._adsContinueUI.gameObject.SetActive(false);
                             GameManager.Instance.GameContinuePlay();
                             this.gameObject.SetActive(false);
                         });
@@ -47,6 +49,8 @@ public class ContinueUI : MonoBehaviour
                     else
                     {
                         closeAction = null;
+                        GameManager.Instance.isRewardAds = false;
+                        GameManager.Instance._adsContinueUI.gameObject.SetActive(false);
                         GameManager.Instance.GameContinuePlay();
                         this.gameObject.SetActive(false);
                     }
@@ -82,15 +86,21 @@ public class ContinueUI : MonoBehaviour
                         infoUI.Open("Network_Error");
                         sendBtn.interactable = true;
                     }
+                    GameManager.Instance.isRewardAds = false;
+                    GameManager.Instance._adsContinueUI.gameObject.SetActive(false);
                 }
             });
         };
         }
         else
         {
+            if (sendButtonEvent != null)
+                sendButtonEvent = null;
+                
             sendButtonEvent += () => AdsManager.Instance.ShowRewardAd((reward) =>
             {
                 closeAction = null;
+
                 GameManager.Instance.GameContinuePlay();
                 this.gameObject.SetActive(false);
             });
@@ -100,6 +110,8 @@ public class ContinueUI : MonoBehaviour
     }
     private void ContinueSend()
     {
+        if (isCoupon)
+            GameManager.Instance.AdsPopOpne();
         sendBtn.interactable = false;
         sendButtonEvent?.Invoke();
         sendButtonEvent = null;
@@ -108,7 +120,6 @@ public class ContinueUI : MonoBehaviour
     public void Close()
     {
         closeAction?.Invoke();
-
         closeAction = null;
         sendButtonEvent = null;
     }

@@ -75,7 +75,7 @@ public class StoreUI : MonoBehaviour
             case 0:  //쉴드 3개
                 if (DataManager.timeData.ShieldAdsCount == 0)
                     return;
-                shieldButton.interactable = false;
+                //shieldButton.interactable = false;
                 AdsManager.Instance.ShowRewardAd((reward)=> {
                     LoadingManager.Instance.LoadingStart();
                     DataManager.userItem.shield += 2;
@@ -97,7 +97,7 @@ public class StoreUI : MonoBehaviour
             case 1:  // 쿠폰 2개
                 if (DataManager.timeData.CouponAdsCount == 0)
                     return;
-                couponButton.interactable = false;
+                //couponButton.interactable = false;
                 AdsManager.Instance.ShowRewardAd((reward)=> {
                     LoadingManager.Instance.LoadingStart();
                     DataManager.userItem.continueCoupon += 2;

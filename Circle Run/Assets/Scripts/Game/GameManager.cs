@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private ContinueUI _continueUI;
     [SerializeField]
-    private ContinueUI _adsContinueUI;
+    public ContinueUI _adsContinueUI;
 
     [SerializeField]
     private InGameRankingUI _rankUI;
@@ -192,7 +192,7 @@ public class GameManager : MonoBehaviour
             minOffsetX = (camera.transform.position.x - orthoSize * aspectRatio) + -1f;
             maxOffsetX = (camera.transform.position.x + orthoSize * aspectRatio) + 1f;
         }
-        int index =0;
+        int index = 0;
         foreach (var i in _obstacleSpawnPos)
         {
             i.Set(maxOffsetX, i.y, 0);
@@ -203,7 +203,7 @@ public class GameManager : MonoBehaviour
         foreach (var i in _obstacleSpawnPos2)
         {
             i.Set(minOffsetX, i.y, 0);
-             _bossSpawnPos[index] = i;
+            _bossSpawnPos[index] = i;
             ++index;
         }
     }
@@ -301,7 +301,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Animator _highScoreAnimator;
     [SerializeField] private AnimationClip _highScoreClip;
 
-    private void AdsPopOpne()
+    public void AdsPopOpne()
     {
         isRewardAds = true;
         _adsContinueUI.Open();
@@ -438,11 +438,13 @@ public class GameManager : MonoBehaviour
                 bool angle = UnityEngine.Random.Range(0, 2) == 0;
                 if (angle)
                 {
+                    pos = pos == 2 ? 0 : pos++;
                     GameObject boss = Instantiate(_bossPrefab, _bossSpawnPos[pos], Quaternion.identity);
                 }
                 else
                 {
-                    GameObject boss = Instantiate(_bossPrefab2, _bossSpawnPos2[pos], Quaternion.identity); 
+                    pos2 = pos2 == 2 ? 0 : pos2++;
+                    GameObject boss = Instantiate(_bossPrefab2, _bossSpawnPos2[pos2], Quaternion.identity);
                 }
 
                 yield return null;
