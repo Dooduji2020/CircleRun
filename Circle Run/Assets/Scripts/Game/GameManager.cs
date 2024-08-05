@@ -369,13 +369,13 @@ public class GameManager : MonoBehaviour
         continueDelay.gameObject.SetActive(true);
 
         float timer = 3;
-        continueTxt.text = timer.ToString();
+        continueTxt.text = "Continue\n" + timer.ToString();
         yield return new WaitForSeconds(1.5f);
         while (timer > 0)
         {
             timer -= Time.deltaTime;
             timer = Mathf.Max(timer, 0);
-            continueTxt.text = ((int)timer).ToString();
+            continueTxt.text = "Continue\n"+((int)timer).ToString();
             yield return null;
         }
         continueDelay.SetActive(false);

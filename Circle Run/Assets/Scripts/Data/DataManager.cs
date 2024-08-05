@@ -128,9 +128,9 @@ public class DataManager : MonoBehaviour
     }
     IEnumerator CouponTimer(DateTime timer, int index)
     {
-        int upTimer = 30;
+        int upTimer = 29;
         if (index > 0)
-            upTimer += 30;
+            upTimer += 29;
         float time = 0;
         DateTime tempTime = timeData.Coupon;
         while (userItem.continueCoupon < 2)
@@ -163,9 +163,9 @@ public class DataManager : MonoBehaviour
     }
     IEnumerator ShieldTimer(DateTime timer, int index)
     {
-        int upTimer = 30;
+        int upTimer = 29;
         if (index > 0)
-            upTimer += 30;
+            upTimer += 29;
         float time = 0;
         while (userItem.shield < 2)
         {

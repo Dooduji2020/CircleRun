@@ -21,15 +21,15 @@ public class ShieldSelectUI : MonoBehaviour
         {
             BackEndManager.Instance.UseShield(shieldCount, (res) =>
           {
-
               if (res)
               {
                   DataManager.Instance.useShieldCount = shieldCount;
-                  if (DataManager.Instance.useShieldCount == 0)
+                  if (DataManager.userItem.shield == 0)
                   {
                       DataManager.timeData.Shield = BackEndManager.Instance.GetTime();
                       BackEndManager.Instance.GetTimeUpdate(DataManager.Instance.GetTimeParam(), DataManager.timeData.inDate, () =>
                       {
+                          DataManager.Instance.CouponTimerStart();
                           LoadingManager.Instance.LoadingStop();
                           SceneManager.LoadScene(Constants.DATA.GAMEPLAY_SCENE);
                       });
