@@ -9,11 +9,11 @@ public class AdsManager : MonoBehaviour
     public static AdsManager Instance;
 
     //보상광고
-    private const string rewardAdID = "ca-app-pub-7346251641612501/6566400313";
+    private const string rewardAdID = "ca-app-pub-7346251641612501/6811221553";
     private const string testRewardAdID = "ca-app-pub-3940256099942544/5224354917";
 
     //전면광고
-    private const string InterstitialAdID = "ca-app-pub-7346251641612501/6597232048";
+    private const string InterstitialAdID = "ca-app-pub-7346251641612501/4789098418";
     private const string testInterstitialAdID = "ca-app-pub-3940256099942544/1033173712";
 
     public bool testMode = true;
@@ -102,6 +102,8 @@ public class AdsManager : MonoBehaviour
     {
         if (_rewardAd == null || !_rewardAd.CanShowAd())
         {
+            callback?.Invoke(null);
+            RewardAdLoad();
             return; 
         }
         _rewardAd.Show(callback);

@@ -166,6 +166,7 @@ PlayerSettings:
   applicationIdentifier:
     Android: com.novembernine.dongrami
     Standalone: com.DefaultCompany.2DProject
+    iPhone: Dongrami
   buildNumber:
     Standalone: 0
     VisionOS: 0
@@ -239,11 +240,11 @@ PlayerSettings:
   metalAPIValidation: 1
   iOSRenderExtraFrameOnPause: 0
   iosCopyPluginsCodeInsteadOfSymlink: 0
-  appleDeveloperTeamID: 
-  iOSManualSigningProvisioningProfileID: 
+  appleDeveloperTeamID: 4YQ94YB264
+  iOSManualSigningProvisioningProfileID: 7cde74be-35bb-4846-83e6-d31a3d3c02ee
   tvOSManualSigningProvisioningProfileID: 
   VisionOSManualSigningProvisioningProfileID: 
-  iOSManualSigningProvisioningProfileType: 0
+  iOSManualSigningProvisioningProfileType: 1
   tvOSManualSigningProvisioningProfileType: 0
   VisionOSManualSigningProvisioningProfileType: 0
   appleEnableAutomaticSigning: 0
@@ -947,7 +948,7 @@ PlayerSettings:
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
   projectName: DONGRAMI
-  organizationId: novembernine
+  organizationId: jae-ik-kim
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}

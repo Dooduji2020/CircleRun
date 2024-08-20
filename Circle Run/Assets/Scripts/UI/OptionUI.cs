@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.Purchasing;
 
 public class OptionUI : MonoBehaviour
 {
@@ -15,7 +14,7 @@ public class OptionUI : MonoBehaviour
     public Button appleLoginButton;
     public Button logOut;
     public Button deleteUser;
-    public CodelessIAPButton restoreButton;
+    public Button restoreButton;
     [Header("토글")]
     public Toggle[] languageToggles;
     public Image[] togglesIMG;
@@ -54,6 +53,37 @@ public class OptionUI : MonoBehaviour
                 }
             });
         }
+        //logOut.onClick.AddListener(()=>{});
+        deleteUser.onClick.AddListener(UserDeleted);
+    }
+    public void LoginCheck(bool isLogin)
+    {
+        if(isLogin)
+        {
+            appleLoginButton.gameObject.SetActive(false);
+            //logOut.gameObject.SetActive(true);
+            deleteUser.gameObject.SetActive(true);
+        }
+        else
+        {
+            appleLoginButton.gameObject.SetActive(true);
+            //logOut.gameObject.SetActive(false);
+            deleteUser.gameObject.SetActive(false);
+        }
+    }
+    private void LogOut()
+    {}
+    private void UserDeleted()
+    {
+        LoadingManager.Instance.LoadingStart();
+        BackEndManager.Instance.UserDeleted();
+    }
+    private void Restore()
+    {
+        LoadingManager.Instance.LoadingStart();
+        DataManager.Instance.Init(()=>{
+            LoadingManager.Instance.LoadingStop();
+        });
     }
     public void Open()
     {

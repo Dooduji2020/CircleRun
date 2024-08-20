@@ -56,8 +56,8 @@ public class TitleManager : MonoBehaviour
             //if (!NetworkConnect.CheckConnectInternet())
             //{ }
             //else {
-                MainMenuManager.Instance.Init();
-                LoadingManager.Instance.LoadingStop();
+            MainMenuManager.Instance.Init();
+            LoadingManager.Instance.LoadingStop();
             //}
         }
     }
@@ -78,7 +78,7 @@ public class TitleManager : MonoBehaviour
     public void TimerText(int index, int min, int sec)
     {
         string time = $"{min}:{sec}";
-        if(index == 0) shieldTxt.text = time;
+        if (index == 0) shieldTxt.text = time;
         else couponTxt.text = time;
     }
     public void UserDataInit()
@@ -113,9 +113,11 @@ public class TitleManager : MonoBehaviour
                 couponTxt.text = DataManager.userItem.continueCoupon.ToString();
                 shieldTxt.text = DataManager.userItem.shield.ToString();
                 BackEndManager.Instance.GetRankReward();
-                
+
                 foreach (var i in moveUI)
                     i.Move();
+
+                ItemUISet();
             });
         }
         AdsManager.Instance.Init();

@@ -6,13 +6,16 @@ using UnityEngine;
 using BackEnd;
 using BackEnd.Game.Rank;
 using Newtonsoft.Json;
+using System.Security.Cryptography;
+using System.Text;
+using UnityEngine.SceneManagement;
+
+
 
 
 #if UNITY_ANDROID
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
-#elif UNITY_IOS
-using AppleAuth;
 #endif
 
 public class BackEndManager : MonoBehaviour
@@ -181,28 +184,65 @@ public class BackEndManager : MonoBehaviour
             Debug.Log("접속되어 있지 않습니다. PlayGamesPlatform.Instance.localUser.authenticated :  fail");
             return null;
         }
-#elif UNITY_IOS
+#else
+        return null;
 #endif
     }
     #endregion
     #region Apple
-    public void AppleLogin()
+    public void AppleAuth(string token)
     {
+        var result = Backend.BMember.CheckUserInBackend(token, FederationType.Apple);
+        if (result.IsSuccess())
+        {
+            if (result.GetStatusCode().Equals("200"))
+            {
+                AppleLogin(token);
+            }
+            else
+            {
+                AppleChangeGuest(token);
+            }
+            OptionUI.Instance.LoginCheck(true);
+        }
 
     }
-    public void AppleAuth()
+    private void AppleLogin(string token)
     {
-        BackendReturnObject bro = Backend.BMember.AuthorizeFederation("idToken", FederationType.Apple, "siwa");
+        BackendReturnObject bro = Backend.BMember.AuthorizeFederation(token, FederationType.Apple, "siwa");
         if (bro.IsSuccess())
         {
             Debug.Log("APPLE 로그인 성공");
-            //성공 처리
+            BackEndDataInit();
+            TitleManager.Instance.UserDataInit();
+            OptionUI.Instance.LoginCheck(true);
         }
         else
         {
             Debug.LogError("Apple 로그인 실패");
             //실패 처리
         }
+    }
+    private void AppleChangeGuest(string token)
+    {
+        BackendReturnObject bro = Backend.BMember.ChangeCustomToFederation(token, FederationType.Apple);
+        if (bro.IsSuccess())
+        {
+            OptionUI.Instance.LoginCheck(true);
+            Debug.Log("로그인 타입 전환에 성공했습니다");
+        }
+    }
+    public void UserDeleted()
+    {
+        Backend.BMember.WithdrawAccount((callback) =>
+        {
+            if (callback.IsSuccess())
+            {
+                LoadingManager.Instance.LoadingStop();
+                SceneManager.LoadScene(0);
+            }
+        });
+
     }
     #endregion
     #region Version&Init
@@ -232,6 +272,7 @@ public class BackEndManager : MonoBehaviour
                 {
 #if UNITY_EDITOR
                     Debug.Log("GeustLogin Start");
+                    string id = Backend.BMember.GetGuestID();
                     Backend.BMember.GuestLogin((callback) =>
                     {
                         Debug.Log("GestLogin Result : " + callback.IsSuccess());
@@ -247,8 +288,22 @@ public class BackEndManager : MonoBehaviour
                             //씬을 다시 구성 
                         }
                     });
-#else
+#elif UNITY_ANDROID
         PlayGamesPlatform.Instance.Authenticate(GPGSLogin);
+#elif UNITY_IOS || UNITY_IPHONE
+                 BackendReturnObject callback = Backend.BMember.GuestLogin("게스트 로그인으로 로그인함");
+                        Debug.Log("GestLogin Result : " + callback.IsSuccess());
+                        if (callback.IsSuccess())
+                        {
+                            BackEndDataSetting();
+                            BackEndDataInit();
+                            TitleManager.Instance.UserDataInit();
+                        }
+                        else
+                        {
+                            Debug.Log("GuestLogin Fail : " + callback.GetMessage());
+                            //씬을 다시 구성 
+                        }
 #endif
                 }
                 else
@@ -379,7 +434,7 @@ Application.OpenURL("https://play.google.com/store/apps/details?id=com.novembern
     {
         int t = 0;
         int e = 0;
-        RankReward("Daily DailyReward", 1,ref t,ref e);
+        RankReward("Daily DailyReward", 1, ref t, ref e);
         int shield = 0;
         int coupon = 0;
         var bro = Backend.UPost.GetPostList(PostType.Rank, 10);
@@ -669,7 +724,7 @@ Application.OpenURL("https://play.google.com/store/apps/details?id=com.novembern
         else
         { }
         Debug.Log(bro.GetMessage());
-        
+
     }
     public void SendQueueTimeUpdate(Param param, string inDate)
     {
