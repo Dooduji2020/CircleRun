@@ -27,6 +27,7 @@ public class OptionUI : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            this.gameObject.SetActive(false);
         }
         else Destroy(this.gameObject);
     }
@@ -63,6 +64,7 @@ public class OptionUI : MonoBehaviour
             appleLoginButton.gameObject.SetActive(false);
             //logOut.gameObject.SetActive(true);
             deleteUser.gameObject.SetActive(true);
+            nickNameTxt.text = BackEndManager.myNickName;
         }
         else
         {
@@ -72,7 +74,9 @@ public class OptionUI : MonoBehaviour
         }
     }
     private void LogOut()
-    {}
+    {
+        BackEndManager.Instance.Logout();
+    }
     private void UserDeleted()
     {
         LoadingManager.Instance.LoadingStart();

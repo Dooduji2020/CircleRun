@@ -39,6 +39,31 @@ public class AppleManager : MonoBehaviour
                     var identityToken = Encoding.UTF8.GetString(appleIdCredential.IdentityToken);
                     var authorizationCode = Encoding.UTF8.GetString(appleIdCredential.AuthorizationCode);
                     Debug.LogWarning("AppleLogin Success");
+                    BackEndManager.Instance.LoginInit(identityToken);
+                }
+            },
+            error =>
+            {
+                Debug.Log("Apple Signin Error");
+            });
+    }
+    public void SigninWithAppleOption()
+    {
+        var loginArgs = new AppleAuthLoginArgs(AppleAuth.Enums.LoginOptions.IncludeEmail | AppleAuth.Enums.LoginOptions.IncludeFullName);
+
+        appleAuthManager.LoginWithAppleId(
+            loginArgs,
+            credential =>
+            {
+                var appleIdCredential = credential as IAppleIDCredential;
+                if (appleIdCredential != null)
+                {
+                    var userId = appleIdCredential.User;
+                    var email = appleIdCredential.Email;
+                    var fullName = appleIdCredential.FullName;
+                    var identityToken = Encoding.UTF8.GetString(appleIdCredential.IdentityToken);
+                    var authorizationCode = Encoding.UTF8.GetString(appleIdCredential.AuthorizationCode);
+                    Debug.LogWarning("AppleLogin Success");
                     BackEndManager.Instance.AppleAuth(identityToken);
                 }
             },

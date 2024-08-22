@@ -10,8 +10,8 @@ public class DataManager : MonoBehaviour
 
     public static UserScore userScore;
     public static UserItem userItem;
-    public static RankList dailyRanking;
-    public static RankList weekRanking;
+    public static RankList dailyRanking = new RankList();
+    public static RankList weekRanking = new RankList();
     public static TimeData timeData;
 
     public int useShieldCount = 0;

@@ -59,6 +59,7 @@ public class NickNameUI : MonoBehaviour
                 if (res)
                 {
                     TitleManager.Instance.nickNameTxt.text = nickNameInput.text;
+                    OptionUI.Instance.nickNameTxt.text = nickNameInput.text;
                     Close();
                 }
                 else

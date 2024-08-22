@@ -78,7 +78,7 @@ public class StoreUI : MonoBehaviour
                 //shieldButton.interactable = false;
                 AdsManager.Instance.ShowRewardAd((reward)=> {
                     LoadingManager.Instance.LoadingStart();
-                    DataManager.userItem.shield += 2;
+                    DataManager.userItem.shield += 3;
                     BackEndManager.Instance.ItemDataUpdate(null);
                     Debug.Log("Shield Reward Ads Show");
                     int shieldCount = --DataManager.timeData.ShieldAdsCount;

@@ -205,13 +205,41 @@ public class BackEndManager : MonoBehaviour
             }
             OptionUI.Instance.LoginCheck(true);
         }
-
+    }
+    public void LoginInit(string token)
+    {
+        var result = Backend.BMember.CheckUserInBackend(token, FederationType.Apple);
+        if (result.IsSuccess())
+        {
+            if (result.GetStatusCode().Equals("200"))
+            {
+                AppleLogin(token);
+            }
+            else
+            {
+                AppleLoginInit(token);
+            }
+        }
+    }
+    private void AppleLoginInit(string token)
+    {
+        BackendReturnObject bro = Backend.BMember.AuthorizeFederation(token, FederationType.Apple, "siwa");
+        if (bro.IsSuccess())
+        {
+            isInit = true;
+            Debug.Log("APPLE 로그인 성공");
+            BackEndDataSetting();
+            BackEndDataInit();
+            TitleManager.Instance.UserDataInit();
+            OptionUI.Instance.LoginCheck(true);
+        }
     }
     private void AppleLogin(string token)
     {
         BackendReturnObject bro = Backend.BMember.AuthorizeFederation(token, FederationType.Apple, "siwa");
         if (bro.IsSuccess())
         {
+            isInit = true;
             Debug.Log("APPLE 로그인 성공");
             BackEndDataInit();
             TitleManager.Instance.UserDataInit();
@@ -262,7 +290,7 @@ public class BackEndManager : MonoBehaviour
             Debug.Log("Init Result : " + isResult);
             if (!isResult)
             {
-                //TitleManager.Instance.VersionCheckResult(isResult);
+                TitleManager.Instance.VersionCheckResult(isResult);
             }
             else
             {
@@ -291,19 +319,7 @@ public class BackEndManager : MonoBehaviour
 #elif UNITY_ANDROID
         PlayGamesPlatform.Instance.Authenticate(GPGSLogin);
 #elif UNITY_IOS || UNITY_IPHONE
-                 BackendReturnObject callback = Backend.BMember.GuestLogin("게스트 로그인으로 로그인함");
-                        Debug.Log("GestLogin Result : " + callback.IsSuccess());
-                        if (callback.IsSuccess())
-                        {
-                            BackEndDataSetting();
-                            BackEndDataInit();
-                            TitleManager.Instance.UserDataInit();
-                        }
-                        else
-                        {
-                            Debug.Log("GuestLogin Fail : " + callback.GetMessage());
-                            //씬을 다시 구성 
-                        }
+            TitleManager.Instance.Idle();
 #endif
                 }
                 else
@@ -324,6 +340,23 @@ public class BackEndManager : MonoBehaviour
                 LoadingManager.Instance.LoadingStart();
                 Init();
             });
+        }
+    }
+    public void GuestLogin()
+    {
+        LoadingManager.Instance.LoadingStart();
+        BackendReturnObject callback = Backend.BMember.GuestLogin("게스트 로그인으로 로그인함");
+        Debug.Log("GestLogin Result : " + callback.IsSuccess());
+        if (callback.IsSuccess())
+        {
+            BackEndDataSetting();
+            BackEndDataInit();
+            TitleManager.Instance.UserDataInit();
+        }
+        else
+        {
+            Debug.Log("GuestLogin Fail : " + callback.GetMessage());
+            //씬을 다시 구성 
         }
     }
     private void BackEndDataSetting()
@@ -365,6 +398,7 @@ public class BackEndManager : MonoBehaviour
 #if UNITY_ANDROID
 Application.OpenURL("https://play.google.com/store/apps/details?id=com.novembernine.dongrami&hl=ko");
 #else
+Application.OpenURL("https://apps.apple.com/app/dongrami-dodge-the-blocks/id6566185602");
 #endif
             }
             }
@@ -423,7 +457,9 @@ Application.OpenURL("https://play.google.com/store/apps/details?id=com.novembern
         Backend.BMember.Logout((callback) =>
         {
             if (callback.IsSuccess())
-            { }
+            {
+                SceneManager.LoadScene(0);
+            }
             else
             { }
         });
@@ -527,18 +563,24 @@ Application.OpenURL("https://play.google.com/store/apps/details?id=com.novembern
         {
             if (bro.IsSuccess())
             {
-                string json = bro.GetFlattenJSON().ToJson();
-                RankList data = JsonConvert.DeserializeObject<RankList>(json);
-                DataManager.dailyRanking = data;
+                if (bro.GetFlattenJSON().Count > 0)
+                {
+                    string json = bro.GetFlattenJSON().ToJson();
+                    RankList data = JsonConvert.DeserializeObject<RankList>(json);
+                    DataManager.dailyRanking = data;
+                }
             }
         });
         SendQueue.Enqueue(Backend.URank.User.GetRankList, GetRankingTable(Ranking.Week), 5, (bro) =>
         {
             if (bro.IsSuccess())
             {
-                string json = bro.GetFlattenJSON().ToJson();
-                RankList data = JsonConvert.DeserializeObject<RankList>(json);
-                DataManager.weekRanking = data;
+                if (bro.GetFlattenJSON().Count > 0)
+                {
+                    string json = bro.GetFlattenJSON().ToJson();
+                    RankList data = JsonConvert.DeserializeObject<RankList>(json);
+                    DataManager.weekRanking = data;
+                }
             }
         });
     }

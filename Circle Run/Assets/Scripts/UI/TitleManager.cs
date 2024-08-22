@@ -15,6 +15,7 @@ public class TitleManager : MonoBehaviour
     public GameObject rewardPop;
     public TextMeshProUGUI shield;
     public TextMeshProUGUI coupon;
+    public GameObject idlePanel;
     [Header("Move UI")]
     public MoveUI[] moveUI;
 
@@ -37,6 +38,11 @@ public class TitleManager : MonoBehaviour
             foreach (var i in moveUI)
                 i.Move();
         }
+    }
+    public void Idle()
+    {
+        idlePanel.gameObject.SetActive(true);
+        LoadingManager.Instance.LoadingStop();
     }
     public void ItemUISet()
     {
@@ -66,7 +72,7 @@ public class TitleManager : MonoBehaviour
 #if !UNITY_EDITOR && UNITY_ANDROID
             Application.OpenURL("https://play.google.com/store/apps/details?id=com.novembernine.dongrami");
 #elif !UNITY_EDITOR && UNITY_IOS
-            Application.OpenURL("");
+            Application.OpenURL("https://apps.apple.com/app/dongrami-dodge-the-blocks/id6566185602");
 #endif
     }
     public void TxtInit(string nickName, string shieldCount, string couponCount)
@@ -83,6 +89,7 @@ public class TitleManager : MonoBehaviour
     }
     public void UserDataInit()
     {
+        idlePanel.SetActive(false);
         Debug.Log("User Data Init");
         BackEndManager.Instance.GetRanking();
         StartCoroutine(LogoDelay());
@@ -121,7 +128,7 @@ public class TitleManager : MonoBehaviour
             });
         }
         AdsManager.Instance.Init();
-        NetworkManager.Instance.IAPInit();
+        //NetworkManager.Instance.IAPInit();
         MainMenuManager.Instance.Init();
         yield return new WaitForSeconds(1.5f);
         yield break;

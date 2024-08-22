@@ -41,7 +41,7 @@ public class AdsManager : MonoBehaviour
         MobileAds.Initialize((InitializationStatus _initStatus) =>
         {
             initStatus = _initStatus;
-            //InterstitialAdLoad();
+            InterstitialAdLoad();
             RewardAdLoad();
         });
     }
