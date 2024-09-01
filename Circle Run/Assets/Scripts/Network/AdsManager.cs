@@ -21,7 +21,7 @@ public class AdsManager : MonoBehaviour
     private InitializationStatus initStatus;
     private InterstitialAd _interstitialAd;
     private RewardedAd _rewardAd;
-
+    private InfoUI infoUI;
     private void Awake()
     {
         if (Instance == null)
@@ -80,10 +80,9 @@ public class AdsManager : MonoBehaviour
         {
             if (error != null || ad == null)
             {
-                Debug.Log("Ads Error");
-                return;
             }
-            _interstitialAd = ad;
+            else
+                _interstitialAd = ad;
         });
     }
     private void RewardAdLoad()
@@ -93,7 +92,6 @@ public class AdsManager : MonoBehaviour
         {
             if (error != null || ad == null)
             {
-                Debug.Log("Ads Load Error = " + error.GetMessage());
             }
             _rewardAd = ad;
         });
@@ -102,9 +100,8 @@ public class AdsManager : MonoBehaviour
     {
         if (_rewardAd == null || !_rewardAd.CanShowAd())
         {
-            callback?.Invoke(null);
-            RewardAdLoad();
-            return; 
+            Error();
+            return;
         }
         _rewardAd.Show(callback);
         RewardAdLoad();
@@ -112,9 +109,23 @@ public class AdsManager : MonoBehaviour
     public void ShowInterstitialAd()
     {
         if (_interstitialAd == null || !_interstitialAd.CanShowAd())
+        {
             return;
+        }
 
         _interstitialAd.Show();
         InterstitialAdLoad();
+    }
+    private void Error()
+    {
+        if (infoUI == null)
+        {
+            infoUI = Instantiate(Resources.Load<InfoUI>("Prefabs/UI/InfoUI"));
+            infoUI.Open("AdsLoad_Fail");
+        }
+        else
+        {
+            infoUI.Open("AdsLoad_Fail");
+        }
     }
 }

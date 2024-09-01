@@ -151,6 +151,18 @@ MonoBehaviour:
     m_Key: NickName_Info
     m_Metadata:
       m_Items: []
+  - m_Id: 12017172653006848
+    m_Key: GuestLogin_Info
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12020310051119104
+    m_Key: AdsLoad_Fail
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13051735265239040
+    m_Key: User_error
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

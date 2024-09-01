@@ -129,6 +129,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: pop
       objectReference: {fileID: 0}
+    - target: {fileID: 6630339826839215414, guid: 7bffaca64324ac447838624926264029, type: 3}
+      propertyPath: m_text
+      value: "\uAD11\uACE0 \uB85C\uB4DC \uC2E4\uD328"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6630339826839215414, guid: 7bffaca64324ac447838624926264029, type: 3}
+      propertyPath: m_fontSize
+      value: 72
+      objectReference: {fileID: 0}
     - target: {fileID: 7127053561455966481, guid: 7bffaca64324ac447838624926264029, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

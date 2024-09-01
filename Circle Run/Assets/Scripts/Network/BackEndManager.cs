@@ -34,6 +34,7 @@ public class BackEndManager : MonoBehaviour
                 return null;
         }
     }
+    public GameObject guestLoginPanel;
     public static bool isInit = false;
     private NetErrorUI netErrorUI;
     private void Awake()
@@ -192,18 +193,19 @@ public class BackEndManager : MonoBehaviour
     #region Apple
     public void AppleAuth(string token)
     {
+        LoadingManager.Instance.LoadingStart();
         var result = Backend.BMember.CheckUserInBackend(token, FederationType.Apple);
         if (result.IsSuccess())
         {
             if (result.GetStatusCode().Equals("200"))
             {
-                AppleLogin(token);
+                 OptionUI.Instance.OpenLoginInfo(() => AppleLogin(token)); 
             }
             else
             {
+                //애플 계정이 존재 덮어쓸건지 말건지 확인 후 진행.
                 AppleChangeGuest(token);
             }
-            OptionUI.Instance.LoginCheck(true);
         }
     }
     public void LoginInit(string token)
@@ -236,6 +238,7 @@ public class BackEndManager : MonoBehaviour
     }
     private void AppleLogin(string token)
     {
+        LoadingManager.Instance.LoadingStart();
         BackendReturnObject bro = Backend.BMember.AuthorizeFederation(token, FederationType.Apple, "siwa");
         if (bro.IsSuccess())
         {
@@ -244,10 +247,12 @@ public class BackEndManager : MonoBehaviour
             BackEndDataInit();
             TitleManager.Instance.UserDataInit();
             OptionUI.Instance.LoginCheck(true);
+            LoadingManager.Instance.LoadingStop();
         }
         else
         {
             Debug.LogError("Apple 로그인 실패");
+            LoadingManager.Instance.LoadingStop();
             //실패 처리
         }
     }
@@ -259,6 +264,7 @@ public class BackEndManager : MonoBehaviour
             OptionUI.Instance.LoginCheck(true);
             Debug.Log("로그인 타입 전환에 성공했습니다");
         }
+        LoadingManager.Instance.LoadingStop();
     }
     public void UserDeleted()
     {
@@ -349,13 +355,16 @@ public class BackEndManager : MonoBehaviour
         Debug.Log("GestLogin Result : " + callback.IsSuccess());
         if (callback.IsSuccess())
         {
+            guestLoginPanel.SetActive(true);
             BackEndDataSetting();
             BackEndDataInit();
             TitleManager.Instance.UserDataInit();
+            LoadingManager.Instance.LoadingStop();
         }
         else
         {
             Debug.Log("GuestLogin Fail : " + callback.GetMessage());
+            LoadingManager.Instance.LoadingStop();
             //씬을 다시 구성 
         }
     }

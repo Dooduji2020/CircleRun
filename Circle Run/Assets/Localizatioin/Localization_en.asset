@@ -159,6 +159,27 @@ MonoBehaviour:
     m_Localized: At least 4 English letters, at least 2 Korean letters
     m_Metadata:
       m_Items: []
+  - m_Id: 12017172653006848
+    m_Localized: 'For guest login apps, data recovery is not possible if deleted
+      or data is lost.
+
+      Please help me log in.
+
+      (Data room recovery is
+      not possible.)'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12020310051119104
+    m_Localized: 'Ad failed to load
+
+      Please try again after treatment.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13051735265239040
+    m_Localized: "This account exists. \nDo you want to overwrite?\n(Overwritten
+      data cannot be recovered.)"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

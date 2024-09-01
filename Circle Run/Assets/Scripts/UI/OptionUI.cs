@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
+using UnityEngine.Events;
 
 public class OptionUI : MonoBehaviour
 {
@@ -19,6 +21,10 @@ public class OptionUI : MonoBehaviour
     public Toggle[] languageToggles;
     public Image[] togglesIMG;
     public TextMeshProUGUI[] togglesTxt;
+    [Header("로그인 안내")]
+    public GameObject loginInfoPop;
+    public Button loginSend;
+    public Button loginCancel;
 
     private Color originColor = new Color(1, 0.9764f, 0.8156f, 1);
     private Color originTxtColor = new Color(0.8490566f, 0.484603f, 0.484603f, 1);
@@ -28,6 +34,7 @@ public class OptionUI : MonoBehaviour
         {
             Instance = this;
             this.gameObject.SetActive(false);
+            loginCancel.onClick.AddListener(()=>loginInfoPop.gameObject.SetActive(false));
         }
         else Destroy(this.gameObject);
     }
@@ -72,6 +79,7 @@ public class OptionUI : MonoBehaviour
             //logOut.gameObject.SetActive(false);
             deleteUser.gameObject.SetActive(false);
         }
+        loginInfoPop.SetActive(false);
     }
     private void LogOut()
     {
@@ -114,5 +122,12 @@ public class OptionUI : MonoBehaviour
         PlayerPrefs.SetInt("Sound", mute);
         bool isMute = mute > 0 ? false : true;
         AudioManager.Instance.SoundMute(isMute);
+    }
+    public void OpenLoginInfo(UnityAction action)
+    {
+        loginSend.onClick.RemoveAllListeners();
+        loginInfoPop.gameObject.SetActive(true);
+        loginSend.onClick.AddListener(action);
+        LoadingManager.Instance.LoadingStop();
     }
 }

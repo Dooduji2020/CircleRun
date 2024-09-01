@@ -12,7 +12,7 @@ public class ContinueUI : MonoBehaviour
     public TextMeshProUGUI continueTxt;
     public Button sendBtn;
     public MoveUI moveUI;
-    public bool isCoupon = true;
+    public bool isCoupon = false;
     private event Action sendButtonEvent;
     public Action closeAction;
     private void Awake()
@@ -25,6 +25,7 @@ public class ContinueUI : MonoBehaviour
     }
     public void Open()
     {
+        sendButtonEvent = null;
         if (isCoupon)
         {
             sendButtonEvent += () =>
@@ -96,7 +97,7 @@ public class ContinueUI : MonoBehaviour
         {
             if (sendButtonEvent != null)
                 sendButtonEvent = null;
-                
+
             sendButtonEvent += () => AdsManager.Instance.ShowRewardAd((reward) =>
             {
                 closeAction = null;
@@ -112,10 +113,11 @@ public class ContinueUI : MonoBehaviour
     {
         if (isCoupon)
             GameManager.Instance.AdsPopOpne();
-        sendBtn.interactable = false;
+
+        //sendBtn.interactable = false;
         sendButtonEvent?.Invoke();
-        sendButtonEvent = null;
-        closeAction = null;
+        //sendButtonEvent = null;
+        //closeAction = null;
     }
     public void Close()
     {

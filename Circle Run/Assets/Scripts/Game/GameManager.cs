@@ -328,8 +328,9 @@ public class GameManager : MonoBehaviour
         if (DataManager.userItem.continueCoupon > 0 && !isCoupon)
         {
             _continueUI.Open();
-            isCoupon = true;
-            _continueUI.closeAction += AdsPopOpne;
+            //isCoupon = true;
+            //_continueUI.closeAction += AdsPopOpne;
+            _continueUI.closeAction += GameOverLast;
         }
         else if (!isRewardAds)
         {
