@@ -126,6 +126,11 @@ public class DataManager : MonoBehaviour
         DateTime time = BackEndManager.Instance.GetTime();
         StartCoroutine(CouponTimer(time, 0));
     }
+    public void ShieldTimerStart()
+    {
+        DateTime time = BackEndManager.Instance.GetTime();
+        StartCoroutine(ShieldTimer(time, 0));
+    }
     IEnumerator CouponTimer(DateTime timer, int index)
     {
         int upTimer = 29;

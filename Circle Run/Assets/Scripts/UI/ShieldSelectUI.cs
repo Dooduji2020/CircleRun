@@ -29,7 +29,7 @@ public class ShieldSelectUI : MonoBehaviour
                       DataManager.timeData.Shield = BackEndManager.Instance.GetTime();
                       BackEndManager.Instance.GetTimeUpdate(DataManager.Instance.GetTimeParam(), DataManager.timeData.inDate, () =>
                       {
-                          DataManager.Instance.CouponTimerStart();
+                          DataManager.Instance.ShieldTimerStart();
                           LoadingManager.Instance.LoadingStop();
                           SceneManager.LoadScene(Constants.DATA.GAMEPLAY_SCENE);
                       });
@@ -58,6 +58,7 @@ public class ShieldSelectUI : MonoBehaviour
         else
         {
             shieldCount = 0;
+            DataManager.Instance.useShieldCount = shieldCount;
             gameObject.SetActive(true);
             foreach (var i in selectButton)
                 i.Init();
